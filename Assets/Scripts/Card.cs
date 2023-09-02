@@ -195,7 +195,7 @@ public class Card : MonoBehaviour
                     ghostCounter.gridPosString != blueCounter.gridPosString ||
                     ghostCounter.actionType != GhostCounter.ActionType.Move) 
                 {
-                    Vector3 newScale = new Vector3(0.7f, 0.7f, 0.1f);
+                    Vector3 newScale = new Vector3(1.3f, 1.3f, 0.1f);
                     if (ghostCounter.actionType == GhostCounter.ActionType.Move) 
                     {
                         newScale = new Vector3(0.7f, 0.7f, 0.1f);
