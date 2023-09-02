@@ -108,7 +108,7 @@ MonoBehaviour:
   startPos: {fileID: 7339819361629376301, guid: 9747dda0e34b15543872b2aa75bfc261,
     type: 3}
   currentPos: {fileID: 0}
-  destinationPos: {fileID: 0}
+  targetPos: {fileID: 0}
   gridPosString: 31
 --- !u!114 &3723048408372062059
 MonoBehaviour:
@@ -181,17 +181,17 @@ PrefabInstance:
     - target: {fileID: 5304911586177118974, guid: 176299a76ecfc7544b22a66fae200ac7,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5304911586177118974, guid: 176299a76ecfc7544b22a66fae200ac7,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5304911586177118974, guid: 176299a76ecfc7544b22a66fae200ac7,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 5304911586177118974, guid: 176299a76ecfc7544b22a66fae200ac7,
         type: 3}
