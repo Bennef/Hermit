@@ -198,7 +198,7 @@ public class Card : MonoBehaviour
                     Vector3 newScale = new Vector3(1.3f, 1.3f, 0.1f);
                     if (ghostCounter.actionType == GhostCounter.ActionType.Move) 
                     {
-                        newScale = new Vector3(0.7f, 0.7f, 0.1f);
+                        newScale = new Vector3(1.3f, 1.3f, 0.1f);
                     } 
                     else if (ghostCounter.actionType == GhostCounter.ActionType.StrongAttack) 
                     {
@@ -210,7 +210,7 @@ public class Card : MonoBehaviour
                     }
                     else
                     {
-                        newScale = new Vector3(50f, 20f, 30f);
+                        newScale = new Vector3(100f, 30f, 50f);
                     }
                     ghostCounter.transform.localScale = newScale;
                 }

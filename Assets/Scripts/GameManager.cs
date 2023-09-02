@@ -34,7 +34,9 @@ public class GameManager : NetworkBehaviour
     [SerializeField] public bool redTurnDone = true;
     [SerializeField] string[][] actionsToExecute;
 
-    [Header("Objects")]    
+    [Header("Objects")]
+    [SerializeField] GameObject blueUIObjects;
+    [SerializeField] GameObject redUIObjects;
     [SerializeField] GameObject idol;
     [SerializeField] GameObject blueCounterObj;
     [SerializeField] GameObject redCounterObj;
@@ -86,10 +88,14 @@ public class GameManager : NetworkBehaviour
         redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
         uIManager.HideStartTurnButton(uIManager.startTurnButtonBlue);
         uIManager.HideStartTurnButton(uIManager.startTurnButtonRed);
-        /*if (!NetworkManager.Singleton.IsServer)
+        if (NetworkManager.Singleton.IsServer)
         {
-            FlipArrowsForRed();
-        }*/
+            redUIObjects.SetActive(false);
+        }
+        else
+        {
+            blueUIObjects.SetActive(false);
+        }
         AssignActionIdsAndCardIds();
         StartRound();
     }

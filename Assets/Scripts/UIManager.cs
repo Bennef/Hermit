@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject closeMyDeckButtonBlue;
     [SerializeField] GameObject discardButtonBlue;
     [SerializeField] GameObject messageOverlayBlue;
+    [SerializeField] GameObject myDeckTextBlue;
     public GameObject startTurnButtonBlue;
     public GameObject resetButtonBlue;
 
@@ -43,6 +45,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject closeMyDeckButtonRed;
     [SerializeField] GameObject discardButtonRed;
     [SerializeField] GameObject messageOverlayRed;
+    [SerializeField] GameObject myDeckTextRed;
     public GameObject startTurnButtonRed;
     public GameObject resetButtonRed;
 
@@ -92,6 +95,7 @@ public class UIManager : MonoBehaviour
             if (!gameManager.bluePickingHand)
                 ShowCloseMyDeckButton();////
             blueHero.ShowDeck();
+            myDeckTextBlue.SetActive(true);
             lowerUIBlue.SetActive(false);
             blueHero.SetCardPositionsInDeck(blueHero.gameObject.transform.GetChild(0));
             redHero.SetCardPositionsDummy(redHero.gameObject.transform.GetChild(1));
@@ -102,6 +106,7 @@ public class UIManager : MonoBehaviour
             if (!gameManager.redPickingHand)
                 ShowCloseMyDeckButton();////
             redHero.ShowDeck();
+            myDeckTextRed.SetActive(true);
             lowerUIRed.SetActive(false);
             redHero.SetCardPositionsInDeck(redHero.gameObject.transform.GetChild(0));
             blueHero.SetCardPositionsDummy(blueHero.gameObject.transform.GetChild(1));
@@ -116,6 +121,7 @@ public class UIManager : MonoBehaviour
             lowerUIBlue.SetActive(true);
             mainCanvasBlue.SetActive(true);
             blueHero.HideDeck();
+            myDeckTextBlue.SetActive(false);
         }
         else
         {
@@ -123,6 +129,7 @@ public class UIManager : MonoBehaviour
             lowerUIRed.SetActive(true);
             mainCanvasRed.SetActive(true);
             redHero.HideDeck();
+            myDeckTextRed.SetActive(false);
         }
     }
 
