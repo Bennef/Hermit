@@ -57,6 +57,17 @@ public class GameManager : NetworkBehaviour
 
     public static GameManager Singleton { get; private set; }
 
+    public Counter BlueCounter
+    {
+        get { return blueCounter; }
+    }
+
+    // Getter for redCounter
+    public Counter RedCounter
+    {
+        get { return redCounter; }
+    }
+
     void Awake()
     {
         AssignCamera();
@@ -698,7 +709,7 @@ public class GameManager : NetworkBehaviour
             // First to go Strong Attack
             if (actionsToExecute[3] != null)
             {
-                secondToGo.ExecuteStrongAttack(actionsToExecute[3]);
+                firstToGo.ExecuteStrongAttack(actionsToExecute[3]);
                 //AddToLog(secondToGo + " : " + actionsToExecute[3].actionType + " on " + actionsToExecute[3].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
@@ -719,7 +730,7 @@ public class GameManager : NetworkBehaviour
             // Second to go Weak Attack
             if (actionsToExecute[4] != null)
             {
-                firstToGo.ExecuteWeakAttack(actionsToExecute[4]);
+                secondToGo.ExecuteWeakAttack(actionsToExecute[4]);
                 //AddToLog(firstToGo + " : " + actionsToExecute[4].actionType + " on " + actionsToExecute[4].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }

@@ -51,7 +51,8 @@ public class Action : MonoBehaviour
                     Debug.Log(ghostRefs[i]);
                 }
             }
-            ghostCounters[i] = GameObject.Find(ghostRefs[i]).GetComponent<GhostCounter>();
+            if (ghostRefs[i] != "00")
+                ghostCounters[i] = GameObject.Find(ghostRefs[i]).GetComponent<GhostCounter>();
         }
     }
 }

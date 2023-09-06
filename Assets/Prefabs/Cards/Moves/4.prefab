@@ -264,7 +264,10 @@ GameObject:
   - component: {fileID: 5698698984604313674}
   - component: {fileID: 5698698984604313675}
   - component: {fileID: 5698698984604313687}
+  - component: {fileID: 5698698984604313680}
   - component: {fileID: 5698698984604313681}
+  - component: {fileID: 5698698984604313682}
+  - component: {fileID: 5698698984604313683}
   m_Layer: 0
   m_Name: 4
   m_TagString: Untagged
@@ -389,6 +392,25 @@ MonoBehaviour:
   baseActions: []
   availableActions: []
   availableActionsObj: {fileID: 0}
+--- !u!114 &5698698984604313680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5698698984604313676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b24ceac9e4f07b48b5d337d5199c115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionId: 0
+  actionType: 0
+  ghostRefs:
+  - NW 22
+  - Green Counter 11
+  ghostCounters:
+  - {fileID: 0}
 --- !u!114 &5698698984604313681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,6 +428,44 @@ MonoBehaviour:
   ghostRefs:
   - NE 42
   - Green Counter 51
+  ghostCounters:
+  - {fileID: 0}
+--- !u!114 &5698698984604313682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5698698984604313676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b24ceac9e4f07b48b5d337d5199c115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionId: 0
+  actionType: 0
+  ghostRefs:
+  - SE 44
+  - Green Counter 55
+  ghostCounters:
+  - {fileID: 0}
+--- !u!114 &5698698984604313683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5698698984604313676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b24ceac9e4f07b48b5d337d5199c115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionId: 0
+  actionType: 0
+  ghostRefs:
+  - SW 24
+  - Green Counter 15
   ghostCounters:
   - {fileID: 0}
 --- !u!1 &6484388842824839529

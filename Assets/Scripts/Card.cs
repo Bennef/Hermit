@@ -202,7 +202,7 @@ public class Card : MonoBehaviour
                     } 
                     else if (ghostCounter.actionType == GhostCounter.ActionType.StrongAttack) 
                     {
-                        newScale = new Vector3(0.05f, 0.05f, 0.05f);
+                        newScale = new Vector3(0.1f, 0.1f, 0.1f);
                     } 
                     else if (ghostCounter.actionType == GhostCounter.ActionType.WeakAttack) 
                     {
@@ -235,7 +235,7 @@ public class Card : MonoBehaviour
         RemoveChildActions();
         availableActions.Clear();
         //Debug.Log("Calculating offsets for " + counter.name + ", GridPosString: " + counter.gridPosString);
-        Debug.Log("Card: " + card.name);
+        //Debug.Log("Card: " + card.name);
         string counterString = "";
         
         //Debug.Log(counter.name + "GridPosString: " + counter.gridPosString);
@@ -247,6 +247,7 @@ public class Card : MonoBehaviour
             for (int i = action.ghostCounters.Length - 1; i >= 0; i--)
             {
                 if (!copyAction) break;
+                if (action.ghostCounters[i] == null) break;
                 GhostCounter gc = action.ghostCounters[i];
                 switch (gc.actionType)
                 {
@@ -284,14 +285,14 @@ public class Card : MonoBehaviour
                         counterString = "NW ";
                         break;
                 }
-                Debug.Log(action.ghostCounters[i]);
+                //if (card.name == "4") Debug.Log(action.ghostCounters[i]);
                 GhostCounter ghostCounter = action.ghostCounters[i].GetComponent<GhostCounter>();
                 //Debug.Log(counter.gridPosString);
                 int ghostCounterCoordX = int.Parse(ghostCounter.gridPosString.Substring(0, 1));
                 int ghostCounterCoordY = int.Parse(ghostCounter.gridPosString.Substring(1, 1));
                 int playerCounterCoordX = int.Parse(counter.gridPosString.Substring(0, 1));
                 int playerCounterCoordY = int.Parse(counter.gridPosString.Substring(1, 1));
-                Debug.Log("ghostCounterCoordX: " + ghostCounterCoordX + ", ghostCounterCoordY: " + ghostCounterCoordY);
+                //if (card.name == "4") Debug.Log("ghostCounterCoordX: " + ghostCounterCoordX + ", ghostCounterCoordY: " + ghostCounterCoordY);
 
                 int gcX = ghostCounterCoordX - 3;
                 int gcY = ghostCounterCoordY - 3;
@@ -306,21 +307,17 @@ public class Card : MonoBehaviour
                 int newPosY = playerCounterCoordY + gcY;
 
                 string updatedCounterPosString = newPosX.ToString() + newPosY.ToString();
-                ghostCounter.gridPosString = updatedCounterPosString;
                 //Debug.Log("updatedCounterPosString: " + updatedCounterPosString);
                 // Check if out of bounds or if a counter is in the way, if yes then DON'T add action
-                if (newPosX > 5 || newPosY > 5 || newPosX < 1 || newPosY < 1 ||
-                    ghostCounter.gridPosString == redCounter.gridPosString || ghostCounter.gridPosString == blueCounter.gridPosString)
+                if ((newPosX > 5 || newPosY > 5 || newPosX < 1 || newPosY < 1) ||
+                   (card.actionType == Card.ActionType.Move &&
+                   (updatedCounterPosString == redCounter.gridPosString || updatedCounterPosString == blueCounter.gridPosString)))
                 {
-                    Debug.Log("updatedCounterPosString: " + updatedCounterPosString);
-                    Debug.Log("Don't copy!");
                     copyAction = false;
                 }
                 else
                 {
                     string newPosString = counterString + updatedCounterPosString;
-                    Debug.Log(newPosString);
-                    //if (i == action.ghostCounters.Length)
                     newGcs[i] = GameObject.Find(newPosString).GetComponent<GhostCounter>();
                 }
             }
@@ -333,7 +330,7 @@ public class Card : MonoBehaviour
 
     void CopyAction(Action action, GhostCounter[] newGcArray)
     {
-        Debug.Log("Copying Action, action: " + action.actionId.ToString());
+        //if (card.name == "Card 4") Debug.Log("Copying Action, action: " + action.actionId.ToString());
         if (availableActionsObj != null)
         {
             Action newAction = availableActionsObj.AddComponent<Action>();
@@ -341,18 +338,19 @@ public class Card : MonoBehaviour
             newAction.actionId = action.actionId;
 
             // Copy the original ghostCounters array to the new Action component
-            newAction.ghostCounters = newGcArray;
             //newAction.ghostCounters = (GhostCounter[])action.ghostCounters.Clone();
             newAction.ghostCounters = newGcArray;
             //Debug.Log(counterString + updatedCounterPosString);
             for (int i = 0; i < action.ghostCounters.Length; i++)
             {
                 // Update the specific GhostCounter reference in the new Action component
-                //newAction.ghostCounters[i] = GameObject.Find(counterString + updatedCounterPosString).GetComponent<GhostCounter>();
                 newAction.ghostRefs = new string[newAction.ghostCounters.Length];
 
                 for (int j = 0; j < action.ghostRefs.Length; j++)
                 {
+                    Debug.Log(action.ghostRefs[j]);
+                    if (action.ghostRefs[j] == "00") break;
+                    Debug.Log(action.ghostRefs[j]);
                     newAction.ghostRefs[j] = newAction.ghostCounters[j].name;
                 }
             }

@@ -36,25 +36,17 @@ public class Counter : NetworkBehaviour
 
     void AssignOtherCounterAndHero()
     {
-        Counter[] counterInstances = FindObjectsOfType<Counter>();
-        foreach (Counter counterInstance in counterInstances)
+        if (this.name == "Blue Counter(Clone)")
         {
-            if (counterInstance != this)
-            {
-                otherCounter = counterInstance;
-            }
+            otherCounter = gameManager.RedCounter;
+            otherHero = gameManager.redHero;
         }
-
-        Hero[] myHeroInstances = FindObjectsOfType<Hero>();
-        foreach (Hero heroInstance in myHeroInstances)
+        else 
         {
-            if (heroInstance != this)
-            {
-                otherHero = heroInstance;
-            }
+            otherCounter = gameManager.BlueCounter;
+            otherHero = gameManager.blueHero;
         }
     }
-
     public void ExecuteMove(string[] ghostRefs)
     {
         foreach(string gRef in ghostRefs)
@@ -158,8 +150,15 @@ public class Counter : NetworkBehaviour
         }
         anim.SetBool("isAttacking", false);
         otherCounter.anim.SetBool("isHit", false);
+        StrongAttackClientRpc();
     }
-    
+
+    [ClientRpc]
+    void StrongAttackClientRpc()
+    {
+        Debug.Log("SA sent");
+    }
+
     IEnumerator WeakAttack(string[] ghostRefs) 
     {
         yield return null;
