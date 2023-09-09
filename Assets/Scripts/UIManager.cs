@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using Unity.Netcode;
 using System;
 
-public class UIManager : MonoBehaviour
+public class UIManager : NetworkBehaviour
 {
     [Header("Objects")]
     [SerializeField] Hero blueHero;
@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
                 ShowCloseMyDeckButton();////
             blueHero.ShowDeck();
             myDeckTextBlue.SetActive(true);
-            lowerUIBlue.SetActive(false);
+            //lowerUIBlue.SetActive(false);
             blueHero.SetCardPositionsInDeck(blueHero.gameObject.transform.GetChild(0));
             redHero.SetCardPositionsDummy(redHero.gameObject.transform.GetChild(1));
         }
@@ -107,7 +107,7 @@ public class UIManager : MonoBehaviour
                 ShowCloseMyDeckButton();////
             redHero.ShowDeck();
             myDeckTextRed.SetActive(true);
-            lowerUIRed.SetActive(false);
+            //lowerUIRed.SetActive(false);
             redHero.SetCardPositionsInDeck(redHero.gameObject.transform.GetChild(0));
             blueHero.SetCardPositionsDummy(blueHero.gameObject.transform.GetChild(1));
         }
@@ -118,7 +118,7 @@ public class UIManager : MonoBehaviour
         if (NetworkManager.Singleton.IsServer)
         {
             myDeckScreenBlue.SetActive(false);
-            lowerUIBlue.SetActive(true);
+            //lowerUIBlue.SetActive(true);
             mainCanvasBlue.SetActive(true);
             blueHero.HideDeck();
             myDeckTextBlue.SetActive(false);
@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour
         else
         {
             myDeckScreenRed.SetActive(false);
-            lowerUIRed.SetActive(true);
+            //lowerUIRed.SetActive(true);
             mainCanvasRed.SetActive(true);
             redHero.HideDeck();
             myDeckTextRed.SetActive(false);
@@ -248,13 +248,29 @@ public class UIManager : MonoBehaviour
         if (NetworkManager.Singleton.IsServer)
         {
             UpdateDiscardButtonText(blueHero);
+            ShowReadyText(blueReadyTextBlue);
+            ShowBlueReadyTextClientRpc();
             gameManager.StartTurnButtonPressed(blueHero);
         }
         else
         {
             UpdateDiscardButtonText(redHero);
+            ShowReadyText(redReadyTextRed);
+            ShowRedReadyTextServerRpc();
             gameManager.StartTurnButtonPressed(redHero);
         }
+    }
+
+    [ClientRpc]
+    void ShowBlueReadyTextClientRpc() 
+    {
+        ShowReadyText(blueReadyTextRed);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void ShowRedReadyTextServerRpc()
+    {
+        ShowReadyText(redReadyTextBlue);
     }
 
     public void CallShowMessageOverlay() 
