@@ -233,6 +233,8 @@ public class GameManager : NetworkBehaviour
             blueReadyToStart = false;
             redReadyToStart = false;
             OrganiseCardsForTurn();
+            uIManager.ShowLogAndMyDeckButton(uIManager.LogButtonRed, uIManager.MyDeckButtonRed);
+            uIManager.ShowLogAndMyDeckButton(uIManager.LogButtonBlue, uIManager.MyDeckButtonBlue);
             currentTurn++;
             StartTurn();
         }

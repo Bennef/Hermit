@@ -28,6 +28,8 @@ public class UIManager : NetworkBehaviour
     [Header("Blue Objects")]
     [SerializeField] GameObject mainCanvasBlue;
     [SerializeField] GameObject myDeckScreenBlue;
+    [SerializeField] GameObject logButtonBlue;
+    [SerializeField] GameObject myDeckButtonBlue;
     [SerializeField] GameObject gameLogCanvasBlue;
     [SerializeField] GameObject lowerUIBlue;
     [SerializeField] GameObject closeMyDeckButtonBlue;
@@ -40,6 +42,8 @@ public class UIManager : NetworkBehaviour
     [Header("Red Objects")]
     [SerializeField] GameObject mainCanvasRed;
     [SerializeField] GameObject myDeckScreenRed;
+    [SerializeField] GameObject logButtonRed;
+    [SerializeField] GameObject myDeckButtonRed;
     [SerializeField] GameObject gameLogCanvasRede;
     [SerializeField] GameObject lowerUIRed;
     [SerializeField] GameObject closeMyDeckButtonRed;
@@ -48,6 +52,11 @@ public class UIManager : NetworkBehaviour
     [SerializeField] GameObject myDeckTextRed;
     public GameObject startTurnButtonRed;
     public GameObject resetButtonRed;
+
+    public GameObject LogButtonBlue { get { return logButtonBlue; } }
+    public GameObject MyDeckButtonBlue { get { return logButtonBlue; } }
+    public GameObject LogButtonRed { get { return logButtonBlue; } }
+    public GameObject MyDeckButtonRed { get { return logButtonBlue; } }
 
     void Start()
     {
@@ -163,6 +172,18 @@ public class UIManager : NetworkBehaviour
         closeMyDeckButtonBlue.SetActive(false);
     }
 
+    public void ShowLogAndMyDeckButton(GameObject logButton, GameObject myDeckButton)
+    {
+        logButton.SetActive(true);
+        myDeckButton.SetActive(true);
+    }
+
+    public void HideLogAndMyDeckButton(GameObject logButton, GameObject myDeckButton)
+    {
+        logButton.SetActive(false);
+        myDeckButton.SetActive(false);
+    }
+
     public void ShowDiscardButton()
     {
         discardButtonBlue.SetActive(true);
@@ -249,6 +270,7 @@ public class UIManager : NetworkBehaviour
         {
             UpdateDiscardButtonText(blueHero);
             ShowReadyText(blueReadyTextBlue);
+            ShowLogAndMyDeckButton(logButtonBlue, myDeckButtonBlue);
             ShowBlueReadyTextClientRpc();
             gameManager.StartTurnButtonPressed(blueHero);
         }
@@ -256,6 +278,7 @@ public class UIManager : NetworkBehaviour
         {
             UpdateDiscardButtonText(redHero);
             ShowReadyText(redReadyTextRed);
+            ShowLogAndMyDeckButton(logButtonRed, myDeckButtonRed);
             ShowRedReadyTextServerRpc();
             gameManager.StartTurnButtonPressed(redHero);
         }

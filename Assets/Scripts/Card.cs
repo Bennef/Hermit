@@ -73,11 +73,13 @@ public class Card : MonoBehaviour
                 if (!selected)
                 {
                     PickUpCard(gameObject.transform);
+                    ShowHand();
                     gameManager.SetDeckCardsSelected(hero, gameManager.blueDeckCardsSelected + 1);
                 }
                 else
                 {
                     PutDownCard(gameObject.transform);
+                    HideHand();
                     gameManager.SetDeckCardsSelected(hero, gameManager.blueDeckCardsSelected - 1);
                 }
             }
@@ -86,11 +88,13 @@ public class Card : MonoBehaviour
                 if (!selected)
                 {
                     PickUpCard(gameObject.transform);
+                    ShowHand();
                     gameManager.SetDeckCardsSelected(hero, gameManager.redDeckCardsSelected + 1);
                 }
                 else
                 {
                     PutDownCard(gameObject.transform);
+                    HideHand();
                     gameManager.SetDeckCardsSelected(hero, gameManager.redDeckCardsSelected - 1);
                 }
             }
