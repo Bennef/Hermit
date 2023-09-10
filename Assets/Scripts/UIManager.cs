@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.Netcode;
-using System;
 
 public class UIManager : NetworkBehaviour
 {
@@ -88,12 +87,12 @@ public class UIManager : NetworkBehaviour
 
     public void ShowMainCanvas() 
     {
-        mainCanvasBlue.SetActive(true); ////
+        mainCanvasBlue.SetActive(true);
     }
 
     public void HideMainCanvas()
     {
-        mainCanvasBlue.SetActive(false);////
+        mainCanvasBlue.SetActive(false);
     }
 
     public void ShowMyDeckScreen() 
@@ -102,10 +101,9 @@ public class UIManager : NetworkBehaviour
         {
             myDeckScreenBlue.SetActive(true);
             if (!gameManager.bluePickingHand)
-                ShowCloseMyDeckButton();////
+                ShowCloseMyDeckButton();
             blueHero.ShowDeck();
             myDeckTextBlue.SetActive(true);
-            //lowerUIBlue.SetActive(false);
             blueHero.SetCardPositionsInDeck(blueHero.gameObject.transform.GetChild(0));
             redHero.SetCardPositionsDummy(redHero.gameObject.transform.GetChild(1));
         }
@@ -113,10 +111,9 @@ public class UIManager : NetworkBehaviour
         {
             myDeckScreenRed.SetActive(true);
             if (!gameManager.redPickingHand)
-                ShowCloseMyDeckButton();////
+                ShowCloseMyDeckButton();
             redHero.ShowDeck();
             myDeckTextRed.SetActive(true);
-            //lowerUIRed.SetActive(false);
             redHero.SetCardPositionsInDeck(redHero.gameObject.transform.GetChild(0));
             blueHero.SetCardPositionsDummy(blueHero.gameObject.transform.GetChild(1));
         }
@@ -188,13 +185,12 @@ public class UIManager : NetworkBehaviour
     {
         discardButtonBlue.SetActive(true);
         discardButtonRed.SetActive(true);
-        HideReadyText(blueReadyTextBlue); ////
-        HideReadyText(redReadyTextBlue); ////
     }
 
     public void HideDiscardButton() 
     {
         discardButtonBlue.SetActive(false);
+        discardButtonRed.SetActive(false);
     }
 
     public void ShowReadyText(Text readyText) 
@@ -294,6 +290,16 @@ public class UIManager : NetworkBehaviour
     void ShowRedReadyTextServerRpc()
     {
         ShowReadyText(redReadyTextBlue);
+    }
+
+    public void GameStarting()
+    {
+        ShowLogAndMyDeckButton(LogButtonRed, MyDeckButtonRed);
+        ShowLogAndMyDeckButton(LogButtonBlue, MyDeckButtonBlue);
+        HideReadyText(blueReadyTextBlue);
+        HideReadyText(redReadyTextBlue);
+        HideReadyText(blueReadyTextRed);
+        HideReadyText(redReadyTextRed);
     }
 
     public void CallShowMessageOverlay() 
