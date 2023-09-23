@@ -17,7 +17,7 @@ public class Counter : NetworkBehaviour
     AudioManager audioManager;
     Animator anim;
 
-    void Awake() 
+    void Awake()
     {
         audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
@@ -25,7 +25,7 @@ public class Counter : NetworkBehaviour
         //Debug.Log(anim);
     }
 
-    public void PlaceToStart() 
+    public void PlaceToStart()
     {
         gameObject.transform.position = startPos.position;
         currentPos = startPos;
@@ -41,7 +41,7 @@ public class Counter : NetworkBehaviour
             otherCounter = gameManager.RedCounter;
             otherHero = gameManager.redHero;
         }
-        else 
+        else
         {
             otherCounter = gameManager.BlueCounter;
             otherHero = gameManager.blueHero;
@@ -49,11 +49,11 @@ public class Counter : NetworkBehaviour
     }
     public void ExecuteMove(string[] ghostRefs)
     {
-        foreach(string gRef in ghostRefs)
+        foreach (string gRef in ghostRefs)
         {
             Debug.Log(gRef);
         }
-        Debug.Log(this.name +  " moving to " + ghostRefs[ghostRefs.Length - 1]);
+        Debug.Log(this.name + " moving to " + ghostRefs[ghostRefs.Length - 1]);
         StartCoroutine(MoveCounter(ghostRefs));
     }
 
@@ -69,12 +69,29 @@ public class Counter : NetworkBehaviour
 
     public void ExecuteStrongAttack(string[] ghostRefs)
     {
-        foreach (string gRef in ghostRefs)
-        {
-            //Debug.Log(gRef);
-        }
         Debug.Log(this.name + " strong attacking " + ghostRefs[ghostRefs.Length - 1]);
-        StartCoroutine(StrongAttack(ghostRefs));
+
+        var slash = Resources.Load<GameObject>("Strong Slash");
+        Transform[] squares = new Transform[ghostRefs.Length];
+        for (int i = 0; i < ghostRefs.Length; i++)
+        {
+            Debug.Log(i + ", " + ghostRefs[i]);
+            int targetCoord = int.Parse(ghostRefs[i]);
+            //squares[i] = GameObject.Find("Green Counter " + ghostRefs[i]).transform;
+        }
+        targetPos = squares[squares.Length - 1];
+
+        Instantiate(slash, targetPos.position, Quaternion.Euler(90, 0, 180));
+        if (otherCounter.gridPosString == targetPos.gameObject.name.Substring(targetPos.gameObject.name.Length - 2))
+        {
+            TakeDamageClientRpc(StrongAttackDamage);
+        }
+        else
+        {
+            audioManager.PlaySound(audioManager.StrongAttackMiss);
+        }
+        anim.SetBool("isAttacking", true);
+        StartCoroutine(Wait());
     }
 
     IEnumerator MoveCounter(string[] ghostRefs)
@@ -119,9 +136,9 @@ public class Counter : NetworkBehaviour
         }*/
     }   
     
-    IEnumerator StrongAttack(string[] ghostRefs) 
+    IEnumerator Wait() 
     {  
-        var slash = Resources.Load<GameObject>("Strong Slash");
+        /*var slash = Resources.Load<GameObject>("Strong Slash");
         Transform[] squares = new Transform[ghostRefs.Length];
         for (int i = 0; i < ghostRefs.Length; i++)
         {
@@ -132,31 +149,42 @@ public class Counter : NetworkBehaviour
         Instantiate(slash, targetPos.position, Quaternion.Euler(90, 0, 180));
         if (otherCounter.gridPosString == targetPos.gameObject.name.Substring(targetPos.gameObject.name.Length - 2)) 
         {
-            gameManager.SetHealth(otherHero, otherHero.health - StrongAttackDamage);
-            //cameraShake.CallShake();
-            audioManager.PlaySound(audioManager.StrongAttackHit); 
-            otherCounter.anim.SetBool("isHit", true); 
+            TakeDamageClientRpc(StrongAttackDamage); //otherCounter.TakeDamage(StrongAttackDamage);
         } 
         else 
         {
             audioManager.PlaySound(audioManager.StrongAttackMiss);
         }
-        anim.SetBool("isAttacking", true);
+        anim.SetBool("isAttacking", true);*/
         float time = 0;
         while (time <= 0.9) 
         {
             time += Time.deltaTime;
             yield return null;
         }
-        anim.SetBool("isAttacking", false);
-        otherCounter.anim.SetBool("isHit", false);
-        StrongAttackClientRpc();
+        //anim.SetBool("isAttacking", false);
+        //otherCounter.anim.SetBool("isHit", false);
+    }
+
+    private void TakeDamage(int attackDamage)
+    {
+        gameManager.SetHealth(otherHero, otherHero.health - attackDamage);
+        otherCounter.anim.SetBool("isHit", true);
+        //cameraShake.CallShake();
+        audioManager.PlaySound(audioManager.StrongAttackHit);
+        TakeDamageClientRpc(attackDamage);
     }
 
     [ClientRpc]
-    void StrongAttackClientRpc()
+    void TakeDamageClientRpc(int attackDamage)
     {
         Debug.Log("SA sent");
+        gameManager.SetHealth(otherHero, otherHero.health - attackDamage);
+        otherCounter.anim.SetBool("isHit", true);
+        //cameraShake.CallShake();
+        audioManager.PlaySound(audioManager.StrongAttackHit);
+        anim.SetBool("isAttacking", false);
+        otherCounter.anim.SetBool("isHit", false);
     }
 
     IEnumerator WeakAttack(string[] ghostRefs) 

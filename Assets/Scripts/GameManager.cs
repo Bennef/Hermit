@@ -964,11 +964,13 @@ public class GameManager : NetworkBehaviour
         hero.health = health;
         if (hero == redHero) 
         {
-            uIManager.SetHealth(uIManager.redHealthSliderBlue, health, uIManager.redHealthTextBlue); ////
+            uIManager.SetHealth(uIManager.redHealthSliderBlue, health, uIManager.redHealthTextBlue);
+            uIManager.SetHealth(uIManager.redHealthSliderBlue, health, uIManager.redHealthTextRed);
         }
         else 
         {
-            uIManager.SetHealth(uIManager.blueHealthSliderBlue, health, uIManager.blueHealthTextBlue); ////
+            uIManager.SetHealth(uIManager.blueHealthSliderBlue, health, uIManager.blueHealthTextBlue);
+            uIManager.SetHealth(uIManager.redHealthSliderBlue, health, uIManager.redHealthTextRed);
         }
     }
 
