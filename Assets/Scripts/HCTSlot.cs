@@ -4,10 +4,7 @@ public class HCTSlot : MonoBehaviour
 {
     HCTManager _hCTManager;
     
-    void Start()
-    {
-        _hCTManager = GameObject.Find("HCT Manager").GetComponent<HCTManager>();
-    }
+    void Start() => _hCTManager = FindAnyObjectByType<HCTManager>();
 
     public void Clicked()
     {

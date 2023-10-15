@@ -7,7 +7,6 @@ using UnityEngine;
 public class MenuControl : MonoBehaviour
 {
     [SerializeField] TMP_Text m_IPAddressText;
-
     [SerializeField] string m_LobbySceneName = "Lobby";
     [SerializeField] GameObject _hCTScreen;
 
@@ -21,9 +20,7 @@ public class MenuControl : MonoBehaviour
     {
         var utpTransport = (UnityTransport)NetworkManager.Singleton.NetworkConfig.NetworkTransport;
         if (utpTransport)
-        {
             utpTransport.SetConnectionData(Sanitize(m_IPAddressText.text), 7777);
-        }
         if (NetworkManager.Singleton.StartHost())
         {
             SceneTransitionHandler.sceneTransitionHandler.RegisterCallbacks();
@@ -39,13 +36,9 @@ public class MenuControl : MonoBehaviour
     {
         var utpTransport = (UnityTransport)NetworkManager.Singleton.NetworkConfig.NetworkTransport;
         if (utpTransport)
-        {
             utpTransport.SetConnectionData(Sanitize(m_IPAddressText.text), 7777);
-        }
         if (!NetworkManager.Singleton.StartClient())
-        {
             Debug.LogError("Failed to start client.");
-        }
     }
     
     static string Sanitize(string dirtyString)
@@ -57,9 +50,7 @@ public class MenuControl : MonoBehaviour
     void Update() // Delete after testing
     {
         if (Input.GetKeyDown(KeyCode.Space))
-        {
             _hCTScreen.SetActive(true);
-        }
     }
 
     public void AcceptButtonClicked() => _hCTScreen.gameObject.SetActive(false);

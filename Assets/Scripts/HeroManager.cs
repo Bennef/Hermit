@@ -1,46 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HeroManager : MonoBehaviour
 {
-    public Hero blueHero, redHero;
-    public string heroName, card1, card2 ,card3, card4, card5, card6, card7, card8;
-    public int speed;
+    [SerializeField] Hero _blueHero, _redHero;
+    [SerializeField] string _heroName, _card1, _card2 ,_card3, _card4, _card5, _card6, _card7, _card8;
+    [SerializeField] int _speed;
 
-    void Awake() {
+    void Awake() 
+    {
         GetMetaDataFromHeroNFT();
-        AssignValuesToHero(blueHero);
-        AssignValuesToHero(redHero);
+        AssignValuesToHero(_blueHero);
+        AssignValuesToHero(_redHero);
     }
 
     void GetMetaDataFromHeroNFT() { // hardcoded for now
-        heroName = "Bob";
+        _heroName = "Bob";
         // image?
-        speed = 100;
-        card1 = "1";
-        card2 = "2";
-        card3 = "4";
-        card4 = "5";
-        card5 = "A";
-        card6 = "B";
-        card7 = "C";
-        card8 = "D";
+        _speed = 100;
+        _card1 = "1";
+        _card2 = "2";
+        _card3 = "4";
+        _card4 = "5";
+        _card5 = "A";
+        _card6 = "B";
+        _card7 = "C";
+        _card8 = "D";
     }
 
-    void AssignValuesToHero(Hero hero) {//should some of these be in Hero?
-        hero.name = heroName;
-        hero.speed = speed;
-        AssignCardsToHero(hero);
-    }
-
-    void AssignCardsToHero(Hero hero) {
-        
-    }
-
-    void AssignCardValues() {
-
+    void AssignValuesToHero(Hero hero)//should some of these be in Hero?
+    {
+        hero.name = _heroName;
+        hero.speed = _speed;
     }
 }
-// we want a prefab for every Card
-// Each card will have to find it's own ghost counters

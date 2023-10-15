@@ -65,19 +65,14 @@ public class GameManager : NetworkBehaviour
         AssignCamera();
 
         if (Singleton == null)
-        {
             Singleton = this;
-        }
         else
-        {
             Destroy(gameObject);
-        }
+
         SpawnObjects();
 
         if (!NetworkManager.Singleton.IsServer)
-        {
             FlipArrowsForRed();
-        }
     }
 
     void Start()
@@ -91,14 +86,12 @@ public class GameManager : NetworkBehaviour
         redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
         uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
         uIManager.HideStartTurnButton(uIManager._startTurnButtonRed);
+
         if (NetworkManager.Singleton.IsServer)
-        {
             redUIObjects.SetActive(false);
-        }
         else
-        {
             blueUIObjects.SetActive(false);
-        }
+
         AssignHCTValues();
         blueHero.PutAllCardsInDeck();
         AssignActionIdsAndCardIds();
@@ -137,37 +130,28 @@ public class GameManager : NetworkBehaviour
         GameObject SW = GameObject.Find("SW");
         GameObject NW = GameObject.Find("NW");
         foreach (Transform arrow in N.transform)
-        {
             arrow.gameObject.name = arrow.gameObject.name.Replace("N", "S");
-        }
+
         foreach (Transform arrow in E.transform)
-        {
             arrow.gameObject.name = arrow.gameObject.name.Replace("E", "W");
-        }
+
         foreach (Transform arrow in S.transform)
-        {
             arrow.gameObject.name = arrow.gameObject.name.Replace("S", "N");
-        }
+
         foreach (Transform arrow in W.transform)
-        {
             arrow.gameObject.name = arrow.gameObject.name.Replace("W", "E");
-        }
+
         foreach (Transform arrow in NE.transform)
-        {
             arrow.gameObject.name = arrow.gameObject.name.Replace("NE", "SW");
-        }
+
         foreach (Transform arrow in SE.transform)
-        {
             arrow.gameObject.name = arrow.gameObject.name.Replace("SE", "NW");
-        }
+
         foreach (Transform arrow in SW.transform)
-        {
             arrow.gameObject.name = arrow.gameObject.name.Replace("SW", "NE");
-        }
+
         foreach (Transform arrow in NW.transform)
-        {
             arrow.gameObject.name = arrow.gameObject.name.Replace("NW", "SE");
-        }
     }
 
     void AssignActionIdsAndCardIds()
@@ -233,9 +217,7 @@ public class GameManager : NetworkBehaviour
         {
             child.transform.gameObject.layer = newLayer;
             foreach (Transform child1 in child.transform)
-            {
                 child1.transform.gameObject.layer = newLayer;
-            }
         }
     }
 

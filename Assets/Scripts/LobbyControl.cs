@@ -5,18 +5,16 @@ using UnityEngine;
 
 public class LobbyControl : NetworkBehaviour
 {
-    [SerializeField]
-    private string m_InGameSceneName = "InGame";
+    [SerializeField] string m_InGameSceneName = "InGame";
     
     // Minimum player count required to transition to next level
-    [SerializeField]
-    private int m_MinimumPlayerCount = 2;
-    
-    public TMP_Text LobbyText;
-    private bool m_AllPlayersInLobby;
+    [SerializeField] int m_MinimumPlayerCount = 2;
 
-    private Dictionary<ulong, bool> m_ClientsInLobby;
-    private string m_UserLobbyStatusText;
+    [SerializeField] TMP_Text LobbyText;
+    bool m_AllPlayersInLobby;
+
+    Dictionary<ulong, bool> m_ClientsInLobby;
+    string m_UserLobbyStatusText;
 
     public override void OnNetworkSpawn()
     {
@@ -42,9 +40,10 @@ public class LobbyControl : NetworkBehaviour
         SceneTransitionHandler.sceneTransitionHandler.SetSceneState(SceneTransitionHandler.SceneStates.Lobby);
     }
 
-    private void OnGUI()
+    void OnGUI()
     {
-        if (LobbyText != null) LobbyText.text = m_UserLobbyStatusText;
+        if (LobbyText != null) 
+            LobbyText.text = m_UserLobbyStatusText;
     }
 
     /// <summary>
@@ -52,7 +51,7 @@ public class LobbyControl : NetworkBehaviour
     ///     Psuedo code for setting player state
     ///     Just updating a text field, this could use a lot of "refactoring"  :)
     /// </summary>
-    private void GenerateUserStatsForLobby()
+    void GenerateUserStatsForLobby()
     {
         m_UserLobbyStatusText = string.Empty;
         foreach (var clientLobbyStatus in m_ClientsInLobby)
@@ -70,7 +69,7 @@ public class LobbyControl : NetworkBehaviour
     ///     UpdateAndCheckPlayersInLobby
     ///     Checks to see if we have at least 2 or more people to start
     /// </summary>
-    private void UpdateAndCheckPlayersInLobby()
+    void UpdateAndCheckPlayersInLobby()
     {
         m_AllPlayersInLobby = m_ClientsInLobby.Count >= m_MinimumPlayerCount;
 
@@ -91,7 +90,7 @@ public class LobbyControl : NetworkBehaviour
     ///     Invoked when a client has loaded this scene
     /// </summary>
     /// <param name="clientId"></param>
-    private void ClientLoadedScene(ulong clientId)
+    void ClientLoadedScene(ulong clientId)
     {
         if (IsServer)
         {
@@ -111,7 +110,7 @@ public class LobbyControl : NetworkBehaviour
     ///     the server can be configured to only listen for connected clients at this stage.
     /// </summary>
     /// <param name="clientId">client that connected</param>
-    private void OnClientConnectedCallback(ulong clientId)
+    void OnClientConnectedCallback(ulong clientId)
     {
         if (IsServer)
         {
@@ -130,7 +129,7 @@ public class LobbyControl : NetworkBehaviour
     /// <param name="clientId"></param>
     /// <param name="isReady"></param>
     [ClientRpc]
-    private void SendClientReadyStatusUpdatesClientRpc(ulong clientId, bool isReady)
+    void SendClientReadyStatusUpdatesClientRpc(ulong clientId, bool isReady)
     {
         if (!IsServer)
         {
@@ -146,7 +145,7 @@ public class LobbyControl : NetworkBehaviour
     ///     CheckForAllPlayersReady
     ///     Checks to see if all players are ready, and if so launches the game
     /// </summary>
-    private void CheckForAllPlayersReady()
+    void CheckForAllPlayersReady()
     {
         if (m_AllPlayersInLobby)
         {
@@ -197,7 +196,7 @@ public class LobbyControl : NetworkBehaviour
     /// </summary>
     /// <param name="clientid">clientId that is ready</param>
     [ServerRpc(RequireOwnership = false)]
-    private void OnClientIsReadyServerRpc(ulong clientid)
+    void OnClientIsReadyServerRpc(ulong clientid)
     {
         if (m_ClientsInLobby.ContainsKey(clientid))
         {

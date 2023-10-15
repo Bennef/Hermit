@@ -17,10 +17,9 @@ public class Counter : NetworkBehaviour
 
     void Awake()
     {
-        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        audioManager = FindAnyObjectByType<AudioManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
         anim = GetComponentInChildren<Animator>();
-        //Debug.Log(anim);
     }
 
     public void PlaceToStart()
@@ -48,9 +47,7 @@ public class Counter : NetworkBehaviour
     public void ExecuteMove(string[] ghostRefs)
     {
         foreach (string gRef in ghostRefs)
-        {
             Debug.Log(gRef);
-        }
         Debug.Log(this.name + " moving to " + ghostRefs[ghostRefs.Length - 1]);
         StartCoroutine(MoveCounter(ghostRefs));
     }

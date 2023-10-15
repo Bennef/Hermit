@@ -5,10 +5,7 @@ public class HCTCard : MonoBehaviour
 {
     HCTManager _hCTManager;
 
-    void Start()
-    {
-        _hCTManager = GameObject.Find("HCT Manager").GetComponent<HCTManager>();
-    }
+    void Start() => _hCTManager = FindAnyObjectByType<HCTManager>();
 
     public void Clicked()
     {
@@ -31,13 +28,9 @@ public class HCTCard : MonoBehaviour
         //print(card);
         GameObject[] cardArray;
         if (_hCTManager.SelectedSlot.transform.parent.name.Contains("Blue"))
-        {
             cardArray = _hCTManager.BlueCards;
-        }
         else
-        {
             cardArray = _hCTManager.RedCards;
-        }
         int index = int.Parse(_hCTManager.SelectedSlot.name) - 1;
         _hCTManager.InsertCardToList(index, card, cardArray);
     }

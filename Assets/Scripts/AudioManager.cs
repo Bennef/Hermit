@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// Handles the SFX in game.
-/// </summary>
 public class AudioManager : MonoBehaviour
 {
     private AudioSource _aSrc;
@@ -23,11 +20,5 @@ public class AudioManager : MonoBehaviour
 
     void Start() => _aSrc = GetComponent<AudioSource>();
 
-    /// <summary>
-    /// Assign the passed AudioClip and play it.
-    /// </summary>
-    public void PlaySound(AudioClip soundToPlay)
-    {
-        _aSrc.PlayOneShot(soundToPlay);
-    }
+    public void PlaySound(AudioClip soundToPlay) => _aSrc.PlayOneShot(soundToPlay);
 }

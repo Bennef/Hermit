@@ -11,24 +11,18 @@ public class GhostCounter : MonoBehaviour
 
     void Awake()
     {
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
         counterRenderer = gameObject.GetComponent<Renderer>();
     }
 
     void Update() 
     {
         if (actionType == ActionType.StrongAttack) 
-        {
             counterRenderer.material.color = new Color (1f, 0f, 0f, Mathf.PingPong(Time.time, 0.5f));
-        }
         else if (actionType == ActionType.WeakAttack) 
-        {
             counterRenderer.material.color = new Color (1f, 0.5f, 0f, Mathf.PingPong(Time.time, 0.5f));
-        }
         else
-        {
             counterRenderer.material.color = new Color(0f, 0.5f, 0f, Mathf.PingPong(Time.time, 0.5f));
-        }
     }
 
     void OnMouseDown()

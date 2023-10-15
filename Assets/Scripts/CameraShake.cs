@@ -9,15 +9,10 @@ public class CameraShake : MonoBehaviour
     private void Update() 
     {
         if (Input.GetKey(KeyCode.E)) 
-        {
             StartCoroutine(Shake());
-        }
     }
 
-    public void CallShake() 
-    {
-        StartCoroutine(Shake());
-    }
+    public void CallShake() => StartCoroutine(Shake());
 
     public IEnumerator Shake() 
     {

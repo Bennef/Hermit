@@ -15,7 +15,7 @@ public class Hero : MonoBehaviour
 
     void Awake() 
     {// just have all the cards as prefabs in hhe game and find them based on string
-        uIManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
+        uIManager = FindAnyObjectByType<UIManager>();
         //PutAllCardsInDeck();
     }
 
@@ -47,6 +47,45 @@ public class Hero : MonoBehaviour
         playerChoosingInitialCards = true;
     }
 
+    public void SetCardPositionsInDeck(Transform transform)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Card card = transform.GetChild(i).GetComponent<Card>();
+            Transform deckPos;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                deckPos = GameObject.Find("Blue Deck " + i).transform;
+            }
+            else
+            {
+                deckPos = GameObject.Find("Red Deck " + i).transform;
+                card.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+            }
+            card.transform.position = deckPos.position;
+        }
+    }
+
+    public void SetCardPositionsDummy(Transform transform)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Card card = transform.GetChild(i).GetComponent<Card>();
+            Transform dummyPos;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                dummyPos = GameObject.Find("Red Dummy " + i).transform;
+                card.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+            }
+            else
+            {
+                dummyPos = GameObject.Find("Blue Dummy " + i).transform;
+            }
+            card.transform.position = dummyPos.position;
+        }
+    }
+
+    /*
     public void SetCardPositions(Transform transform, bool isDeck)
     {
         string deckOrDummy = isDeck ? "Deck" : "Dummy";
@@ -58,13 +97,11 @@ public class Hero : MonoBehaviour
             Transform targetPos = GameObject.Find($"{color} {deckOrDummy} {i}").transform;
 
             if (isDeck)
-            {
                 card.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-            }
 
             card.transform.position = targetPos.position;
         }
-    }
+    }*/
 
 
     public void MoveCardsToHand() {

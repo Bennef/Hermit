@@ -94,8 +94,8 @@ public class UIManager : NetworkBehaviour
                 ShowCloseMyDeckButton();
             _blueHero.ShowDeck();
             _myDeckTextBlue.SetActive(true);
-            _blueHero.SetCardPositions(_blueHero.gameObject.transform.GetChild(0), true);
-            _redHero.SetCardPositions(_redHero.gameObject.transform.GetChild(1), false);
+            _blueHero.SetCardPositionsInDeck(_blueHero.gameObject.transform.GetChild(0));
+            _redHero.SetCardPositionsDummy(_redHero.gameObject.transform.GetChild(1));
         }
         else
         {
@@ -104,8 +104,8 @@ public class UIManager : NetworkBehaviour
                 ShowCloseMyDeckButton();
             _redHero.ShowDeck();
             _myDeckTextRed.SetActive(true);
-            _redHero.SetCardPositions(_redHero.gameObject.transform.GetChild(0), true);
-            _blueHero.SetCardPositions(_blueHero.gameObject.transform.GetChild(1), false);
+            _redHero.SetCardPositionsInDeck(_redHero.gameObject.transform.GetChild(0));
+            _blueHero.SetCardPositionsDummy(_blueHero.gameObject.transform.GetChild(1));
         }
     }
 

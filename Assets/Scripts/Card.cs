@@ -25,9 +25,9 @@ public class Card : MonoBehaviour
 
     void Awake() 
     {
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        uIManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
-        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
+        uIManager = FindAnyObjectByType<UIManager>();
+        audioManager = FindAnyObjectByType<AudioManager>();
         baseActions = GetComponents<Action>();
         AssignChildren();
     }
