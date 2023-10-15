@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class HCTManager : MonoBehaviour
@@ -6,10 +7,12 @@ public class HCTManager : MonoBehaviour
 
     [Header("Blue Player")]
     [SerializeField] int _blueSpeed;
+    [SerializeField] TMP_InputField _blueSpeedInput;
     GameObject[] _blueCards = new GameObject[8];
 
     [Header("Red Player")]
     [SerializeField] int _redSpeed;
+    [SerializeField] TextMeshProUGUI _redSpeedInput;
     GameObject[] _redCards = new GameObject[8];
 
     [Header("Game")]
@@ -41,6 +44,30 @@ public class HCTManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+        SetDefaults();
+        //_blueSpeedInput.onValueChanged.AddListener(UpdateIntFromInputField(_blueSpeedInput, _blueSpeed));
+    }
+
+    void UpdateIntFromInputField(string newText, int intToChange)
+    {
+        if (int.TryParse(newText, out int newValue))
+            intToChange = newValue;
+    }
+
+    void SetDefaults()
+    {
+        // Speed
+        _blueSpeed = 100;
+        _redSpeed = 90;
+
+        // Idol placement
+
+        // Cards
+
     }
 
     void Update()

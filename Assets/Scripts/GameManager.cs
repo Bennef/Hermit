@@ -101,7 +101,7 @@ public class GameManager : NetworkBehaviour
     void AssignHCTValues()
     {
         Transform blueCards = blueHero.transform.Find("Cards");
-
+        // should be 8 - check the hct count
         for (int i = 0; i < _hCTManager.BlueCards.Length; i++)
         {
             if (_hCTManager.BlueCards[i] != null)
@@ -114,7 +114,7 @@ public class GameManager : NetworkBehaviour
                 newCard.name = newCard.name.Replace("(Clone)", "").Trim();
                 Destroy(blueCards.GetChild(i).gameObject);
             }
-        }
+        }print(blueCards.childCount);
         // Set dummy cards as dummy
 
     }

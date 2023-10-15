@@ -49,8 +49,13 @@ public class MenuControl : MonoBehaviour
 
     void Update() // Delete after testing
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            _hCTScreen.SetActive(true);
+        if (Input.GetKeyDown(KeyCode.Space) && NetworkManager.Singleton.IsServer)
+        {
+            if (_hCTScreen.activeInHierarchy)
+                _hCTScreen.SetActive(false);
+            else
+                _hCTScreen.SetActive(true);
+        }
     }
 
     public void AcceptButtonClicked() => _hCTScreen.gameObject.SetActive(false);

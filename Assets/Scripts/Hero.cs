@@ -22,12 +22,14 @@ public class Hero : MonoBehaviour
     public void PutAllCardsInDeck() 
     {
         deck.Clear();
+        //print(deck.Count);
         hand.Clear();
         discardPile.Clear();
         cardInPlay = null;
         for (int i = 0; i < this.gameObject.transform.GetChild(0).childCount; i++) 
         {
             Card card = this.gameObject.transform.GetChild(0).GetChild(i).GetComponent<Card>();
+            //print(i + "  " + card);
             deck.Add(card);
             card?.AssignChildren();
             card?.HideHand();
