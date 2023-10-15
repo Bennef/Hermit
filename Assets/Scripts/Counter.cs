@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
+﻿using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,7 +10,7 @@ public class Counter : NetworkBehaviour
     public Transform startPos, currentPos, targetPos;
     public string gridPosString; // Make sure this is set before play
     float moveSpeed = 1f;
-    CameraShake cameraShake;
+    //CameraShake cameraShake;
     GameManager gameManager;
     AudioManager audioManager;
     Animator anim;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -37,11 +36,8 @@ public class Card : MonoBehaviour
     {
         blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
         redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
-        //Debug.Log(this);
         foreach (Action action in baseActions)
-        {
             action.AssignGhostCounters();
-        }
     }
 
     public void AssignChildren() 
@@ -58,13 +54,9 @@ public class Card : MonoBehaviour
             return;
 
         if (NetworkManager.Singleton.IsServer)
-        {
             hero = gameManager.blueHero;
-        }
         else
-        {
             hero = gameManager.redHero;
-        }
 
         if (inDeck) 
         {
@@ -103,14 +95,10 @@ public class Card : MonoBehaviour
         {
             PickUpCard(gameObject.transform);
             if (NetworkManager.Singleton.IsServer)
-            {
                 gameManager.blueSelectedCard = this;
-            }
             else
-            {
                 gameManager.redSelectedCard = this;
-            }
-            
+
             HandleOtherCardSelection(otherCard1);
             HandleOtherCardSelection(otherCard2);
             HandlePlayerDiscarding();////
@@ -326,9 +314,7 @@ public class Card : MonoBehaviour
                 }
             }
             if (copyAction)
-            {
                 CopyAction(action, newGcs);
-            }
         }
     }
 
@@ -374,38 +360,18 @@ public class Card : MonoBehaviour
     {
         Action[] actions = availableActionsObj.GetComponents<Action>();
         foreach (Action action in actions) 
-        {
             Destroy(action);
-        }
     }
 
-    public void ShowDiscardX() 
-    {
-        x.gameObject.SetActive(true);
-    }
+    public void ShowDiscardX() => x.gameObject.SetActive(true);
 
-    public void HideDiscardX() 
-    {
-        x.gameObject.SetActive(false);
-    }
+    public void HideDiscardX() => x.gameObject.SetActive(false);
 
-    public void ShowHand() 
-    {
-        hand.gameObject.SetActive(true);
-    }
+    public void ShowHand() => hand.gameObject.SetActive(true);
 
-    public void HideHand() 
-    {
-        hand.gameObject.SetActive(false);
-    }
+    public void HideHand() => hand.gameObject.SetActive(false);
 
-    public void ShowTick()
-    {
-        tick.gameObject.SetActive(true);
-    }
+    public void ShowTick() => tick.gameObject.SetActive(true);
 
-    public void HideTick() 
-    {
-        tick.gameObject.SetActive(false);
-    }
+    public void HideTick() => tick.gameObject.SetActive(false);
 }

@@ -89,8 +89,8 @@ public class GameManager : NetworkBehaviour
         redHero = GameObject.Find("Red Hero").GetComponent<Hero>();
         blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
         redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
-        uIManager.HideStartTurnButton(uIManager.startTurnButtonBlue);
-        uIManager.HideStartTurnButton(uIManager.startTurnButtonRed);
+        uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
+        uIManager.HideStartTurnButton(uIManager._startTurnButtonRed);
         if (NetworkManager.Singleton.IsServer)
         {
             redUIObjects.SetActive(false);
@@ -100,6 +100,7 @@ public class GameManager : NetworkBehaviour
             blueUIObjects.SetActive(false);
         }
         AssignHCTValues();
+        blueHero.PutAllCardsInDeck();
         AssignActionIdsAndCardIds();
         StartRound();
     }
@@ -110,15 +111,16 @@ public class GameManager : NetworkBehaviour
 
         for (int i = 0; i < _hCTManager.BlueCards.Length; i++)
         {
-            GameObject newCard = Instantiate(_hCTManager.BlueCards[i]);
+            if (_hCTManager.BlueCards[i] != null)
+            {
+                GameObject newCard = Instantiate(_hCTManager.BlueCards[i]);
 
-            newCard.transform.position = blueCards.GetChild(i).position;
-            newCard.transform.rotation = blueCards.GetChild(i).rotation;
-            newCard.transform.localScale = blueCards.GetChild(i).localScale;
-
-            newCard.transform.SetParent(blueCards);
-
-            Destroy(blueCards.GetChild(i).gameObject);
+                newCard.transform.SetPositionAndRotation(blueCards.GetChild(i).position, blueCards.GetChild(i).rotation);
+                newCard.transform.localScale = blueCards.GetChild(i).localScale;
+                newCard.transform.SetParent(blueCards);
+                newCard.name = newCard.name.Replace("(Clone)", "").Trim();
+                Destroy(blueCards.GetChild(i).gameObject);
+            }
         }
         // Set dummy cards as dummy
 
@@ -285,19 +287,19 @@ public class GameManager : NetworkBehaviour
         if (NetworkManager.Singleton.IsServer)
         {
             PlaceIdol();
-            uIManager.HideReadyText(uIManager.blueReadyTextBlue); 
-            uIManager.HideReadyText(uIManager.redReadyTextBlue); 
-            uIManager.SetHealth(uIManager.blueHealthSliderBlue, blueHero.health, uIManager.blueHealthTextBlue); 
-            uIManager.SetHealth(uIManager.redHealthSliderBlue, redHero.health, uIManager.redHealthTextBlue); 
-            uIManager.SetText(uIManager.roundTextBlue, "Round " + currentRound); 
+            uIManager.HideReadyText(uIManager._blueReadyTextBlue); 
+            uIManager.HideReadyText(uIManager._redReadyTextBlue); 
+            uIManager.SetHealth(uIManager._blueHealthSliderBlue, blueHero.health, uIManager._blueHealthTextBlue); 
+            uIManager.SetHealth(uIManager._redHealthSliderBlue, redHero.health, uIManager._redHealthTextBlue); 
+            uIManager.SetText(uIManager._roundTextBlue, "Round " + currentRound); 
         }
         else 
         {
-            uIManager.HideReadyText(uIManager.blueReadyTextRed); 
-            uIManager.HideReadyText(uIManager.redReadyTextRed); 
-            uIManager.SetHealth(uIManager.blueHealthSliderRed, blueHero.health, uIManager.blueHealthTextRed); 
-            uIManager.SetHealth(uIManager.redHealthSliderRed, redHero.health, uIManager.redHealthTextRed); 
-            uIManager.SetText(uIManager.roundTextRed, "Round " + currentRound); 
+            uIManager.HideReadyText(uIManager._blueReadyTextRed); 
+            uIManager.HideReadyText(uIManager._redReadyTextRed); 
+            uIManager.SetHealth(uIManager._blueHealthSliderRed, blueHero.health, uIManager._blueHealthTextRed); 
+            uIManager.SetHealth(uIManager._redHealthSliderRed, redHero.health, uIManager._redHealthTextRed); 
+            uIManager.SetText(uIManager._roundTextRed, "Round " + currentRound); 
         }
 
         uIManager.ShowMyDeckScreen();
@@ -307,12 +309,12 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("End of round " + currentRound);
         uIManager.HideCloseMyDeckButton();
-        uIManager.HideStartTurnButton(uIManager.startTurnButtonBlue);
+        uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
         //audioManager.PlaySound(audioManager.RoundWin);
         ResetAllCards();
         currentRound++;
         currentTurn = 1;
-        uIManager.SetText(uIManager.turnTextBlue, "Turn " + currentTurn); ////
+        uIManager.SetText(uIManager._turnTextBlue, "Turn " + currentTurn); ////
         blueHero.playerChoosingInitialCards = true;
         StartRound();
     }
@@ -322,7 +324,7 @@ public class GameManager : NetworkBehaviour
         turnRunning = true;
         blueTurnDone = redTurnDone = false;
         bluePickingHand = redPickingHand = false;
-        uIManager.SetText(uIManager.turnTextBlue, "Turn " + currentTurn); ////
+        uIManager.SetText(uIManager._turnTextBlue, "Turn " + currentTurn); ////
         Debug.Log("Turn " + currentTurn + " started");
         //PickCRandomCardsForHand(redHero);
         actionsToExecute = new string[6][]; // Clear the array
@@ -362,14 +364,14 @@ public class GameManager : NetworkBehaviour
             blueReadyToStart = true;
             UpdateReadyToStartBoolClientRpc(true);
             blueDeckCardsSelected = 0;
-            uIManager.HideStartTurnButton(uIManager.startTurnButtonBlue);
+            uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
         }
         else
         {
             redReadyToStart = true;
             UpdateReadyToStartBoolServerRpc(true);
             redDeckCardsSelected = 0;
-            uIManager.HideStartTurnButton(uIManager.startTurnButtonRed);
+            uIManager.HideStartTurnButton(uIManager._startTurnButtonRed);
         }
     }
 
@@ -486,11 +488,11 @@ public class GameManager : NetworkBehaviour
             blueDeckCardsSelected = valueToSet;
             if (blueDeckCardsSelected == 3)
             {
-                uIManager.ShowStartTurnButton(uIManager.startTurnButtonBlue);
+                uIManager.ShowStartTurnButton(uIManager._startTurnButtonBlue);
             }
             else
             {
-                uIManager.HideStartTurnButton(uIManager.startTurnButtonBlue);
+                uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
             }
         }
         else
@@ -498,11 +500,11 @@ public class GameManager : NetworkBehaviour
             redDeckCardsSelected = valueToSet;
             if (redDeckCardsSelected == 3)
             {
-                uIManager.ShowStartTurnButton(uIManager.startTurnButtonRed);
+                uIManager.ShowStartTurnButton(uIManager._startTurnButtonRed);
             }
             else
             {
-                uIManager.HideStartTurnButton(uIManager.startTurnButtonRed);
+                uIManager.HideStartTurnButton(uIManager._startTurnButtonRed);
             }
         }
     }
@@ -707,8 +709,8 @@ public class GameManager : NetworkBehaviour
             }
             if (CheckForDefeatWinner())
             {
-                uIManager.SetText(uIManager.roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
-                uIManager.SetText(uIManager.messageTextBlue, roundWinner + " player wins round " + currentRound);////
+                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
+                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);////
                 uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -728,8 +730,8 @@ public class GameManager : NetworkBehaviour
             }
             if (CheckForDefeatWinner())
             {
-                uIManager.SetText(uIManager.roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
-                uIManager.SetText(uIManager.messageTextBlue, roundWinner + " player wins round " + currentRound);////
+                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
+                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);////
                 uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -749,8 +751,8 @@ public class GameManager : NetworkBehaviour
             }
             if (CheckForDefeatWinner())
             {
-                uIManager.SetText(uIManager.roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
-                uIManager.SetText(uIManager.messageTextBlue, roundWinner + " player wins round " + currentRound);////
+                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
+                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);////
                 uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -769,8 +771,8 @@ public class GameManager : NetworkBehaviour
             }
             if (CheckForDefeatWinner())
             {
-                uIManager.SetText(uIManager.roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
-                uIManager.SetText(uIManager.messageTextBlue, roundWinner + " player wins round " + currentRound);////
+                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
+                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);////
                 uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -787,8 +789,8 @@ public class GameManager : NetworkBehaviour
 
             if (CheckForIdolWinner())
             {
-                uIManager.SetText(uIManager.roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);///
-                uIManager.SetText(uIManager.messageTextBlue, roundWinner + " player wins round " + currentRound);///
+                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);///
+                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);///
                 uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -912,9 +914,9 @@ public class GameManager : NetworkBehaviour
 
     void MatchOver() 
     {
-        uIManager.SetText(uIManager.messageTextBlue, roundWinner + " player wins Match! ");/////////
+        uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins Match! ");/////////
         uIManager.CallShowMessageOverlay();
-        uIManager.ShowButton(uIManager.resetButtonBlue);///////
+        uIManager.ShowButton(uIManager._resetButtonBlue);///////
         Debug.Log("Match Over!");
     }
 
@@ -968,13 +970,13 @@ public class GameManager : NetworkBehaviour
         hero.health = health;
         if (hero == redHero) 
         {
-            uIManager.SetHealth(uIManager.redHealthSliderBlue, health, uIManager.redHealthTextBlue);
-            uIManager.SetHealth(uIManager.redHealthSliderBlue, health, uIManager.redHealthTextRed);
+            uIManager.SetHealth(uIManager._redHealthSliderBlue, health, uIManager._redHealthTextBlue);
+            uIManager.SetHealth(uIManager._redHealthSliderBlue, health, uIManager._redHealthTextRed);
         }
         else 
         {
-            uIManager.SetHealth(uIManager.blueHealthSliderBlue, health, uIManager.blueHealthTextBlue);
-            uIManager.SetHealth(uIManager.redHealthSliderBlue, health, uIManager.redHealthTextRed);
+            uIManager.SetHealth(uIManager._blueHealthSliderBlue, health, uIManager._blueHealthTextBlue);
+            uIManager.SetHealth(uIManager._redHealthSliderBlue, health, uIManager._redHealthTextRed);
         }
     }
 

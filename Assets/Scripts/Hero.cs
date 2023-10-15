@@ -16,7 +16,7 @@ public class Hero : MonoBehaviour
     void Awake() 
     {// just have all the cards as prefabs in hhe game and find them based on string
         uIManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
-        PutAllCardsInDeck();
+        //PutAllCardsInDeck();
     }
 
     public void PutAllCardsInDeck() 
@@ -47,44 +47,25 @@ public class Hero : MonoBehaviour
         playerChoosingInitialCards = true;
     }
 
-    public void SetCardPositionsInDeck(Transform transform) 
+    public void SetCardPositions(Transform transform, bool isDeck)
     {
-        print("here" + transform);
+        string deckOrDummy = isDeck ? "Deck" : "Dummy";
+        string color = NetworkManager.Singleton.IsServer ? "Blue" : "Red";
+
         for (int i = 0; i < transform.childCount; i++)
         {
             Card card = transform.GetChild(i).GetComponent<Card>();
-            Transform deckPos;
-            if (NetworkManager.Singleton.IsServer)
+            Transform targetPos = GameObject.Find($"{color} {deckOrDummy} {i}").transform;
+
+            if (isDeck)
             {
-                deckPos = GameObject.Find("Blue Deck " + i).transform;
-            }
-            else
-            {
-                deckPos = GameObject.Find("Red Deck " + i).transform;
                 card.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
             }
-            card.transform.position = deckPos.position;
+
+            card.transform.position = targetPos.position;
         }
     }
 
-    public void SetCardPositionsDummy(Transform transform)
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Card card = transform.GetChild(i).GetComponent<Card>();
-            Transform dummyPos;
-            if (NetworkManager.Singleton.IsServer)
-            {
-                dummyPos = GameObject.Find("Red Dummy " + i).transform;
-                card.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-            }
-            else
-            {
-                dummyPos = GameObject.Find("Blue Dummy " + i).transform;
-            }
-            card.transform.position = dummyPos.position;
-        }
-    }
 
     public void MoveCardsToHand() {
         if (playerChoosingInitialCards) 
@@ -111,7 +92,7 @@ public class Hero : MonoBehaviour
     public void FilldeckFromDiscardPile() 
     {
         // Show overlay
-        uIManager.SetText(uIManager.messageTextBlue, this.name + " shuffling discard pile\nto fill their hand"); ////
+        uIManager.SetText(uIManager._messageTextBlue, this.name + " shuffling discard pile\nto fill their hand"); ////
         uIManager.CallShowMessageOverlay();
         List<Card> cardsToRemove = new List<Card>();
         foreach (Card card in discardPile) {

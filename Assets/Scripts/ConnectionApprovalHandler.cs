@@ -5,10 +5,7 @@ public class ConnectionApprovalHandler : MonoBehaviour
 {
     private const int MaxPlayers = 2;
 
-    private void Start() 
-    {
-        NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-    }
+    private void Start() => NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, 
         NetworkManager.ConnectionApprovalResponse response) 

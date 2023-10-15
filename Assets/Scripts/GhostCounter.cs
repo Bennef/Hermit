@@ -33,33 +33,16 @@ public class GhostCounter : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (NetworkManager.Singleton.IsServer)
+        Hero selectedHero = (NetworkManager.Singleton.IsServer) ? gameManager.blueHero : gameManager.redHero;
+        Card selectedCard = (NetworkManager.Singleton.IsServer) ? gameManager.blueSelectedCard : gameManager.redSelectedCard;
+
+        foreach (Action availableAction in selectedCard.availableActionsObj.GetComponents<Action>())
         {
-            foreach (Action availableAction in gameManager.blueSelectedCard.availableActionsObj.GetComponents<Action>())
+            foreach (GhostCounter gc in availableAction.ghostCounters)
             {
-                foreach(GhostCounter gc in availableAction.ghostCounters)
+                if (gc == this)
                 {
-                    if (gc == this)
-                    {
-                        //Debug.Log(this + " - " + gc);
-                        //Debug.Log(availableAction.ghostRefs[0]);
-                        gameManager.ActionSelected(gameManager.blueHero, availableAction.actionType, availableAction.ghostRefs);
-                    }
-                }
-            }
-        }
-        else
-        {
-            foreach (Action availableAction in gameManager.redSelectedCard.availableActionsObj.GetComponents<Action>())
-            {
-                foreach (GhostCounter gc in availableAction.ghostCounters)
-                {
-                    if (gc == this)
-                    {
-                        //Debug.Log(this + " - " + gc);
-                        //Debug.Log(availableAction.ghostRefs[0]);
-                        gameManager.ActionSelected(gameManager.redHero, availableAction.actionType, availableAction.ghostRefs);
-                    }
+                    gameManager.ActionSelected(selectedHero, availableAction.actionType, availableAction.ghostRefs);
                 }
             }
         }

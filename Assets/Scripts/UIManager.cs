@@ -8,59 +8,61 @@ using Unity.Netcode;
 public class UIManager : NetworkBehaviour
 {
     [Header("Objects")]
-    [SerializeField] Hero blueHero;
-    [SerializeField] Hero redHero;
-    [SerializeField] GameManager gameManager;
+    [SerializeField] Hero _blueHero;
+    [SerializeField] Hero _redHero;
 
     [Header("Blue UI")]
-    [SerializeField] public Slider blueHealthSliderBlue;
-    [SerializeField] public Slider redHealthSliderBlue;
-    public Text blueHealthTextBlue, redHealthTextBlue, roundTextBlue, turnTextBlue, roundsTextBlue, roundTimeLeftTextBlue,
-                redReadyTextBlue, blueReadyTextBlue, discardButtonTextBlue, messageTextBlue;
+    [SerializeField] public Slider _blueHealthSliderBlue;
+    [SerializeField] public Slider _redHealthSliderBlue;
+    public Text _blueHealthTextBlue, _redHealthTextBlue, _roundTextBlue, _turnTextBlue, _roundsTextBlue, _roundTimeLeftTextBlue,
+                _blueReadyTextBlue, _redReadyTextBlue, _discardButtonTextBlue, _messageTextBlue;
 
     [Header("Red UI")]
-    [SerializeField] public Slider blueHealthSliderRed;
-    [SerializeField] public Slider redHealthSliderRed;
-    public Text blueHealthTextRed, redHealthTextRed, roundTextRed, turnTextRed, roundsTextRed, roundTimeLeftTextRed,
-                redReadyTextRed, blueReadyTextRed, discardButtonTextRed, messageTextRed;
+    [SerializeField] public Slider _blueHealthSliderRed;
+    [SerializeField] public Slider _redHealthSliderRed;
+    public Text _blueHealthTextRed, _redHealthTextRed, _roundTextRed, _turnTextRed, _roundsTextRed, _roundTimeLeftTextRed,
+                _redReadyTextRed, _blueReadyTextRed, _discardButtonTextRed, _messageTextRed;
 
     [Header("Blue Objects")]
-    [SerializeField] GameObject mainCanvasBlue;
-    [SerializeField] GameObject myDeckScreenBlue;
-    [SerializeField] GameObject logButtonBlue;
-    [SerializeField] GameObject myDeckButtonBlue;
-    [SerializeField] GameObject gameLogCanvasBlue;
-    [SerializeField] GameObject lowerUIBlue;
-    [SerializeField] GameObject closeMyDeckButtonBlue;
-    [SerializeField] GameObject discardButtonBlue;
-    [SerializeField] GameObject messageOverlayBlue;
-    [SerializeField] GameObject myDeckTextBlue;
-    public GameObject startTurnButtonBlue;
-    public GameObject resetButtonBlue;
+    [SerializeField] GameObject _mainCanvasBlue;
+    [SerializeField] GameObject _myDeckScreenBlue;
+    [SerializeField] GameObject _logButtonBlue;
+    [SerializeField] GameObject _myDeckButtonBlue;
+    [SerializeField] GameObject _gameLogCanvasBlue;
+    [SerializeField] GameObject _lowerUIBlue;
+    [SerializeField] GameObject _closeMyDeckButtonBlue;
+    [SerializeField] GameObject _discardButtonBlue;
+    [SerializeField] GameObject _messageOverlayBlue;
+    [SerializeField] GameObject _myDeckTextBlue;
+    public GameObject _startTurnButtonBlue;
+    public GameObject _resetButtonBlue;
 
     [Header("Red Objects")]
-    [SerializeField] GameObject mainCanvasRed;
-    [SerializeField] GameObject myDeckScreenRed;
-    [SerializeField] GameObject logButtonRed;
-    [SerializeField] GameObject myDeckButtonRed;
-    [SerializeField] GameObject gameLogCanvasRede;
-    [SerializeField] GameObject lowerUIRed;
-    [SerializeField] GameObject closeMyDeckButtonRed;
-    [SerializeField] GameObject discardButtonRed;
-    [SerializeField] GameObject messageOverlayRed;
-    [SerializeField] GameObject myDeckTextRed;
-    public GameObject startTurnButtonRed;
-    public GameObject resetButtonRed;
+    [SerializeField] GameObject _mainCanvasRed;
+    [SerializeField] GameObject _myDeckScreenRed;
+    [SerializeField] GameObject _logButtonRed;
+    [SerializeField] GameObject _myDeckButtonRed;
+    [SerializeField] GameObject _gameLogCanvasRede;
+    [SerializeField] GameObject _lowerUIRed;
+    [SerializeField] GameObject _closeMyDeckButtonRed;
+    [SerializeField] GameObject _discardButtonRed;
+    [SerializeField] GameObject _messageOverlayRed;
+    [SerializeField] GameObject _myDeckTextRed;
+    public GameObject _startTurnButtonRed;
+    public GameObject _resetButtonRed;
 
-    public GameObject LogButtonBlue { get { return logButtonBlue; } }
-    public GameObject MyDeckButtonBlue { get { return logButtonBlue; } }
-    public GameObject LogButtonRed { get { return logButtonBlue; } }
-    public GameObject MyDeckButtonRed { get { return logButtonBlue; } }
+    public GameObject LogButtonBlue { get { return _logButtonBlue; } }
+    public GameObject MyDeckButtonBlue { get { return _logButtonBlue; } }
+    public GameObject LogButtonRed { get { return _logButtonBlue; } }
+    public GameObject MyDeckButtonRed { get { return _logButtonBlue; } }
+
+    GameManager _gameManager;
 
     void Start()
     {
-        blueHero = GameObject.Find("Blue Hero").GetComponent<Hero>();
-        redHero = GameObject.Find("Red Hero").GetComponent<Hero>();
+        _gameManager = FindAnyObjectByType<GameManager>();  
+        _blueHero = GameObject.Find("Blue Hero").GetComponent<Hero>();
+        _redHero = GameObject.Find("Red Hero").GetComponent<Hero>();
     }
 
     public void ReloadScene() 
@@ -79,31 +81,31 @@ public class UIManager : NetworkBehaviour
 
     public void SetText(Text text, string value) => text.text = value;
 
-    public void ShowMainCanvas() => mainCanvasBlue.SetActive(true);
+    public void ShowMainCanvas() => _mainCanvasBlue.SetActive(true);
 
-    public void HideMainCanvas() => mainCanvasBlue.SetActive(false);
+    public void HideMainCanvas() => _mainCanvasBlue.SetActive(false);
 
     public void ShowMyDeckScreen() 
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            myDeckScreenBlue.SetActive(true);
-            if (!gameManager.bluePickingHand)
+            _myDeckScreenBlue.SetActive(true);
+            if (!_gameManager.bluePickingHand)
                 ShowCloseMyDeckButton();
-            blueHero.ShowDeck();
-            myDeckTextBlue.SetActive(true);
-            blueHero.SetCardPositionsInDeck(blueHero.gameObject.transform.GetChild(0));
-            redHero.SetCardPositionsDummy(redHero.gameObject.transform.GetChild(1));
+            _blueHero.ShowDeck();
+            _myDeckTextBlue.SetActive(true);
+            _blueHero.SetCardPositions(_blueHero.gameObject.transform.GetChild(0), true);
+            _redHero.SetCardPositions(_redHero.gameObject.transform.GetChild(1), false);
         }
         else
         {
-            myDeckScreenRed.SetActive(true);
-            if (!gameManager.redPickingHand)
+            _myDeckScreenRed.SetActive(true);
+            if (!_gameManager.redPickingHand)
                 ShowCloseMyDeckButton();
-            redHero.ShowDeck();
-            myDeckTextRed.SetActive(true);
-            redHero.SetCardPositionsInDeck(redHero.gameObject.transform.GetChild(0));
-            blueHero.SetCardPositionsDummy(blueHero.gameObject.transform.GetChild(1));
+            _redHero.ShowDeck();
+            _myDeckTextRed.SetActive(true);
+            _redHero.SetCardPositions(_redHero.gameObject.transform.GetChild(0), true);
+            _blueHero.SetCardPositions(_blueHero.gameObject.transform.GetChild(1), false);
         }
     }
 
@@ -111,19 +113,19 @@ public class UIManager : NetworkBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            myDeckScreenBlue.SetActive(false);
+            _myDeckScreenBlue.SetActive(false);
             //lowerUIBlue.SetActive(true);
-            mainCanvasBlue.SetActive(true);
-            blueHero.HideDeck();
-            myDeckTextBlue.SetActive(false);
+            _mainCanvasBlue.SetActive(true);
+            _blueHero.HideDeck();
+            _myDeckTextBlue.SetActive(false);
         }
         else
         {
-            myDeckScreenRed.SetActive(false);
+            _myDeckScreenRed.SetActive(false);
             //lowerUIRed.SetActive(true);
-            mainCanvasRed.SetActive(true);
-            redHero.HideDeck();
-            myDeckTextRed.SetActive(false);
+            _mainCanvasRed.SetActive(true);
+            _redHero.HideDeck();
+            _myDeckTextRed.SetActive(false);
         }
     }
 
@@ -132,15 +134,15 @@ public class UIManager : NetworkBehaviour
         //gameLogCanvas.SetActive(true);
     }
 
-    public void HideGameLogScreen() => gameLogCanvasBlue.SetActive(false); ////
+    public void HideGameLogScreen() => _gameLogCanvasBlue.SetActive(false); ////
 
     public void ShowStartTurnButton(GameObject startTurnButton) => startTurnButton.SetActive(true);
  
     public void HideStartTurnButton(GameObject startTurnButton) => startTurnButton.SetActive(false);
 
-    public void ShowCloseMyDeckButton() => closeMyDeckButtonBlue.SetActive(true);
+    public void ShowCloseMyDeckButton() => _closeMyDeckButtonBlue.SetActive(true);
 
-    public void HideCloseMyDeckButton() => closeMyDeckButtonBlue.SetActive(false);
+    public void HideCloseMyDeckButton() => _closeMyDeckButtonBlue.SetActive(false);
 
     public void ShowLogAndMyDeckButton(GameObject logButton, GameObject myDeckButton)
     {
@@ -156,14 +158,14 @@ public class UIManager : NetworkBehaviour
 
     public void ShowDiscardButton()
     {
-        discardButtonBlue.SetActive(true);
-        discardButtonRed.SetActive(true);
+        _discardButtonBlue.SetActive(true);
+        _discardButtonRed.SetActive(true);
     }
 
     public void HideDiscardButton() 
     {
-        discardButtonBlue.SetActive(false);
-        discardButtonRed.SetActive(false);
+        _discardButtonBlue.SetActive(false);
+        _discardButtonRed.SetActive(false);
     }
 
     public void ShowReadyText(Text readyText)  => readyText.enabled = true;
@@ -179,13 +181,13 @@ public class UIManager : NetworkBehaviour
 
         if (NetworkManager.Singleton.IsServer)
         {
-            hero = blueHero;
-            ShowStartTurnButton(startTurnButtonBlue);
+            hero = _blueHero;
+            ShowStartTurnButton(_startTurnButtonBlue);
         }
         else
         {
-            hero = redHero;
-            ShowStartTurnButton(startTurnButtonRed);
+            hero = _redHero;
+            ShowStartTurnButton(_startTurnButtonRed);
         }
 
         foreach (Card card in hero.hand)
@@ -201,8 +203,8 @@ public class UIManager : NetworkBehaviour
             hero.DiscardCardFromHand(card);
             card.toBeDiscarded = false;
         }
-        gameManager.blueDiscarding = false;
-        gameManager.redDiscarding = false;
+        _gameManager.blueDiscarding = false;
+        _gameManager.redDiscarding = false;
         HideDiscardButton();
         ShowMyDeckScreen();
         HideCloseMyDeckButton();
@@ -217,13 +219,13 @@ public class UIManager : NetworkBehaviour
                 cardsToDiscard++;
             }
         }
-        if (hero == blueHero)
+        if (hero == _blueHero)
         {
-            discardButtonTextBlue.text = "Discard\n" + cardsToDiscard.ToString();
+            _discardButtonTextBlue.text = "Discard\n" + cardsToDiscard.ToString();
         }
         else
         {
-            discardButtonTextRed.text = "Discard\n" + cardsToDiscard.ToString();
+            _discardButtonTextRed.text = "Discard\n" + cardsToDiscard.ToString();
         }
     }
 
@@ -231,46 +233,46 @@ public class UIManager : NetworkBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            UpdateDiscardButtonText(blueHero);
-            ShowReadyText(blueReadyTextBlue);
-            ShowLogAndMyDeckButton(logButtonBlue, myDeckButtonBlue);
+            UpdateDiscardButtonText(_blueHero);
+            ShowReadyText(_blueReadyTextBlue);
+            ShowLogAndMyDeckButton(_logButtonBlue, _myDeckButtonBlue);
             ShowBlueReadyTextClientRpc();
-            gameManager.StartTurnButtonPressed(blueHero);
+            _gameManager.StartTurnButtonPressed(_blueHero);
         }
         else
         {
-            UpdateDiscardButtonText(redHero);
-            ShowReadyText(redReadyTextRed);
-            ShowLogAndMyDeckButton(logButtonRed, myDeckButtonRed);
+            UpdateDiscardButtonText(_redHero);
+            ShowReadyText(_redReadyTextRed);
+            ShowLogAndMyDeckButton(_logButtonRed, _myDeckButtonRed);
             ShowRedReadyTextServerRpc();
-            gameManager.StartTurnButtonPressed(redHero);
+            _gameManager.StartTurnButtonPressed(_redHero);
         }
     }
 
     [ClientRpc]
-    void ShowBlueReadyTextClientRpc() => ShowReadyText(blueReadyTextRed);
+    void ShowBlueReadyTextClientRpc() => ShowReadyText(_blueReadyTextRed);
 
     [ServerRpc(RequireOwnership = false)]
-    void ShowRedReadyTextServerRpc() => ShowReadyText(redReadyTextBlue);
+    void ShowRedReadyTextServerRpc() => ShowReadyText(_redReadyTextBlue);
 
     public void GameStarting()
     {
         ShowLogAndMyDeckButton(LogButtonRed, MyDeckButtonRed);
         ShowLogAndMyDeckButton(LogButtonBlue, MyDeckButtonBlue);
-        HideReadyText(blueReadyTextBlue);
-        HideReadyText(redReadyTextBlue);
-        HideReadyText(blueReadyTextRed);
-        HideReadyText(redReadyTextRed);
+        HideReadyText(_blueReadyTextBlue);
+        HideReadyText(_redReadyTextBlue);
+        HideReadyText(_blueReadyTextRed);
+        HideReadyText(_redReadyTextRed);
     }
 
     public void CallShowMessageOverlay() => StartCoroutine(ShowMessageOverlay());
 
     public IEnumerator ShowMessageOverlay()
     {
-        messageOverlayBlue.SetActive(true);
+        _messageOverlayBlue.SetActive(true);
         yield return new WaitForSeconds(3);
         HideMessageOverlay();
     }
 
-    public void HideMessageOverlay() => messageOverlayBlue.SetActive(false);
+    public void HideMessageOverlay() => _messageOverlayBlue.SetActive(false);
 }
