@@ -49,6 +49,7 @@ public class Hero : MonoBehaviour
 
     public void SetCardPositionsInDeck(Transform transform) 
     {
+        print("here" + transform);
         for (int i = 0; i < transform.childCount; i++)
         {
             Card card = transform.GetChild(i).GetComponent<Card>();

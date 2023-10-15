@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using System.Linq;
-using System;
 
 public class GameManager : NetworkBehaviour
 {
@@ -50,6 +48,7 @@ public class GameManager : NetworkBehaviour
         blueCardInHandPos1, blueCardInHandPos2, blueCardInHandPos3, 
         redCardInHandPos1, redCardInHandPos2, redCardInHandPos3;
 
+    HCTManager _hCTManager;
     UIManager uIManager;
     AudioManager audioManager;
     Coroutine turnTimerCoroutine;
@@ -57,32 +56,24 @@ public class GameManager : NetworkBehaviour
 
     public static GameManager Singleton { get; private set; }
 
-    public Counter BlueCounter
-    {
-        get { return blueCounter; }
-    }
+    public Counter BlueCounter { get { return blueCounter; }}
 
-    // Getter for redCounter
-    public Counter RedCounter
-    {
-        get { return redCounter; }
-    }
+    public Counter RedCounter { get { return redCounter; }}
 
     void Awake()
     {
         AssignCamera();
-        // Check if an instance already exists
+
         if (Singleton == null)
         {
-            // If not, set this object as the instance
             Singleton = this;
         }
         else
         {
-            // If an instance already exists, destroy this object
             Destroy(gameObject);
         }
         SpawnObjects();
+
         if (!NetworkManager.Singleton.IsServer)
         {
             FlipArrowsForRed();
@@ -91,8 +82,9 @@ public class GameManager : NetworkBehaviour
 
     void Start()
     {
-        uIManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
-        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        _hCTManager = FindObjectOfType<HCTManager>();
+        uIManager = FindObjectOfType<UIManager>();
+        audioManager = FindObjectOfType<AudioManager>();
         blueHero = GameObject.Find("Blue Hero").GetComponent<Hero>();
         redHero = GameObject.Find("Red Hero").GetComponent<Hero>();
         blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
@@ -107,8 +99,29 @@ public class GameManager : NetworkBehaviour
         {
             blueUIObjects.SetActive(false);
         }
+        AssignHCTValues();
         AssignActionIdsAndCardIds();
         StartRound();
+    }
+
+    void AssignHCTValues()
+    {
+        Transform blueCards = blueHero.transform.Find("Cards");
+
+        for (int i = 0; i < _hCTManager.BlueCards.Length; i++)
+        {
+            GameObject newCard = Instantiate(_hCTManager.BlueCards[i]);
+
+            newCard.transform.position = blueCards.GetChild(i).position;
+            newCard.transform.rotation = blueCards.GetChild(i).rotation;
+            newCard.transform.localScale = blueCards.GetChild(i).localScale;
+
+            newCard.transform.SetParent(blueCards);
+
+            Destroy(blueCards.GetChild(i).gameObject);
+        }
+        // Set dummy cards as dummy
+
     }
 
     void FlipArrowsForRed()
@@ -193,7 +206,6 @@ public class GameManager : NetworkBehaviour
 
     void SpawnObjects()
     {
-        //GameObject go = Instantiate(idol, Vector3.zero, Quaternion.identity);
         // Heroes
         GameObject blueHero = Instantiate(hero1Obj, Vector3.zero, Quaternion.identity);
         blueHero.name = "Blue Hero";
@@ -295,7 +307,7 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("End of round " + currentRound);
         uIManager.HideCloseMyDeckButton();
-        uIManager.HideStartTurnButton(uIManager.startTurnButtonBlue); // hide red too?
+        uIManager.HideStartTurnButton(uIManager.startTurnButtonBlue);
         //audioManager.PlaySound(audioManager.RoundWin);
         ResetAllCards();
         currentRound++;
@@ -882,14 +894,12 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     void UpdateTurnDoneBoolClientRpc(bool trueOrFalse)
     {
-        //.Log("sending blue turn done to client");
         blueTurnDone = trueOrFalse;
     }
 
     [ServerRpc(RequireOwnership = false)]
     void UpdateTurnDoneBoolServerRpc(bool trueOrFalse)
     {
-        //Debug.Log("sending red turn done to server");
         redTurnDone = trueOrFalse;
     }
 
@@ -948,14 +958,8 @@ public class GameManager : NetworkBehaviour
 
     bool CheckForMatchWinner() 
     {
-        if (blueRoundsWon == 2) 
-        {
+        if (blueRoundsWon == 2 || redRoundsWon == 2) 
             return true;
-        }
-        else if (redRoundsWon == 2) 
-        {
-            return true;
-        }
         return false;
     }
 

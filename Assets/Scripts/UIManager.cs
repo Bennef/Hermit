@@ -75,25 +75,13 @@ public class UIManager : NetworkBehaviour
         SetText(text, valueToSet.ToString());
     }
 
-    public void ShowButton(GameObject button) 
-    {
-        button.SetActive(true);
-    }
+    public void ShowButton(GameObject button) => button.SetActive(true);
 
-    public void SetText(Text text, string value) 
-    {
-        text.text = value;
-    }
+    public void SetText(Text text, string value) => text.text = value;
 
-    public void ShowMainCanvas() 
-    {
-        mainCanvasBlue.SetActive(true);
-    }
+    public void ShowMainCanvas() => mainCanvasBlue.SetActive(true);
 
-    public void HideMainCanvas()
-    {
-        mainCanvasBlue.SetActive(false);
-    }
+    public void HideMainCanvas() => mainCanvasBlue.SetActive(false);
 
     public void ShowMyDeckScreen() 
     {
@@ -144,30 +132,15 @@ public class UIManager : NetworkBehaviour
         //gameLogCanvas.SetActive(true);
     }
 
-    public void HideGameLogScreen() 
-    {
-        gameLogCanvasBlue.SetActive(false); ////
-    }
+    public void HideGameLogScreen() => gameLogCanvasBlue.SetActive(false); ////
 
-    public void ShowStartTurnButton(GameObject startTurnButton) 
-    {
-        startTurnButton.SetActive(true);
-    }
+    public void ShowStartTurnButton(GameObject startTurnButton) => startTurnButton.SetActive(true);
+ 
+    public void HideStartTurnButton(GameObject startTurnButton) => startTurnButton.SetActive(false);
 
-    public void HideStartTurnButton(GameObject startTurnButton) 
-    {
-        startTurnButton.SetActive(false);
-    }
+    public void ShowCloseMyDeckButton() => closeMyDeckButtonBlue.SetActive(true);
 
-    public void ShowCloseMyDeckButton() 
-    {
-        closeMyDeckButtonBlue.SetActive(true);
-    }
-
-    public void HideCloseMyDeckButton() 
-    {
-        closeMyDeckButtonBlue.SetActive(false);
-    }
+    public void HideCloseMyDeckButton() => closeMyDeckButtonBlue.SetActive(false);
 
     public void ShowLogAndMyDeckButton(GameObject logButton, GameObject myDeckButton)
     {
@@ -193,15 +166,9 @@ public class UIManager : NetworkBehaviour
         discardButtonRed.SetActive(false);
     }
 
-    public void ShowReadyText(Text readyText) 
-    {
-        readyText.enabled = true;
-    }
+    public void ShowReadyText(Text readyText)  => readyText.enabled = true;
 
-    public void HideReadyText(Text readyText) 
-    {
-        readyText.enabled = false;
-    }
+    public void HideReadyText(Text readyText) => readyText.enabled = false;
 
     public void DiscardButtonPress() 
     {
@@ -281,16 +248,10 @@ public class UIManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void ShowBlueReadyTextClientRpc() 
-    {
-        ShowReadyText(blueReadyTextRed);
-    }
+    void ShowBlueReadyTextClientRpc() => ShowReadyText(blueReadyTextRed);
 
     [ServerRpc(RequireOwnership = false)]
-    void ShowRedReadyTextServerRpc()
-    {
-        ShowReadyText(redReadyTextBlue);
-    }
+    void ShowRedReadyTextServerRpc() => ShowReadyText(redReadyTextBlue);
 
     public void GameStarting()
     {
@@ -302,10 +263,7 @@ public class UIManager : NetworkBehaviour
         HideReadyText(redReadyTextRed);
     }
 
-    public void CallShowMessageOverlay() 
-    {
-        StartCoroutine(ShowMessageOverlay());
-    }
+    public void CallShowMessageOverlay() => StartCoroutine(ShowMessageOverlay());
 
     public IEnumerator ShowMessageOverlay()
     {
@@ -314,8 +272,5 @@ public class UIManager : NetworkBehaviour
         HideMessageOverlay();
     }
 
-    public void HideMessageOverlay() 
-    {
-        messageOverlayBlue.SetActive(false);
-    }
+    public void HideMessageOverlay() => messageOverlayBlue.SetActive(false);
 }

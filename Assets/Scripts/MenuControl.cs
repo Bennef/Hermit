@@ -6,11 +6,16 @@ using UnityEngine;
 
 public class MenuControl : MonoBehaviour
 {
-    [SerializeField]
-    TMP_Text m_IPAddressText;
+    [SerializeField] TMP_Text m_IPAddressText;
 
-    [SerializeField]
-    string m_LobbySceneName = "InvadersLobby";
+    [SerializeField] string m_LobbySceneName = "Lobby";
+    [SerializeField] GameObject _hCTScreen;
+
+    void Awake()
+    {
+        _hCTScreen = GameObject.Find("HCT Canvas");
+        _hCTScreen.SetActive(false);
+    }
 
     public void StartGame()
     {
@@ -48,4 +53,14 @@ public class MenuControl : MonoBehaviour
         // sanitize the input for the ip address
         return Regex.Replace(dirtyString, "[^A-Za-z0-9.]", "");
     }
+
+    void Update() // Delete after testing
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _hCTScreen.SetActive(true);
+        }
+    }
+
+    public void AcceptButtonClicked() => _hCTScreen.gameObject.SetActive(false);
 }
