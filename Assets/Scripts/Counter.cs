@@ -114,8 +114,8 @@ public class Counter : NetworkBehaviour
         currentPos = targetPos;
         UpdateCounterPosString();
 
-        if (gameManager.idolPosInt == 0) yield break;
-        if (int.Parse(gridPosString) == gameManager.idolPosInt)
+        if (gameManager.IdolPosInt == 0) yield break;
+        if (int.Parse(gridPosString) == gameManager.IdolPosInt)
         {
             gameManager.PickupIdol(this);
         }

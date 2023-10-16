@@ -49,7 +49,7 @@ public class MenuControl : MonoBehaviour
 
     void Update() // Delete after testing
     {
-        if (Input.GetKeyDown(KeyCode.Space) && NetworkManager.Singleton.IsServer)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (_hCTScreen.activeInHierarchy)
                 _hCTScreen.SetActive(false);

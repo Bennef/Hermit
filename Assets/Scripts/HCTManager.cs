@@ -17,7 +17,8 @@ public class HCTManager : MonoBehaviour
 
     [Header("Game")]
     [SerializeField] GameObject _selectedImage;
-    [SerializeField] string idolPos = "";
+    [SerializeField] int _idolPosInt;
+    [SerializeField] GameObject _idolImage;
     [SerializeField] HCTSlot _selectedSlot;
 
     public GameObject SelectedImage
@@ -33,7 +34,10 @@ public class HCTManager : MonoBehaviour
     }
 
     public GameObject[] BlueCards { get { return _blueCards; }}
+    public int BlueSpeed { get { return _blueSpeed; }}
     public GameObject[] RedCards { get { return _redCards; } }
+    public int RedSpeed { get { return _redSpeed; } }
+    public int IdolPosInt{ get { return _idolPosInt; } }
 
     void Awake()
     {
@@ -49,13 +53,14 @@ public class HCTManager : MonoBehaviour
     void Start()
     {
         SetDefaults();
-        //_blueSpeedInput.onValueChanged.AddListener(UpdateIntFromInputField(_blueSpeedInput, _blueSpeed));
     }
 
-    void UpdateIntFromInputField(string newText, int intToChange)
+    public void UpdateIntFromInputField(TMP_InputField inputField)
     {
-        if (int.TryParse(newText, out int newValue))
-            intToChange = newValue;
+        if (inputField == _blueSpeedInput)
+            _blueSpeed = int.Parse(inputField.text);
+        else
+            _redSpeed = int.Parse(inputField.text);
     }
 
     void SetDefaults()
@@ -63,8 +68,6 @@ public class HCTManager : MonoBehaviour
         // Speed
         _blueSpeed = 100;
         _redSpeed = 90;
-
-        // Idol placement
 
         // Cards
 
@@ -84,5 +87,12 @@ public class HCTManager : MonoBehaviour
     public void InsertCardToList(int index, GameObject card, GameObject[] cardArray)
     {
         cardArray[index] = card;
+    }
+
+    public void IdolClickableSquareClicked(Transform clickableSquare)
+    {
+        _idolImage.SetActive(true);
+        _idolImage.transform.position = clickableSquare.position;
+        _idolPosInt = int.Parse(clickableSquare.name.Substring(clickableSquare.name.Length - 2));
     }
 }

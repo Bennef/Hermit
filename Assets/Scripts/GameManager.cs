@@ -41,9 +41,9 @@ public class GameManager : NetworkBehaviour
     [SerializeField] GameObject hero1Obj;
     [SerializeField] GameObject hero2Obj;
     [SerializeField] Counter blueCounter, redCounter, firstToGo, secondToGo;
+    [SerializeField] int _idolPosInt;
     public Hero blueHero, redHero;
     public GameObject blueCamera, redCamera, blueCup, redCup;
-    public int idolPosInt;
     public Transform blueHasIdolPos, redHasIdolPos, 
         blueCardInHandPos1, blueCardInHandPos2, blueCardInHandPos3, 
         redCardInHandPos1, redCardInHandPos2, redCardInHandPos3;
@@ -57,8 +57,8 @@ public class GameManager : NetworkBehaviour
     public static GameManager Singleton { get; private set; }
 
     public Counter BlueCounter { get { return blueCounter; }}
-
     public Counter RedCounter { get { return redCounter; }}
+    public int IdolPosInt { get { return _idolPosInt; }}
 
     void Awake()
     {
@@ -100,6 +100,10 @@ public class GameManager : NetworkBehaviour
 
     void AssignHCTValues()
     {
+        // Speed
+        blueHero.speed = _hCTManager.BlueSpeed;
+        redHero.speed = _hCTManager.RedSpeed;
+
         Transform blueCards = blueHero.transform.Find("Cards");
         // should be 8 - check the hct count
         for (int i = 0; i < _hCTManager.BlueCards.Length; i++)
@@ -964,32 +968,35 @@ public class GameManager : NetworkBehaviour
 
     void PlaceIdol() 
     {
-        //Debug.Log("Placing idol");
-        float randomNum = UnityEngine.Random.Range(1, 6);
-        switch(randomNum) 
+        _idolPosInt = _hCTManager.IdolPosInt;
+        if (_idolPosInt == 0)
         {
-            case 1:
-                idol.transform.position = GameObject.Find("Green Counter 13").transform.position;
-                idolPosInt = 13;
-                break;
-            case 2:
-                idol.transform.position = GameObject.Find("Green Counter 23").transform.position;
-                idolPosInt = 23;
-                break;
-            case 3:
-                idol.transform.position = GameObject.Find("Green Counter 33").transform.position;
-                idolPosInt = 33;
-                break;
-            case 4:
-                idol.transform.position = GameObject.Find("Green Counter 43").transform.position;
-                idolPosInt = 43;
-                break;
-            default:
-                idol.transform.position = GameObject.Find("Green Counter 53").transform.position;
-                idolPosInt = 53;
-                break;
+            float randomNum = UnityEngine.Random.Range(1, 6);
+            switch (randomNum)
+            {
+                case 1:
+                    idol.transform.position = GameObject.Find("Green Counter 13").transform.position;
+                    _idolPosInt = 13;
+                    break;
+                case 2:
+                    idol.transform.position = GameObject.Find("Green Counter 23").transform.position;
+                    _idolPosInt = 23;
+                    break;
+                case 3:
+                    idol.transform.position = GameObject.Find("Green Counter 33").transform.position;
+                    _idolPosInt = 33;
+                    break;
+                case 4:
+                    idol.transform.position = GameObject.Find("Green Counter 43").transform.position;
+                    _idolPosInt = 43;
+                    break;
+                default:
+                    idol.transform.position = GameObject.Find("Green Counter 53").transform.position;
+                    _idolPosInt = 53;
+                    break;
+            }
         }
-        PlaceIdolClientRpc(idolPosInt);
+        PlaceIdolClientRpc(_idolPosInt);
     }
 
     [ClientRpc]
@@ -1000,7 +1007,7 @@ public class GameManager : NetworkBehaviour
 
     public void PickupIdol(Counter counter) 
     {
-        idolPosInt = 0;
+        _idolPosInt = 0;
         audioManager.PlaySound(audioManager.CollectIdol);
         if (counter == blueCounter) 
         {
