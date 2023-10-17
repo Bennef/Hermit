@@ -6,59 +6,61 @@ using Unity.Netcode;
 public class GameManager : NetworkBehaviour
 {
     [Header("Game Stats")]
-    [SerializeField] float turnTime = 60f;
-    [SerializeField] float countDownTimer;
-    [SerializeField] int currentTurn;
-    [SerializeField] int currentRound = 1;
-    [SerializeField] int blueRoundsWon;
-    [SerializeField] int redRoundsWon;
-    [SerializeField] Hero hasIdol;
-    [SerializeField] string roundWinner = "";
-    [SerializeField] public int blueDeckCardsSelected = 0;
-    [SerializeField] public int redDeckCardsSelected = 0;
+    [SerializeField] float _turnTime = 60f;
+    [SerializeField] float _countDownTimer;
+    [SerializeField] int _currentTurn;
+    [SerializeField] int _currentRound = 1;
+    [SerializeField] int _blueRoundsWon, _redRoundsWon;
+    [SerializeField] Hero _hasIdol;
+    [SerializeField] string _roundWinner = "";
+    [SerializeField] int _blueDeckCardsSelected, _redDeckCardsSelected;
 
     [Header("Game Flow")]
-    [SerializeField] public bool aIPlaying = true;
-    [SerializeField] public bool blueDiscarding;
-    [SerializeField] public bool redDiscarding;
-    [SerializeField] public bool bluePickingHand = true;
-    [SerializeField] public bool redPickingHand = true;
-    [SerializeField] public bool blueReadyToStart = true;
-    [SerializeField] public bool redReadyToStart = true;
-    [SerializeField] public bool turnRunning = true;
-    public Card blueSelectedCard, redSelectedCard;
-    public int bluePlayedCardId, redPlayedCardId;
-    [SerializeField] public bool blueTurnDone = true;
-    [SerializeField] public bool redTurnDone = true;
-    [SerializeField] string[][] actionsToExecute;
+    [SerializeField] bool _aIPlaying = true;
+    [SerializeField] bool _blueDiscarding, _redDiscarding;
+    [SerializeField] bool _bluePickingHand = true, _redPickingHand = true;
+    [SerializeField] bool _blueReadyToStart, _redReadyToStart;
+    [SerializeField] bool _turnRunning;
+    [SerializeField] Card _blueSelectedCard, redSelectedCard;
+    [SerializeField] int _bluePlayedCardId, _redPlayedCardId;
+    [SerializeField] bool _blueTurnDone = true, _redTurnDone = true;
+    [SerializeField] string[][] _actionsToExecute;
 
     [Header("Objects")]
-    [SerializeField] GameObject blueUIObjects;
-    [SerializeField] GameObject redUIObjects;
     [SerializeField] GameObject idol;
-    [SerializeField] GameObject blueCounterObj;
-    [SerializeField] GameObject redCounterObj;
-    [SerializeField] GameObject hero1Obj;
-    [SerializeField] GameObject hero2Obj;
+    [SerializeField] GameObject blueUIObjects, redUIObjects;
+    [SerializeField] GameObject blueCounterObj, redCounterObj;
+    [SerializeField] GameObject hero1Obj, hero2Obj;
     [SerializeField] Counter blueCounter, redCounter, firstToGo, secondToGo;
     [SerializeField] int _idolPosInt;
-    public Hero blueHero, redHero;
-    public GameObject blueCamera, redCamera, blueCup, redCup;
-    public Transform blueHasIdolPos, redHasIdolPos, 
+    [SerializeField] Hero _blueHero, _redHero;
+    [SerializeField] GameObject blueCamera, redCamera, blueCup, redCup;
+    [SerializeField] Transform blueHasIdolPos, redHasIdolPos, 
         blueCardInHandPos1, blueCardInHandPos2, blueCardInHandPos3, 
         redCardInHandPos1, redCardInHandPos2, redCardInHandPos3;
 
     HCTManager _hCTManager;
-    UIManager uIManager;
-    AudioManager audioManager;
-    Coroutine turnTimerCoroutine;
+    UIManager _uIManager;
+    AudioManager _audioManager;
+    Coroutine _turnTimerCoroutine;
     List<Card> allCards = new List<Card>();
 
     public static GameManager Singleton { get; private set; }
-
     public Counter BlueCounter { get { return blueCounter; }}
     public Counter RedCounter { get { return redCounter; }}
     public int IdolPosInt { get { return _idolPosInt; }}
+    public bool BlueDiscarding { get => _blueDiscarding; set => _blueDiscarding = value; }
+    public bool RedDiscarding { get => _redDiscarding; set => _redDiscarding = value; }
+    public bool BluePickingHand { get => _bluePickingHand; set => _bluePickingHand = value; }
+    public bool RedPickingHand { get => _redPickingHand; set => _redPickingHand = value; }
+    public int BlueDeckCardsSelected { get => _blueDeckCardsSelected; }
+    public int RedDeckCardsSelected { get => _redDeckCardsSelected; }
+    public Card BlueSelectedCard { get => _blueSelectedCard; set => _blueSelectedCard = value; }
+    public Card RedSelectedCard { get => redSelectedCard; set => redSelectedCard = value; }
+    public bool BlueTurnDone { get => _blueTurnDone; set => _blueTurnDone = value; }
+    public bool RedTurnDone { get => _redTurnDone; set => _redTurnDone = value; }
+    public Hero BlueHero { get => _blueHero; set => _blueHero = value; }
+    public Hero RedHero { get => _redHero; set => _redHero = value; }
 
     void Awake()
     {
@@ -78,14 +80,14 @@ public class GameManager : NetworkBehaviour
     void Start()
     {
         _hCTManager = FindObjectOfType<HCTManager>();
-        uIManager = FindObjectOfType<UIManager>();
-        audioManager = FindObjectOfType<AudioManager>();
-        blueHero = GameObject.Find("Blue Hero").GetComponent<Hero>();
-        redHero = GameObject.Find("Red Hero").GetComponent<Hero>();
+        _uIManager = FindObjectOfType<UIManager>();
+        _audioManager = FindObjectOfType<AudioManager>();
+        _blueHero = GameObject.Find("Blue Hero").GetComponent<Hero>(); 
+        _redHero = GameObject.Find("Red Hero").GetComponent<Hero>();
         blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
         redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
-        uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
-        uIManager.HideStartTurnButton(uIManager._startTurnButtonRed);
+        _uIManager.HideStartTurnButton(_uIManager._startTurnButtonBlue);
+        _uIManager.HideStartTurnButton(_uIManager._startTurnButtonRed);
 
         if (NetworkManager.Singleton.IsServer)
             redUIObjects.SetActive(false);
@@ -93,18 +95,18 @@ public class GameManager : NetworkBehaviour
             blueUIObjects.SetActive(false);
 
         AssignHCTValues();
-        blueHero.PutAllCardsInDeck();
+        _blueHero.PutAllCardsInDeck();
+        _redHero.PutAllCardsInDeck();
         AssignActionIdsAndCardIds();
         StartRound();
     }
 
     void AssignHCTValues()
     {
-        // Speed
-        blueHero.speed = _hCTManager.BlueSpeed;
-        redHero.speed = _hCTManager.RedSpeed;
+        _blueHero.speed = _hCTManager.BlueSpeed;
+        _redHero.speed = _hCTManager.RedSpeed;
 
-        Transform blueCards = blueHero.transform.Find("Cards");
+        Transform blueCards = _blueHero.transform.Find("Cards");
         // should be 8 - check the hct count
         for (int i = 0; i < _hCTManager.BlueCards.Length; i++)
         {
@@ -120,7 +122,16 @@ public class GameManager : NetworkBehaviour
             }
         }print(blueCards.childCount);
         // Set dummy cards as dummy
+        AssignHCTValuesClientRpc(_blueHero.speed, _redHero.speed);
+    }
 
+    [ClientRpc]
+    void AssignHCTValuesClientRpc(int blueSpeed, int redSpeed)
+    {
+        //print(blueHero);
+        _blueHero.speed = blueSpeed;
+        _redHero.speed = redSpeed;
+        print("d");
     }
 
     void FlipArrowsForRed()
@@ -160,8 +171,8 @@ public class GameManager : NetworkBehaviour
 
     void AssignActionIdsAndCardIds()
     {
-        Card[] blueCards = blueHero.GetComponentsInChildren<Card>();
-        Card[] redCards = redHero.GetComponentsInChildren<Card>();
+        Card[] blueCards = _blueHero.GetComponentsInChildren<Card>();
+        Card[] redCards = _redHero.GetComponentsInChildren<Card>();
         allCards.AddRange(blueCards);
         allCards.AddRange(redCards);
 
@@ -197,20 +208,20 @@ public class GameManager : NetworkBehaviour
     void SpawnObjects()
     {
         // Heroes
-        GameObject blueHero = Instantiate(hero1Obj, Vector3.zero, Quaternion.identity);
-        blueHero.name = "Blue Hero";
-        GameObject redHero = Instantiate(hero2Obj, Vector3.zero, Quaternion.identity);
-        redHero.name = "Red Hero";
+        GameObject blueHeroObj = Instantiate(hero1Obj, Vector3.zero, Quaternion.identity);
+        blueHeroObj.name = "Blue Hero";
+        GameObject redHeroObj = Instantiate(hero2Obj, Vector3.zero, Quaternion.identity);
+        redHeroObj.name = "Red Hero";
         // Counters
         GameObject bc = Instantiate(blueCounterObj, Vector3.zero, Quaternion.identity);
         GameObject rc = Instantiate(redCounterObj, Vector3.zero, Quaternion.identity);
         // Camera layers
         int blueHeroLayer = LayerMask.NameToLayer("Blue Player");
         int redHeroLayer = LayerMask.NameToLayer("Red Player");
-        SetLayer(blueHero.transform.GetChild(0), blueHeroLayer);
-        SetLayer(blueHero.transform.GetChild(1), redHeroLayer);
-        SetLayer(redHero.transform.GetChild(0), redHeroLayer);
-        SetLayer(redHero.transform.GetChild(1), blueHeroLayer);
+        SetLayer(blueHeroObj.transform.GetChild(0), blueHeroLayer);
+        SetLayer(blueHeroObj.transform.GetChild(1), redHeroLayer);
+        SetLayer(redHeroObj.transform.GetChild(0), redHeroLayer);
+        SetLayer(redHeroObj.transform.GetChild(1), blueHeroLayer);
     }
 
     void SetLayer(Transform transform, int newLayer)
@@ -227,137 +238,135 @@ public class GameManager : NetworkBehaviour
 
     void Update() 
     {
-        if (!turnRunning && blueReadyToStart && redReadyToStart)
+        if (!_turnRunning && _blueReadyToStart && _redReadyToStart)
         {
             Debug.Log("Both ready to start turn");
-            blueReadyToStart = false;
-            redReadyToStart = false;
+            _blueReadyToStart = false;
+            _redReadyToStart = false;
             OrganiseCardsForTurn();
-            uIManager.GameStarting();
-            currentTurn++;
+            _uIManager.GameStarting();
+            _currentTurn++;
             StartTurn();
         }
 
-        if (!turnRunning) return;
+        if (!_turnRunning) return;
         
-        if (blueTurnDone && redTurnDone) 
+        if (_blueTurnDone && _redTurnDone) 
         {
-            turnRunning = blueTurnDone = redTurnDone = false;//////
+            _turnRunning = _blueTurnDone = _redTurnDone = false;//////
             StartCoroutine(ExecuteFlowOfEvents());
         }
         /*
-        countDownTimer -= Time.deltaTime;
-        if (countDownTimer > 0) 
+        _countDownTimer -= Time.deltaTime;
+        if (_countDownTimer > 0) 
         {
-            uIManager.SetText(uIManager.roundTimeLeftTextBlue, "Time\n" + countDownTimer.ToString().Substring(0, 3));////
+            _uIManager.SetText(_uIManager.roundTimeLeftTextBlue, "Time\n" + _countDownTimer.ToString().Substring(0, 3));////
         }
         else 
         {
-            uIManager.SetText(uIManager.roundTimeLeftTextBlue, "Time\n" + "0"); ////
+            _uIManager.SetText(_uIManager.roundTimeLeftTextBlue, "Time\n" + "0"); ////
         }*/
     }
 
     public void StartRound() 
     {
-        Debug.Log("Start of round " + currentRound);
-        blueHero.health = 100;
-        redHero.health = 100;
-        hasIdol = null;
-        bluePickingHand = true;
-        redPickingHand = true; //// send these
+        Debug.Log("Start of round " + _currentRound);
+        _blueHero.health = 100;
+        _redHero.health = 100;
+        _hasIdol = null;
+        _bluePickingHand = true;
+        _redPickingHand = true; //// send these
         blueCounter.PlaceToStart();
         redCounter.PlaceToStart();
 
-        DetermineFirstToGo(blueHero, redHero);
+        DetermineFirstToGo(_blueHero, _redHero);
 
         if (NetworkManager.Singleton.IsServer)
         {
             PlaceIdol();
-            uIManager.HideReadyText(uIManager._blueReadyTextBlue); 
-            uIManager.HideReadyText(uIManager._redReadyTextBlue); 
-            uIManager.SetHealth(uIManager._blueHealthSliderBlue, blueHero.health, uIManager._blueHealthTextBlue); 
-            uIManager.SetHealth(uIManager._redHealthSliderBlue, redHero.health, uIManager._redHealthTextBlue); 
-            uIManager.SetText(uIManager._roundTextBlue, "Round " + currentRound); 
+            _uIManager.HideReadyText(_uIManager._blueReadyTextBlue); 
+            _uIManager.HideReadyText(_uIManager._redReadyTextBlue); 
+            _uIManager.SetHealth(_uIManager._blueHealthSliderBlue, _blueHero.health, _uIManager._blueHealthTextBlue); 
+            _uIManager.SetHealth(_uIManager._redHealthSliderBlue, _redHero.health, _uIManager._redHealthTextBlue); 
+            _uIManager.SetText(_uIManager._roundTextBlue, "Round " + _currentRound); 
         }
         else 
         {
-            uIManager.HideReadyText(uIManager._blueReadyTextRed); 
-            uIManager.HideReadyText(uIManager._redReadyTextRed); 
-            uIManager.SetHealth(uIManager._blueHealthSliderRed, blueHero.health, uIManager._blueHealthTextRed); 
-            uIManager.SetHealth(uIManager._redHealthSliderRed, redHero.health, uIManager._redHealthTextRed); 
-            uIManager.SetText(uIManager._roundTextRed, "Round " + currentRound); 
+            _uIManager.HideReadyText(_uIManager._blueReadyTextRed); 
+            _uIManager.HideReadyText(_uIManager._redReadyTextRed); 
+            _uIManager.SetHealth(_uIManager._blueHealthSliderRed, _blueHero.health, _uIManager._blueHealthTextRed); 
+            _uIManager.SetHealth(_uIManager._redHealthSliderRed, _redHero.health, _uIManager._redHealthTextRed); 
+            _uIManager.SetText(_uIManager._roundTextRed, "Round " + _currentRound); 
         }
 
-        uIManager.ShowMyDeckScreen();
+        _uIManager.ShowMyDeckScreen();
     }
 
     public void EndRound() 
     {
-        Debug.Log("End of round " + currentRound);
-        uIManager.HideCloseMyDeckButton();
-        uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
-        //audioManager.PlaySound(audioManager.RoundWin);
+        Debug.Log("End of round " + _currentRound);
+        _uIManager.HideCloseMyDeckButton();
+        _uIManager.HideStartTurnButton(_uIManager._startTurnButtonBlue);
+        //_audioManager.PlaySound(_audioManager.RoundWin);
         ResetAllCards();
-        currentRound++;
-        currentTurn = 1;
-        uIManager.SetText(uIManager._turnTextBlue, "Turn " + currentTurn); ////
-        blueHero.playerChoosingInitialCards = true;
+        _currentRound++;
+        _currentTurn = 1;
+        _uIManager.SetText(_uIManager._turnTextBlue, "Turn " + _currentTurn); ////
+        _blueHero.playerChoosingInitialCards = true;
         StartRound();
     }
 
     public void StartTurn() // only call this when both players have picked 3 cards
     {
-        turnRunning = true;
-        blueTurnDone = redTurnDone = false;
-        bluePickingHand = redPickingHand = false;
-        uIManager.SetText(uIManager._turnTextBlue, "Turn " + currentTurn); ////
-        Debug.Log("Turn " + currentTurn + " started");
+        _turnRunning = true;
+        _blueTurnDone = _redTurnDone = false;
+        _bluePickingHand = _redPickingHand = false;
+        _uIManager.SetText(_uIManager._turnTextBlue, "Turn " + _currentTurn); ////
+        Debug.Log("Turn " + _currentTurn + " started");
         //PickCRandomCardsForHand(redHero);
-        actionsToExecute = new string[6][]; // Clear the array
-        //countDownTimer = turnTime;
-        //turnTimerCoroutine = StartCoroutine(TurnTimer());
+        _actionsToExecute = new string[6][]; // Clear the array
+        //_countDownTimer = _turnTime;
+        //_turnTimerCoroutine = StartCoroutine(TurnTimer());
     }
 
     IEnumerator TurnTimer() 
     {
-        yield return new WaitForSeconds(turnTime);
-        if (turnRunning) EndTurn();
+        yield return new WaitForSeconds(_turnTime);
+        if (_turnRunning) 
+            EndTurn();
     }
 
     public void EndTurn() 
     {
-        turnRunning = false;
+        _turnRunning = false;
         /*if (blueHero.hand.Count == 0) 
         {
             PickRandomCardsForHand(blueHero);
         }
         SelectRandomCardToPlay(redHero);*/
         Debug.Log("Turn over");
-        if (turnTimerCoroutine != null) 
-        {
-            StopCoroutine(turnTimerCoroutine);
-        }
+        if (_turnTimerCoroutine != null) 
+            StopCoroutine(_turnTimerCoroutine);
+
         if (NetworkManager.Singleton.IsServer)
-        {
-            StartCoroutine(ExecuteFlowOfEvents());//here to test for now
-        }
+            StartCoroutine(ExecuteFlowOfEvents());
     }
 
     public void StartTurnButtonPressed(Hero hero) /// Show ready text for player!!!
     {
-        if (hero == blueHero)
+        if (hero == _blueHero)
         {
-            blueReadyToStart = true;
+            _blueReadyToStart = true;
             UpdateReadyToStartBoolClientRpc(true);
-            blueDeckCardsSelected = 0;
-            uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
+            _blueDeckCardsSelected = 0;
+            _uIManager.HideStartTurnButton(_uIManager._startTurnButtonBlue);
         }
         else
         {
-            redReadyToStart = true;
+            _redReadyToStart = true;
             UpdateReadyToStartBoolServerRpc(true);
-            redDeckCardsSelected = 0;
-            uIManager.HideStartTurnButton(uIManager._startTurnButtonRed);
+            _redDeckCardsSelected = 0;
+            _uIManager.HideStartTurnButton(_uIManager._startTurnButtonRed);
         }
     }
 
@@ -365,14 +374,14 @@ public class GameManager : NetworkBehaviour
     void UpdateReadyToStartBoolClientRpc(bool trueOrFalse)
     {
         //Debug.Log("Setting blueIsReady to " + trueOrFalse + " on client");
-        blueReadyToStart = trueOrFalse;
+        _blueReadyToStart = trueOrFalse;
     }
 
     [ServerRpc(RequireOwnership = false)]
     void UpdateReadyToStartBoolServerRpc(bool trueOrFalse)
     {
         //Debug.Log("Setting redIsReady to " + trueOrFalse + " on server");
-        redReadyToStart = trueOrFalse;
+        _redReadyToStart = trueOrFalse;
     }  
     /*
     void PickRandomCardsForHand(Hero hero) 
@@ -414,9 +423,9 @@ public class GameManager : NetworkBehaviour
         Debug.Log("cardsWithValidMoves: " + cardsWithValidMoves.Count);
         int index = UnityEngine.Random.Range (0, cardsWithValidMoves.Count);        
         if (hero == blueHero) {
-            blueSelectedCard = hero.hand[index];
-            hero.cardInPlay = blueSelectedCard;
-            SelectRandomActionToPlay(blueSelectedCard, blueCounter, redCounter);
+            _blueSelectedCard = hero.hand[index];
+            hero.cardInPlay = _blueSelectedCard;
+            SelectRandomActionToPlay(_blueSelectedCard, blueCounter, redCounter);
         }
         if (hero == redHero) 
         {
@@ -469,29 +478,21 @@ public class GameManager : NetworkBehaviour
     */
     public void SetDeckCardsSelected(Hero hero, int valueToSet) 
     {
-        if (hero == blueHero)
+        if (hero == _blueHero)
         {
-            blueDeckCardsSelected = valueToSet;
-            if (blueDeckCardsSelected == 3)
-            {
-                uIManager.ShowStartTurnButton(uIManager._startTurnButtonBlue);
-            }
+            _blueDeckCardsSelected = valueToSet;
+            if (_blueDeckCardsSelected == 3)
+                _uIManager.ShowStartTurnButton(_uIManager._startTurnButtonBlue);
             else
-            {
-                uIManager.HideStartTurnButton(uIManager._startTurnButtonBlue);
-            }
+                _uIManager.HideStartTurnButton(_uIManager._startTurnButtonBlue);
         }
         else
         {
-            redDeckCardsSelected = valueToSet;
-            if (redDeckCardsSelected == 3)
-            {
-                uIManager.ShowStartTurnButton(uIManager._startTurnButtonRed);
-            }
+            _redDeckCardsSelected = valueToSet;
+            if (_redDeckCardsSelected == 3)
+                _uIManager.ShowStartTurnButton(_uIManager._startTurnButtonRed);
             else
-            {
-                uIManager.HideStartTurnButton(uIManager._startTurnButtonRed);
-            }
+                _uIManager.HideStartTurnButton(_uIManager._startTurnButtonRed);
         }
     }
 
@@ -500,20 +501,20 @@ public class GameManager : NetworkBehaviour
         Debug.Log("Organising cards");
         if (NetworkManager.Singleton.IsServer) 
         {
-            blueHero.MoveCardsToHand();
-            PositionHandCards(blueHero, blueCounter);
+            _blueHero.MoveCardsToHand();
+            PositionHandCards(_blueHero, blueCounter);
         }
         else 
         {
-            redHero.MoveCardsToHand();
-            PositionHandCards(redHero, redCounter);
+            _redHero.MoveCardsToHand();
+            PositionHandCards(_redHero, redCounter);
         }
     }
 
     public void PositionHandCards(Hero hero, Counter counter) 
     {
         //Debug.Log(hero.hand.Count + " in hand");
-        if (hero == blueHero)
+        if (hero == _blueHero)
         {
             ProcessCardInHand(hero.hand[0], blueCardInHandPos1, hero.hand[1], hero.hand[2]);
             ProcessCardInHand(hero.hand[1], blueCardInHandPos2, hero.hand[0], hero.hand[2]);
@@ -529,7 +530,7 @@ public class GameManager : NetworkBehaviour
         
         CalcGhostPositions(hero, counter);
         LockCards(hero.deck);
-        uIManager.HideMyDeckScreen();
+        _uIManager.HideMyDeckScreen();
     }
 
     void ProcessCardInHand(Card card, Transform cardPos, Card otherCard1, Card otherCard2) 
@@ -542,17 +543,13 @@ public class GameManager : NetworkBehaviour
     void LockCards(List<Card> cards) 
     {
         foreach (Card card in cards) 
-        {
             card.locked = true;
-        }
     }
 
     public void UnLockCards(List<Card> cards) 
     {
         foreach (Card card in cards) 
-        {
             card.locked = false;
-        }
     }
         
     public void RegisterAction(Counter counter, Action.ActionType actionType, string[] ghostRefs) 
@@ -561,50 +558,38 @@ public class GameManager : NetworkBehaviour
         if (actionType == Action.ActionType.Move) 
         {
             if (counter == firstToGo) 
-            {
                 flowPos = 0;
-            }
             else 
-            {
                 flowPos = 1;
-            }
         }
         else if (actionType == Action.ActionType.WeakAttack)
         {
             if (counter == firstToGo) 
-            {
                 flowPos = 2;
-            }
             else 
-            {
                 flowPos = 4;
-            }
         }
         else if (actionType == Action.ActionType.StrongAttack)
         {
             if (counter == firstToGo)
-            {
                 flowPos = 3;
-            }
             else
-            {
                 flowPos = 5;
-            }
         }
 
-        actionsToExecute[flowPos] = ghostRefs;
+        _actionsToExecute[flowPos] = ghostRefs;
 
         if (counter == blueCounter) 
         {
-            blueSelectedCard?.HideDestinations(blueSelectedCard.availableActions);
+            _blueSelectedCard?.HideDestinations(_blueSelectedCard.availableActions);
             RegisterActionClientRpc(flowPos, ConvertToIntArray(ghostRefs));
-            //uIManager.ShowReadyText(uIManager.blueReadyTextBlue); ////
+            //_uIManager.ShowReadyText(_uIManager.blueReadyTextBlue); ////
         }
         if (counter == redCounter) 
         {
             redSelectedCard?.HideDestinations(redSelectedCard.availableActions);
             RegisterActionServerRpc(flowPos, ConvertToIntArray(ghostRefs));
-            //uIManager.ShowReadyText(uIManager.redReadyTextBlue); ////
+            //_uIManager.ShowReadyText(_uIManager.redReadyTextBlue); ////
         }
     }
 
@@ -621,20 +606,12 @@ public class GameManager : NetworkBehaviour
             {
                 string lastTwoDigits = ghostRef.Substring(ghostRef.Length - 2);
                 if (int.TryParse(lastTwoDigits, out int lastTwoDigitsInt))
-                {
                     lastTwoDigitsArray[i] = lastTwoDigitsInt;
-                }
                 else
-                {
-                    // Handle parsing failure
                     lastTwoDigitsArray[i] = 0; // Or another appropriate default value
-                }
             }
             else
-            {
-                // Handle strings with fewer than 2 characters
                 lastTwoDigitsArray[i] = 0; // Or another appropriate default value
-            }
         }
         return lastTwoDigitsArray;
     }
@@ -644,10 +621,8 @@ public class GameManager : NetworkBehaviour
     {
         string[] ghostRefsConverted = new string[intGhostRefs.Length];
         for (int i = 0; i < intGhostRefs.Length; i++)
-        {
             ghostRefsConverted[i] = intGhostRefs[i].ToString();
-        }
-        actionsToExecute[flowPos] = ghostRefsConverted;
+        _actionsToExecute[flowPos] = ghostRefsConverted;
         //Debug.Log(ghostRefsConverted[0]);
     }
 
@@ -656,10 +631,8 @@ public class GameManager : NetworkBehaviour
     {
         string[] ghostRefsConverted = new string[intGhostRefs.Length];
         for (int i = 0; i < intGhostRefs.Length; i++)
-        {
             ghostRefsConverted[i] = intGhostRefs[i].ToString();
-        }
-        actionsToExecute[flowPos] = ghostRefsConverted;
+        _actionsToExecute[flowPos] = ghostRefsConverted;
         //Debug.Log(ghostRefsConverted[0]);
     }
 
@@ -669,35 +642,35 @@ public class GameManager : NetworkBehaviour
         {
             Debug.Log("Flow");
             // First to go Move
-            if (actionsToExecute[0] != null)
+            if (_actionsToExecute[0] != null)
             {
-                Debug.Log("Flow 1: " + actionsToExecute[0][0]);
-                firstToGo.ExecuteMove(actionsToExecute[0]);
-                //AddToLog(firstToGo + " : " + actionsToExecute2[0].actionType + " to " + actionsToExecute[0].selectedGridSquare);
+                Debug.Log("Flow 1: " + _actionsToExecute[0][0]);
+                firstToGo.ExecuteMove(_actionsToExecute[0]);
+                //AddToLog(firstToGo + " : " + _actionsToExecute2[0].actionType + " to " + _actionsToExecute[0].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
 
             // Second to go Move
-            if (actionsToExecute[1] != null)
+            if (_actionsToExecute[1] != null)
             {
-                Debug.Log("Flow 2: " + actionsToExecute[1][0]);
-                secondToGo.ExecuteMove(actionsToExecute[1]);
-                //AddToLog(secondToGo + " : " + actionsToExecute[1].actionType + " to " + actionsToExecute[1].selectedGridSquare);
+                Debug.Log("Flow 2: " + _actionsToExecute[1][0]);
+                secondToGo.ExecuteMove(_actionsToExecute[1]);
+                //AddToLog(secondToGo + " : " + _actionsToExecute[1].actionType + " to " + _actionsToExecute[1].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
 
             // First to go Weak Attack
-            if (actionsToExecute[2] != null)
+            if (_actionsToExecute[2] != null)
             {
-                firstToGo.ExecuteWeakAttack(actionsToExecute[2]);
-                //AddToLog(firstToGo + " : " + actionsToExecute[2].actionType + " on " + actionsToExecute[2].selectedGridSquare);
+                firstToGo.ExecuteWeakAttack(_actionsToExecute[2]);
+                //AddToLog(firstToGo + " : " + _actionsToExecute[2].actionType + " on " + _actionsToExecute[2].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
             if (CheckForDefeatWinner())
             {
-                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
-                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);////
-                uIManager.CallShowMessageOverlay();
+                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
+                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);////
+                _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -708,17 +681,17 @@ public class GameManager : NetworkBehaviour
             }
 
             // First to go Strong Attack
-            if (actionsToExecute[3] != null)
+            if (_actionsToExecute[3] != null)
             {
-                firstToGo.ExecuteStrongAttack(actionsToExecute[3]);
-                //AddToLog(secondToGo + " : " + actionsToExecute[3].actionType + " on " + actionsToExecute[3].selectedGridSquare);
+                firstToGo.ExecuteStrongAttack(_actionsToExecute[3]);
+                //AddToLog(secondToGo + " : " + _actionsToExecute[3].actionType + " on " + _actionsToExecute[3].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
             if (CheckForDefeatWinner())
             {
-                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
-                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);////
-                uIManager.CallShowMessageOverlay();
+                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
+                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);////
+                _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -729,17 +702,17 @@ public class GameManager : NetworkBehaviour
             }
 
             // Second to go Weak Attack
-            if (actionsToExecute[4] != null)
+            if (_actionsToExecute[4] != null)
             {
-                secondToGo.ExecuteWeakAttack(actionsToExecute[4]);
-                //AddToLog(firstToGo + " : " + actionsToExecute[4].actionType + " on " + actionsToExecute[4].selectedGridSquare);
+                secondToGo.ExecuteWeakAttack(_actionsToExecute[4]);
+                //AddToLog(firstToGo + " : " + _actionsToExecute[4].actionType + " on " + _actionsToExecute[4].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
             if (CheckForDefeatWinner())
             {
-                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
-                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);////
-                uIManager.CallShowMessageOverlay();
+                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
+                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);////
+                _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -749,17 +722,17 @@ public class GameManager : NetworkBehaviour
                 yield break;
             }
             // Second to go Strong Attack
-            if (actionsToExecute[5] != null)
+            if (_actionsToExecute[5] != null)
             {
-                secondToGo.ExecuteStrongAttack(actionsToExecute[5]);
-                //AddToLog(secondToGo + " : " + actionsToExecute[5].actionType + " on " + actionsToExecute[5].selectedGridSquare);
+                secondToGo.ExecuteStrongAttack(_actionsToExecute[5]);
+                //AddToLog(secondToGo + " : " + _actionsToExecute[5].actionType + " on " + _actionsToExecute[5].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
             if (CheckForDefeatWinner())
             {
-                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);////
-                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);////
-                uIManager.CallShowMessageOverlay();
+                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
+                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);////
+                _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -768,16 +741,14 @@ public class GameManager : NetworkBehaviour
                 EndRound();
                 yield break; 
             }
-            if (blueSelectedCard != null)
-            {
-                blueSelectedCard.selected = false;
-            }
+            if (_blueSelectedCard != null) 
+                _blueSelectedCard.selected = false;
 
             if (CheckForIdolWinner())
             {
-                uIManager.SetText(uIManager._roundsTextBlue, "B : R " + blueRoundsWon + " : " + redRoundsWon);///
-                uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins round " + currentRound);///
-                uIManager.CallShowMessageOverlay();
+                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);///
+                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);///
+                _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -788,21 +759,21 @@ public class GameManager : NetworkBehaviour
             }
             //redHero.DiscardCardFromHand(redHero.cardInPlay); // Th card just played
             //redHero.DiscardRandomCardInHand(); // BUG - Red always discards 1 card here
-            if (aIPlaying)
+            if (_aIPlaying)
             {
-                blueHero.DiscardCardFromHand(blueHero.cardInPlay);////
-                blueHero.DiscardRandomCardInHand();////
-                UnLockCards(blueHero.deck);////
-                currentRound++;
+                _blueHero.DiscardCardFromHand(_blueHero.cardInPlay);////
+                _blueHero.DiscardRandomCardInHand();////
+                UnLockCards(_blueHero.deck);////
+                _currentRound++;
                 StartRound();
             }
             else
             {
                 ShowPlayedCardTicksClientRpc();
-                //blueSelectedCard.PutDownCard(blueSelectedCard.transform);// same for red
-                UnLockCards(blueHero.hand);
-                blueSelectedCard.locked = true;
-                blueDiscarding = true;
+                //_blueSelectedCard.PutDownCard(_blueSelectedCard.transform);// same for red
+                UnLockCards(_blueHero.hand);
+                _blueSelectedCard.locked = true;
+                _blueDiscarding = true;
                 CleanUpTurnStuffClientRpc();
             }
         }
@@ -814,7 +785,7 @@ public class GameManager : NetworkBehaviour
         foreach (Card card in allCards)
         {
             //Debug.Log(card.cardId);
-            if (card != null && card.cardId == bluePlayedCardId || card.cardId == redPlayedCardId)//////need to get dUMMY cards
+            if (card != null && card.cardId == _bluePlayedCardId || card.cardId == _redPlayedCardId)//////need to get dUMMY cards
             {
                 Debug.Log(card.cardId + " should tick");
                 card.ShowTick();
@@ -831,36 +802,36 @@ public class GameManager : NetworkBehaviour
             {
                 redSelectedCard.selected = false;
             }
-            UnLockCards(redHero.hand);
+            UnLockCards(_redHero.hand);
             //redSelectedCard.PutDownCard(redSelectedCard.transform);
             redSelectedCard.locked = true;
-            redDiscarding = true;
+            RedDiscarding = true;
         }
-        uIManager.ShowDiscardButton();
+        _uIManager.ShowDiscardButton();
     }
 
     public void ActionSelected(Hero hero, Action.ActionType actionType, string[] ghostRefs)
     {
         Debug.Log(ghostRefs[0]);
-        audioManager.PlaySound(audioManager.SelectSquare);
-        aIPlaying = false;
+        _audioManager.PlaySound(_audioManager.SelectSquare);
+        _aIPlaying = false;
         LockCards(hero.hand);
-        if (hero == blueHero)
+        if (hero == _blueHero)
         {
-            blueHero.cardInPlay = blueSelectedCard;
+            _blueHero.cardInPlay = _blueSelectedCard;
             RegisterAction(blueCounter, actionType, ghostRefs);
-            bluePlayedCardId = blueSelectedCard.cardId;
-            SetBluePlayedCardClientRpc(bluePlayedCardId);
-            blueTurnDone = true;
+            _bluePlayedCardId = _blueSelectedCard.cardId;
+            SetBluePlayedCardClientRpc(_bluePlayedCardId);
+            _blueTurnDone = true;
             UpdateTurnDoneBoolClientRpc(true);
         }
-        else if (hero == redHero)
+        else if (hero == _redHero)
         {
-            redHero.cardInPlay = redSelectedCard;
+            _redHero.cardInPlay = redSelectedCard;
             RegisterAction(redCounter, actionType, ghostRefs);
-            redPlayedCardId = redSelectedCard.cardId;
-            SetRedPlayedCardServerRpc(redPlayedCardId);
-            redTurnDone = true;
+            _redPlayedCardId = redSelectedCard.cardId;
+            SetRedPlayedCardServerRpc(_redPlayedCardId);
+            _redTurnDone = true;
             UpdateTurnDoneBoolServerRpc(true);
         }
     }
@@ -869,57 +840,51 @@ public class GameManager : NetworkBehaviour
     void SetBluePlayedCardClientRpc(int bluePlayedCardServer)
     {
         Debug.Log("SetBluePlayedCardClientRpc");
-        bluePlayedCardId = bluePlayedCardServer;
+        _bluePlayedCardId = bluePlayedCardServer;
     }
 
     [ServerRpc(RequireOwnership = false)]
     void SetRedPlayedCardServerRpc(int redPlayedCardClient)
     {
         Debug.Log("SetRedPlayedCardServerRpc");
-        redPlayedCardId = redPlayedCardClient;
+        _redPlayedCardId = redPlayedCardClient;
     }
 
     [ClientRpc]
-    void UpdateTurnDoneBoolClientRpc(bool trueOrFalse)
-    {
-        blueTurnDone = trueOrFalse;
-    }
+    void UpdateTurnDoneBoolClientRpc(bool trueOrFalse) => _blueTurnDone = trueOrFalse;
 
     [ServerRpc(RequireOwnership = false)]
-    void UpdateTurnDoneBoolServerRpc(bool trueOrFalse)
-    {
-        redTurnDone = trueOrFalse;
-    }
+    void UpdateTurnDoneBoolServerRpc(bool trueOrFalse) => _redTurnDone = trueOrFalse;
 
     public void ResetAllCards() 
     {
-        blueHero.PutAllCardsInDeck();
-        redHero.PutAllCardsInDeck();
-        blueSelectedCard = redSelectedCard = null;
+        _blueHero.PutAllCardsInDeck();
+        _redHero.PutAllCardsInDeck();
+        _blueSelectedCard = redSelectedCard = null;
     }
 
     void MatchOver() 
     {
-        uIManager.SetText(uIManager._messageTextBlue, roundWinner + " player wins Match! ");/////////
-        uIManager.CallShowMessageOverlay();
-        uIManager.ShowButton(uIManager._resetButtonBlue);///////
+        _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins Match! ");/////////
+        _uIManager.CallShowMessageOverlay();
+        _uIManager.ShowButton(_uIManager._resetButtonBlue);///////
         Debug.Log("Match Over!");
     }
 
     bool CheckForIdolWinner() 
     {
-        if (hasIdol == redHero && currentTurn == 8) 
+        if (_hasIdol == _redHero && _currentTurn == 8) 
         { 
-            audioManager.PlaySound(audioManager.IdolWin);
-            redRoundsWon++;
-            roundWinner = "Red";
+            _audioManager.PlaySound(_audioManager.IdolWin);
+            _redRoundsWon++;
+            _roundWinner = "Red";
             return true;
         }
-        if (hasIdol == blueHero && currentTurn == 8) 
+        if (_hasIdol == _blueHero && _currentTurn == 8) 
         { 
-            audioManager.PlaySound(audioManager.IdolWin);
-            blueRoundsWon++;
-            roundWinner = "Blue";
+            _audioManager.PlaySound(_audioManager.IdolWin);
+            _blueRoundsWon++;
+            _roundWinner = "Blue";
             return true;
         }
         return false;
@@ -927,18 +892,18 @@ public class GameManager : NetworkBehaviour
 
     bool CheckForDefeatWinner() 
     {
-        if (blueHero.health == 0 ) 
+        if (_blueHero.health == 0 ) 
         {
-            audioManager.PlaySound(audioManager.PlayerDead);
-            redRoundsWon++;
-            roundWinner = "Red";
+            _audioManager.PlaySound(_audioManager.PlayerDead);
+            _redRoundsWon++;
+            _roundWinner = "Red";
             return true;
         }
-        if (redHero.health == 0 ) 
+        if (_redHero.health == 0 ) 
         {
-            audioManager.PlaySound(audioManager.PlayerDead);
-            blueRoundsWon++;
-            roundWinner = "Blue";
+            _audioManager.PlaySound(_audioManager.PlayerDead);
+            _blueRoundsWon++;
+            _roundWinner = "Blue";
             return true;
         }
         return false;
@@ -946,7 +911,7 @@ public class GameManager : NetworkBehaviour
 
     bool CheckForMatchWinner() 
     {
-        if (blueRoundsWon == 2 || redRoundsWon == 2) 
+        if (_blueRoundsWon == 2 || _redRoundsWon == 2) 
             return true;
         return false;
     }
@@ -954,15 +919,15 @@ public class GameManager : NetworkBehaviour
     public void SetHealth(Hero hero, int health) 
     {
         hero.health = health;
-        if (hero == redHero) 
+        if (hero == _redHero) 
         {
-            uIManager.SetHealth(uIManager._redHealthSliderBlue, health, uIManager._redHealthTextBlue);
-            uIManager.SetHealth(uIManager._redHealthSliderBlue, health, uIManager._redHealthTextRed);
+            _uIManager.SetHealth(_uIManager._redHealthSliderBlue, health, _uIManager._redHealthTextBlue);
+            _uIManager.SetHealth(_uIManager._redHealthSliderBlue, health, _uIManager._redHealthTextRed);
         }
         else 
         {
-            uIManager.SetHealth(uIManager._blueHealthSliderBlue, health, uIManager._blueHealthTextBlue);
-            uIManager.SetHealth(uIManager._redHealthSliderBlue, health, uIManager._redHealthTextRed);
+            _uIManager.SetHealth(_uIManager._blueHealthSliderBlue, health, _uIManager._blueHealthTextBlue);
+            _uIManager.SetHealth(_uIManager._redHealthSliderBlue, health, _uIManager._redHealthTextRed);
         }
     }
 
@@ -1008,43 +973,35 @@ public class GameManager : NetworkBehaviour
     public void PickupIdol(Counter counter) 
     {
         _idolPosInt = 0;
-        audioManager.PlaySound(audioManager.CollectIdol);
+        _audioManager.PlaySound(_audioManager.CollectIdol);
         if (counter == blueCounter) 
         {
             idol.transform.position = blueHasIdolPos.position;
-            hasIdol = blueHero;
+            _hasIdol = _blueHero;
         }
         else 
         {
             idol.transform.position = redHasIdolPos.position;
-            hasIdol = redHero;
+            _hasIdol = _redHero;
         }
     }
 
     public void DetermineFirstToGo(Hero blueHero, Hero redHero) 
     {
         if (blueHero.speed > redHero.speed) 
-        {
             SetPlayerOrder(blueCounter, redCounter, true, false);
-        } 
         else if (blueHero.speed < redHero.speed)
-        {
             SetPlayerOrder(redCounter, blueCounter, false, true);
-        } 
         else 
         {
             bool isBlueFirst = UnityEngine.Random.value < 0.5f;
             if (isBlueFirst) 
-            {
                 SetPlayerOrder(blueCounter, redCounter, true, false);
-            } 
             else 
-            {
                 SetPlayerOrder(redCounter, blueCounter, true, false);
-            }
         }
 
-        if (currentRound == 2 && firstToGo == blueCounter) 
+        if (_currentRound == 2 && firstToGo == blueCounter) 
         {
             Debug.Log("Swapping first to go");
             SetPlayerOrder(redCounter, blueCounter, false, true);
@@ -1062,9 +1019,7 @@ public class GameManager : NetworkBehaviour
     public void CalcGhostPositions(Hero hero, Counter counter) 
     {
         foreach (Card cardInHand in hero.hand) 
-        {
             cardInHand.CalcOffsetForActions(counter, cardInHand);
-        }
     }
 
     void AddToLog(string textToAdd) 

@@ -12,12 +12,12 @@ public class Counter : NetworkBehaviour
     float moveSpeed = 1f;
     //CameraShake cameraShake;
     GameManager gameManager;
-    AudioManager audioManager;
+    AudioManager _audioManager;
     Animator anim;
 
     void Awake()
     {
-        audioManager = FindAnyObjectByType<AudioManager>();
+        _audioManager = FindAnyObjectByType<AudioManager>();
         gameManager = FindAnyObjectByType<GameManager>();
         anim = GetComponentInChildren<Animator>();
     }
@@ -36,12 +36,12 @@ public class Counter : NetworkBehaviour
         if (this.name == "Blue Counter(Clone)")
         {
             otherCounter = gameManager.RedCounter;
-            otherHero = gameManager.redHero;
+            otherHero = gameManager.RedHero;
         }
         else
         {
             otherCounter = gameManager.BlueCounter;
-            otherHero = gameManager.blueHero;
+            otherHero = gameManager.BlueHero;
         }
     }
     public void ExecuteMove(string[] ghostRefs)
@@ -83,7 +83,7 @@ public class Counter : NetworkBehaviour
         }
         else
         {
-            audioManager.PlaySound(audioManager.StrongAttackMiss);
+            _audioManager.PlaySound(_audioManager.StrongAttackMiss);
         }
         anim.SetBool("isAttacking", true);
         StartCoroutine(Wait());
@@ -91,7 +91,7 @@ public class Counter : NetworkBehaviour
 
     IEnumerator MoveCounter(string[] ghostRefs)
     {
-        audioManager.PlaySound(audioManager.SlideCounter);
+        _audioManager.PlaySound(_audioManager.SlideCounter);
         Transform[] squares = new Transform[ghostRefs.Length];
         for (int i = 0; i < ghostRefs.Length; i++)
         {
@@ -148,7 +148,7 @@ public class Counter : NetworkBehaviour
         } 
         else 
         {
-            audioManager.PlaySound(audioManager.StrongAttackMiss);
+            _audioManager.PlaySound(_audioManager.StrongAttackMiss);
         }
         anim.SetBool("isAttacking", true);*/
         float time = 0;
@@ -166,7 +166,7 @@ public class Counter : NetworkBehaviour
         gameManager.SetHealth(otherHero, otherHero.health - attackDamage);
         otherCounter.anim.SetBool("isHit", true);
         //cameraShake.CallShake();
-        audioManager.PlaySound(audioManager.StrongAttackHit);
+        _audioManager.PlaySound(_audioManager.StrongAttackHit);
         TakeDamageClientRpc(attackDamage);
     }
 
@@ -177,7 +177,7 @@ public class Counter : NetworkBehaviour
         gameManager.SetHealth(otherHero, otherHero.health - attackDamage);
         otherCounter.anim.SetBool("isHit", true);
         //cameraShake.CallShake();
-        audioManager.PlaySound(audioManager.StrongAttackHit);
+        _audioManager.PlaySound(_audioManager.StrongAttackHit);
         anim.SetBool("isAttacking", false);
         otherCounter.anim.SetBool("isHit", false);
     }

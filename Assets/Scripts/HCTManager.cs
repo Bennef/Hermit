@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
 public class HCTManager : MonoBehaviour
@@ -57,10 +58,17 @@ public class HCTManager : MonoBehaviour
 
     public void UpdateIntFromInputField(TMP_InputField inputField)
     {
-        if (inputField == _blueSpeedInput)
-            _blueSpeed = int.Parse(inputField.text);
-        else
-            _redSpeed = int.Parse(inputField.text);
+        if (inputField.text != "")
+        {
+            if (inputField == _blueSpeedInput)
+            {
+                _blueSpeed = int.Parse(inputField.text);
+            }
+            else
+            {
+                _redSpeed = int.Parse(inputField.text);
+            }
+        }
     }
 
     void SetDefaults()

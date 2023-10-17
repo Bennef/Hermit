@@ -11,11 +11,11 @@ public class Hero : MonoBehaviour
     public List<Card> hand = new List<Card>();
     public List<Card> discardPile = new List<Card>();
     public Card cardInPlay;
-    UIManager uIManager;
+    UIManager _uIManager;
 
     void Awake() 
     {// just have all the cards as prefabs in hhe game and find them based on string
-        uIManager = FindAnyObjectByType<UIManager>();
+        _uIManager = FindAnyObjectByType<UIManager>();
         //PutAllCardsInDeck();
     }
 
@@ -131,8 +131,8 @@ public class Hero : MonoBehaviour
     public void FilldeckFromDiscardPile() 
     {
         // Show overlay
-        uIManager.SetText(uIManager._messageTextBlue, this.name + " shuffling discard pile\nto fill their hand"); ////
-        uIManager.CallShowMessageOverlay();
+        _uIManager.SetText(_uIManager._messageTextBlue, this.name + " shuffling discard pile\nto fill their hand"); ////
+        _uIManager.CallShowMessageOverlay();
         List<Card> cardsToRemove = new List<Card>();
         foreach (Card card in discardPile) {
             deck.Add(card);

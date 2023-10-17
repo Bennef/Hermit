@@ -27,8 +27,8 @@ public class GhostCounter : MonoBehaviour
 
     void OnMouseDown()
     {
-        Hero selectedHero = (NetworkManager.Singleton.IsServer) ? gameManager.blueHero : gameManager.redHero;
-        Card selectedCard = (NetworkManager.Singleton.IsServer) ? gameManager.blueSelectedCard : gameManager.redSelectedCard;
+        Hero selectedHero = (NetworkManager.Singleton.IsServer) ? gameManager.BlueHero : gameManager.RedHero;
+        Card selectedCard = (NetworkManager.Singleton.IsServer) ? gameManager.BlueSelectedCard : gameManager.RedSelectedCard;
 
         foreach (Action availableAction in selectedCard.availableActionsObj.GetComponents<Action>())
         {

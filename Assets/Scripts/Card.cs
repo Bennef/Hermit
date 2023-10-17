@@ -19,15 +19,15 @@ public class Card : MonoBehaviour
     Transform x, hand, tick;
     Counter blueCounter, redCounter;
     GameManager gameManager;
-    UIManager uIManager;
-    AudioManager audioManager;
+    UIManager _uIManager;
+    AudioManager _audioManager;
     Hero hero;
 
     void Awake() 
     {
         gameManager = FindAnyObjectByType<GameManager>();
-        uIManager = FindAnyObjectByType<UIManager>();
-        audioManager = FindAnyObjectByType<AudioManager>();
+        _uIManager = FindAnyObjectByType<UIManager>();
+        _audioManager = FindAnyObjectByType<AudioManager>();
         baseActions = GetComponents<Action>();
         AssignChildren();
     }
@@ -54,9 +54,9 @@ public class Card : MonoBehaviour
             return;
 
         if (NetworkManager.Singleton.IsServer)
-            hero = gameManager.blueHero;
+            hero = gameManager.BlueHero;
         else
-            hero = gameManager.redHero;
+            hero = gameManager.RedHero;
 
         if (inDeck) 
         {
@@ -66,13 +66,13 @@ public class Card : MonoBehaviour
                 {
                     PickUpCard(gameObject.transform);
                     ShowHand();
-                    gameManager.SetDeckCardsSelected(hero, gameManager.blueDeckCardsSelected + 1);
+                    gameManager.SetDeckCardsSelected(hero, gameManager.BlueDeckCardsSelected + 1);
                 }
                 else
                 {
                     PutDownCard(gameObject.transform);
                     HideHand();
-                    gameManager.SetDeckCardsSelected(hero, gameManager.blueDeckCardsSelected - 1);
+                    gameManager.SetDeckCardsSelected(hero, gameManager.BlueDeckCardsSelected - 1);
                 }
             }
             else
@@ -81,13 +81,13 @@ public class Card : MonoBehaviour
                 {
                     PickUpCard(gameObject.transform);
                     ShowHand();
-                    gameManager.SetDeckCardsSelected(hero, gameManager.redDeckCardsSelected + 1);
+                    gameManager.SetDeckCardsSelected(hero, gameManager.RedDeckCardsSelected + 1);
                 }
                 else
                 {
                     PutDownCard(gameObject.transform);
                     HideHand();
-                    gameManager.SetDeckCardsSelected(hero, gameManager.redDeckCardsSelected - 1);
+                    gameManager.SetDeckCardsSelected(hero, gameManager.RedDeckCardsSelected - 1);
                 }
             }
         }
@@ -95,9 +95,9 @@ public class Card : MonoBehaviour
         {
             PickUpCard(gameObject.transform);
             if (NetworkManager.Singleton.IsServer)
-                gameManager.blueSelectedCard = this;
+                gameManager.BlueSelectedCard = this;
             else
-                gameManager.redSelectedCard = this;
+                gameManager.RedSelectedCard = this;
 
             HandleOtherCardSelection(otherCard1);
             HandleOtherCardSelection(otherCard2);
@@ -112,13 +112,13 @@ public class Card : MonoBehaviour
         }
         if (NetworkManager.Singleton.IsServer)
         {
-            if (gameManager.blueDiscarding)
-                uIManager.UpdateDiscardButtonText(hero);
+            if (gameManager.BlueDiscarding)
+                _uIManager.UpdateDiscardButtonText(hero);
         }
         else
         {
-            if (gameManager.redDiscarding)
-                uIManager.UpdateDiscardButtonText(hero);
+            if (gameManager.RedDiscarding)
+                _uIManager.UpdateDiscardButtonText(hero);
         }
     }
 
@@ -126,7 +126,7 @@ public class Card : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            if (otherCard.selected && !gameManager.blueDiscarding)
+            if (otherCard.selected && !gameManager.BlueDiscarding)
             {
                 PutDownCard(otherCard.GetComponent<Transform>());
                 HideDestinations(otherCard.availableActions);
@@ -134,7 +134,7 @@ public class Card : MonoBehaviour
         }
         else
         {
-            if (otherCard.selected && !gameManager.redDiscarding)
+            if (otherCard.selected && !gameManager.RedDiscarding)
             {
                 PutDownCard(otherCard.GetComponent<Transform>());
                 HideDestinations(otherCard.availableActions);
@@ -146,14 +146,14 @@ public class Card : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            if (gameManager.blueDiscarding)
+            if (gameManager.BlueDiscarding)
                 ShowDiscardX();
             else
                 ShowDestinations(availableActions);
         }
         else
         {
-            if (gameManager.redDiscarding)
+            if (gameManager.RedDiscarding)
                 ShowDiscardX();
             else
                 ShowDestinations(availableActions);
@@ -165,7 +165,7 @@ public class Card : MonoBehaviour
         cardOffset = new Vector3(card.position.x, card.position.y, card.position.z - 0.2f);
         card.position = cardOffset;
         card.GetComponent<Card>().selected = true;
-        audioManager.PlaySound(audioManager.CardUp);
+        _audioManager.PlaySound(_audioManager.CardUp);
     }
 
     public void PutDownCard(Transform card)
@@ -174,7 +174,7 @@ public class Card : MonoBehaviour
         card.position = cardOffset;
         card.GetComponent<Card>().selected = false;
         card.GetComponent<Card>().toBeDiscarded = false;
-        audioManager.PlaySound(audioManager.CardDown);
+        _audioManager.PlaySound(_audioManager.CardDown);
     }
 
     void ShowDestinations(List<Action> availableActions) 
