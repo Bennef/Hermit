@@ -27,27 +27,27 @@ public class GameManager : NetworkBehaviour
     [SerializeField] string[][] _actionsToExecute;
 
     [Header("Objects")]
-    [SerializeField] GameObject idol;
-    [SerializeField] GameObject blueUIObjects, redUIObjects;
-    [SerializeField] GameObject blueCounterObj, redCounterObj;
-    [SerializeField] GameObject hero1Obj, hero2Obj;
-    [SerializeField] Counter blueCounter, redCounter, firstToGo, secondToGo;
+    [SerializeField] GameObject _idol;
+    [SerializeField] GameObject _blueUIObjects, _redUIObjects;
+    [SerializeField] GameObject __blueCounterObj, __redCounterObj;
+    [SerializeField] GameObject _hero1Obj, _hero2Obj;
+    [SerializeField] Counter _blueCounter, _redCounter, _firstToGo, _secondToGo;
     [SerializeField] int _idolPosInt;
     [SerializeField] Hero _blueHero, _redHero;
-    [SerializeField] GameObject blueCamera, redCamera, blueCup, redCup;
-    [SerializeField] Transform blueHasIdolPos, redHasIdolPos, 
-        blueCardInHandPos1, blueCardInHandPos2, blueCardInHandPos3, 
-        redCardInHandPos1, redCardInHandPos2, redCardInHandPos3;
+    [SerializeField] GameObject _blueCamera, _redCamera, _blueCup, _redCup;
+    [SerializeField] Transform _blueHasIdolPos, _redHasIdolPos, 
+        _blueCardInHandPos1, _blueCardInHandPos2, _blueCardInHandPos3, 
+        _redCardInHandPos1, _redCardInHandPos2, _redCardInHandPos3;
 
     HCTManager _hCTManager;
     UIManager _uIManager;
     AudioManager _audioManager;
     Coroutine _turnTimerCoroutine;
-    List<Card> allCards = new List<Card>();
+    List<Card> _allCards = new List<Card>();
 
     public static GameManager Singleton { get; private set; }
-    public Counter BlueCounter { get { return blueCounter; }}
-    public Counter RedCounter { get { return redCounter; }}
+    public Counter BlueCounter { get { return _blueCounter; }}
+    public Counter RedCounter { get { return _redCounter; }}
     public int IdolPosInt { get { return _idolPosInt; }}
     public bool BlueDiscarding { get => _blueDiscarding; set => _blueDiscarding = value; }
     public bool RedDiscarding { get => _redDiscarding; set => _redDiscarding = value; }
@@ -84,15 +84,15 @@ public class GameManager : NetworkBehaviour
         _audioManager = FindObjectOfType<AudioManager>();
         _blueHero = GameObject.Find("Blue Hero").GetComponent<Hero>(); 
         _redHero = GameObject.Find("Red Hero").GetComponent<Hero>();
-        blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
-        redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
+        _blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
+        _redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
         _uIManager.HideStartTurnButton(_uIManager._startTurnButtonBlue);
         _uIManager.HideStartTurnButton(_uIManager._startTurnButtonRed);
 
         if (NetworkManager.Singleton.IsServer)
-            redUIObjects.SetActive(false);
+            _redUIObjects.SetActive(false);
         else
-            blueUIObjects.SetActive(false);
+            _blueUIObjects.SetActive(false);
 
         AssignHCTValues();
         _blueHero.PutAllCardsInDeck();
@@ -173,13 +173,13 @@ public class GameManager : NetworkBehaviour
     {
         Card[] blueCards = _blueHero.GetComponentsInChildren<Card>();
         Card[] redCards = _redHero.GetComponentsInChildren<Card>();
-        allCards.AddRange(blueCards);
-        allCards.AddRange(redCards);
+        _allCards.AddRange(blueCards);
+        _allCards.AddRange(redCards);
 
         int uniqueCardId = 1;
         int uniqueActionId = 1;
 
-        foreach (Card card in allCards)
+        foreach (Card card in _allCards)
         {
             card.cardId = uniqueCardId; // Assign unique card ID
             foreach (Action action in card.baseActions) // Iterate over the baseActions list
@@ -195,26 +195,26 @@ public class GameManager : NetworkBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            blueCamera.SetActive(true);
-            redCamera.SetActive(false);
+            _blueCamera.SetActive(true);
+            _redCamera.SetActive(false);
         }
         else
         {
-            redCamera.SetActive(true);
-            blueCamera.SetActive(false);
+            _redCamera.SetActive(true);
+            _blueCamera.SetActive(false);
         }
     }
 
     void SpawnObjects()
     {
         // Heroes
-        GameObject blueHeroObj = Instantiate(hero1Obj, Vector3.zero, Quaternion.identity);
+        GameObject blueHeroObj = Instantiate(_hero1Obj, Vector3.zero, Quaternion.identity);
         blueHeroObj.name = "Blue Hero";
-        GameObject redHeroObj = Instantiate(hero2Obj, Vector3.zero, Quaternion.identity);
+        GameObject redHeroObj = Instantiate(_hero2Obj, Vector3.zero, Quaternion.identity);
         redHeroObj.name = "Red Hero";
         // Counters
-        GameObject bc = Instantiate(blueCounterObj, Vector3.zero, Quaternion.identity);
-        GameObject rc = Instantiate(redCounterObj, Vector3.zero, Quaternion.identity);
+        GameObject bc = Instantiate(__blueCounterObj, Vector3.zero, Quaternion.identity);
+        GameObject rc = Instantiate(__redCounterObj, Vector3.zero, Quaternion.identity);
         // Camera layers
         int blueHeroLayer = LayerMask.NameToLayer("Blue Player");
         int redHeroLayer = LayerMask.NameToLayer("Red Player");
@@ -276,8 +276,8 @@ public class GameManager : NetworkBehaviour
         _hasIdol = null;
         _bluePickingHand = true;
         _redPickingHand = true; //// send these
-        blueCounter.PlaceToStart();
-        redCounter.PlaceToStart();
+        _blueCounter.PlaceToStart();
+        _redCounter.PlaceToStart();
 
         DetermineFirstToGo(_blueHero, _redHero);
 
@@ -425,14 +425,14 @@ public class GameManager : NetworkBehaviour
         if (hero == blueHero) {
             _blueSelectedCard = hero.hand[index];
             hero.cardInPlay = _blueSelectedCard;
-            SelectRandomActionToPlay(_blueSelectedCard, blueCounter, redCounter);
+            SelectRandomActionToPlay(_blueSelectedCard, _blueCounter, _redCounter);
         }
         if (hero == redHero) 
         {
             Debug.Log(index);
             redSelectedCard = hero.hand[index];
             hero.cardInPlay = redSelectedCard;
-            SelectRandomActionToPlay(redSelectedCard, redCounter, blueCounter);
+            SelectRandomActionToPlay(redSelectedCard, _redCounter, _blueCounter);
         }
     }
 
@@ -502,12 +502,12 @@ public class GameManager : NetworkBehaviour
         if (NetworkManager.Singleton.IsServer) 
         {
             _blueHero.MoveCardsToHand();
-            PositionHandCards(_blueHero, blueCounter);
+            PositionHandCards(_blueHero, _blueCounter);
         }
         else 
         {
             _redHero.MoveCardsToHand();
-            PositionHandCards(_redHero, redCounter);
+            PositionHandCards(_redHero, _redCounter);
         }
     }
 
@@ -516,16 +516,16 @@ public class GameManager : NetworkBehaviour
         //Debug.Log(hero.hand.Count + " in hand");
         if (hero == _blueHero)
         {
-            ProcessCardInHand(hero.hand[0], blueCardInHandPos1, hero.hand[1], hero.hand[2]);
-            ProcessCardInHand(hero.hand[1], blueCardInHandPos2, hero.hand[0], hero.hand[2]);
-            ProcessCardInHand(hero.hand[2], blueCardInHandPos3, hero.hand[0], hero.hand[1]);
+            ProcessCardInHand(hero.hand[0], _blueCardInHandPos1, hero.hand[1], hero.hand[2]);
+            ProcessCardInHand(hero.hand[1], _blueCardInHandPos2, hero.hand[0], hero.hand[2]);
+            ProcessCardInHand(hero.hand[2], _blueCardInHandPos3, hero.hand[0], hero.hand[1]);
         }
         else
         {
             //Debug.Log(hero.hand.Count);
-            ProcessCardInHand(hero.hand[0], redCardInHandPos1, hero.hand[1], hero.hand[2]);
-            ProcessCardInHand(hero.hand[1], redCardInHandPos2, hero.hand[0], hero.hand[2]);
-            ProcessCardInHand(hero.hand[2], redCardInHandPos3, hero.hand[0], hero.hand[1]);
+            ProcessCardInHand(hero.hand[0], _redCardInHandPos1, hero.hand[1], hero.hand[2]);
+            ProcessCardInHand(hero.hand[1], _redCardInHandPos2, hero.hand[0], hero.hand[2]);
+            ProcessCardInHand(hero.hand[2], _redCardInHandPos3, hero.hand[0], hero.hand[1]);
         }
         
         CalcGhostPositions(hero, counter);
@@ -557,21 +557,21 @@ public class GameManager : NetworkBehaviour
         int flowPos = 0;
         if (actionType == Action.ActionType.Move) 
         {
-            if (counter == firstToGo) 
+            if (counter == _firstToGo) 
                 flowPos = 0;
             else 
                 flowPos = 1;
         }
         else if (actionType == Action.ActionType.WeakAttack)
         {
-            if (counter == firstToGo) 
+            if (counter == _firstToGo) 
                 flowPos = 2;
             else 
                 flowPos = 4;
         }
         else if (actionType == Action.ActionType.StrongAttack)
         {
-            if (counter == firstToGo)
+            if (counter == _firstToGo)
                 flowPos = 3;
             else
                 flowPos = 5;
@@ -579,13 +579,13 @@ public class GameManager : NetworkBehaviour
 
         _actionsToExecute[flowPos] = ghostRefs;
 
-        if (counter == blueCounter) 
+        if (counter == _blueCounter) 
         {
             _blueSelectedCard?.HideDestinations(_blueSelectedCard.availableActions);
             RegisterActionClientRpc(flowPos, ConvertToIntArray(ghostRefs));
             //_uIManager.ShowReadyText(_uIManager.blueReadyTextBlue); ////
         }
-        if (counter == redCounter) 
+        if (counter == _redCounter) 
         {
             redSelectedCard?.HideDestinations(redSelectedCard.availableActions);
             RegisterActionServerRpc(flowPos, ConvertToIntArray(ghostRefs));
@@ -645,8 +645,8 @@ public class GameManager : NetworkBehaviour
             if (_actionsToExecute[0] != null)
             {
                 Debug.Log("Flow 1: " + _actionsToExecute[0][0]);
-                firstToGo.ExecuteMove(_actionsToExecute[0]);
-                //AddToLog(firstToGo + " : " + _actionsToExecute2[0].actionType + " to " + _actionsToExecute[0].selectedGridSquare);
+                _firstToGo.ExecuteMove(_actionsToExecute[0]);
+                //AddToLog(_firstToGo + " : " + _actionsToExecute2[0].actionType + " to " + _actionsToExecute[0].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
 
@@ -654,16 +654,16 @@ public class GameManager : NetworkBehaviour
             if (_actionsToExecute[1] != null)
             {
                 Debug.Log("Flow 2: " + _actionsToExecute[1][0]);
-                secondToGo.ExecuteMove(_actionsToExecute[1]);
-                //AddToLog(secondToGo + " : " + _actionsToExecute[1].actionType + " to " + _actionsToExecute[1].selectedGridSquare);
+                _secondToGo.ExecuteMove(_actionsToExecute[1]);
+                //AddToLog(_secondToGo + " : " + _actionsToExecute[1].actionType + " to " + _actionsToExecute[1].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
 
             // First to go Weak Attack
             if (_actionsToExecute[2] != null)
             {
-                firstToGo.ExecuteWeakAttack(_actionsToExecute[2]);
-                //AddToLog(firstToGo + " : " + _actionsToExecute[2].actionType + " on " + _actionsToExecute[2].selectedGridSquare);
+                _firstToGo.ExecuteWeakAttack(_actionsToExecute[2]);
+                //AddToLog(_firstToGo + " : " + _actionsToExecute[2].actionType + " on " + _actionsToExecute[2].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
             if (CheckForDefeatWinner())
@@ -683,8 +683,8 @@ public class GameManager : NetworkBehaviour
             // First to go Strong Attack
             if (_actionsToExecute[3] != null)
             {
-                firstToGo.ExecuteStrongAttack(_actionsToExecute[3]);
-                //AddToLog(secondToGo + " : " + _actionsToExecute[3].actionType + " on " + _actionsToExecute[3].selectedGridSquare);
+                _firstToGo.ExecuteStrongAttack(_actionsToExecute[3]);
+                //AddToLog(_secondToGo + " : " + _actionsToExecute[3].actionType + " on " + _actionsToExecute[3].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
             if (CheckForDefeatWinner())
@@ -704,8 +704,8 @@ public class GameManager : NetworkBehaviour
             // Second to go Weak Attack
             if (_actionsToExecute[4] != null)
             {
-                secondToGo.ExecuteWeakAttack(_actionsToExecute[4]);
-                //AddToLog(firstToGo + " : " + _actionsToExecute[4].actionType + " on " + _actionsToExecute[4].selectedGridSquare);
+                _secondToGo.ExecuteWeakAttack(_actionsToExecute[4]);
+                //AddToLog(_firstToGo + " : " + _actionsToExecute[4].actionType + " on " + _actionsToExecute[4].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
             if (CheckForDefeatWinner())
@@ -724,8 +724,8 @@ public class GameManager : NetworkBehaviour
             // Second to go Strong Attack
             if (_actionsToExecute[5] != null)
             {
-                secondToGo.ExecuteStrongAttack(_actionsToExecute[5]);
-                //AddToLog(secondToGo + " : " + _actionsToExecute[5].actionType + " on " + _actionsToExecute[5].selectedGridSquare);
+                _secondToGo.ExecuteStrongAttack(_actionsToExecute[5]);
+                //AddToLog(_secondToGo + " : " + _actionsToExecute[5].actionType + " on " + _actionsToExecute[5].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
             }
             if (CheckForDefeatWinner())
@@ -782,7 +782,7 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     void ShowPlayedCardTicksClientRpc()
     {
-        foreach (Card card in allCards)
+        foreach (Card card in _allCards)
         {
             //Debug.Log(card.cardId);
             if (card != null && card.cardId == _bluePlayedCardId || card.cardId == _redPlayedCardId)//////need to get dUMMY cards
@@ -819,7 +819,7 @@ public class GameManager : NetworkBehaviour
         if (hero == _blueHero)
         {
             _blueHero.cardInPlay = _blueSelectedCard;
-            RegisterAction(blueCounter, actionType, ghostRefs);
+            RegisterAction(_blueCounter, actionType, ghostRefs);
             _bluePlayedCardId = _blueSelectedCard.cardId;
             SetBluePlayedCardClientRpc(_bluePlayedCardId);
             _blueTurnDone = true;
@@ -828,7 +828,7 @@ public class GameManager : NetworkBehaviour
         else if (hero == _redHero)
         {
             _redHero.cardInPlay = redSelectedCard;
-            RegisterAction(redCounter, actionType, ghostRefs);
+            RegisterAction(_redCounter, actionType, ghostRefs);
             _redPlayedCardId = redSelectedCard.cardId;
             SetRedPlayedCardServerRpc(_redPlayedCardId);
             _redTurnDone = true;
@@ -940,23 +940,23 @@ public class GameManager : NetworkBehaviour
             switch (randomNum)
             {
                 case 1:
-                    idol.transform.position = GameObject.Find("Green Counter 13").transform.position;
+                    _idol.transform.position = GameObject.Find("Green Counter 13").transform.position;
                     _idolPosInt = 13;
                     break;
                 case 2:
-                    idol.transform.position = GameObject.Find("Green Counter 23").transform.position;
+                    _idol.transform.position = GameObject.Find("Green Counter 23").transform.position;
                     _idolPosInt = 23;
                     break;
                 case 3:
-                    idol.transform.position = GameObject.Find("Green Counter 33").transform.position;
+                    _idol.transform.position = GameObject.Find("Green Counter 33").transform.position;
                     _idolPosInt = 33;
                     break;
                 case 4:
-                    idol.transform.position = GameObject.Find("Green Counter 43").transform.position;
+                    _idol.transform.position = GameObject.Find("Green Counter 43").transform.position;
                     _idolPosInt = 43;
                     break;
                 default:
-                    idol.transform.position = GameObject.Find("Green Counter 53").transform.position;
+                    _idol.transform.position = GameObject.Find("Green Counter 53").transform.position;
                     _idolPosInt = 53;
                     break;
             }
@@ -967,21 +967,21 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     void PlaceIdolClientRpc(int idolPosInt)
     {
-        idol.transform.position = GameObject.Find("Green Counter " + idolPosInt.ToString()).transform.position;
+        _idol.transform.position = GameObject.Find("Green Counter " + idolPosInt.ToString()).transform.position;
     }
 
     public void PickupIdol(Counter counter) 
     {
         _idolPosInt = 0;
         _audioManager.PlaySound(_audioManager.CollectIdol);
-        if (counter == blueCounter) 
+        if (counter == _blueCounter) 
         {
-            idol.transform.position = blueHasIdolPos.position;
+            _idol.transform.position = _blueHasIdolPos.position;
             _hasIdol = _blueHero;
         }
         else 
         {
-            idol.transform.position = redHasIdolPos.position;
+            _idol.transform.position = _redHasIdolPos.position;
             _hasIdol = _redHero;
         }
     }
@@ -989,31 +989,31 @@ public class GameManager : NetworkBehaviour
     public void DetermineFirstToGo(Hero blueHero, Hero redHero) 
     {
         if (blueHero.speed > redHero.speed) 
-            SetPlayerOrder(blueCounter, redCounter, true, false);
+            SetPlayerOrder(_blueCounter, _redCounter, true, false);
         else if (blueHero.speed < redHero.speed)
-            SetPlayerOrder(redCounter, blueCounter, false, true);
+            SetPlayerOrder(_redCounter, _blueCounter, false, true);
         else 
         {
             bool isBlueFirst = UnityEngine.Random.value < 0.5f;
             if (isBlueFirst) 
-                SetPlayerOrder(blueCounter, redCounter, true, false);
+                SetPlayerOrder(_blueCounter, _redCounter, true, false);
             else 
-                SetPlayerOrder(redCounter, blueCounter, true, false);
+                SetPlayerOrder(_redCounter, _blueCounter, true, false);
         }
 
-        if (_currentRound == 2 && firstToGo == blueCounter) 
+        if (_currentRound == 2 && _firstToGo == _blueCounter) 
         {
             Debug.Log("Swapping first to go");
-            SetPlayerOrder(redCounter, blueCounter, false, true);
+            SetPlayerOrder(_redCounter, _blueCounter, false, true);
         }
     }
 
     public void SetPlayerOrder(Counter firstPlayer, Counter secondPlayer, bool isFirstCupActive, bool isSecondCupActive) 
     {
-        firstToGo = firstPlayer;
-        secondToGo = secondPlayer;
-        blueCup.SetActive(isFirstCupActive);
-        redCup.SetActive(isSecondCupActive);
+        _firstToGo = firstPlayer;
+        _secondToGo = secondPlayer;
+        _blueCup.SetActive(isFirstCupActive);
+        _redCup.SetActive(isSecondCupActive);
     }
 
     public void CalcGhostPositions(Hero hero, Counter counter) 

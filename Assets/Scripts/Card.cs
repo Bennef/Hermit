@@ -17,7 +17,7 @@ public class Card : MonoBehaviour
     public GameObject availableActionsObj; // We are going to add action components to this obj
     Vector3 cardOffset;
     Transform x, hand, tick;
-    Counter blueCounter, redCounter;
+    Counter _blueCounter, _redCounter;
     GameManager gameManager;
     UIManager _uIManager;
     AudioManager _audioManager;
@@ -34,8 +34,8 @@ public class Card : MonoBehaviour
 
     void Start()
     {
-        blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
-        redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
+        _blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
+        _redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
         foreach (Action action in baseActions)
             action.AssignGhostCounters();
     }
@@ -183,8 +183,8 @@ public class Card : MonoBehaviour
         {
             foreach (GhostCounter ghostCounter in action.ghostCounters) 
             {
-                if (ghostCounter.gridPosString != redCounter.gridPosString && 
-                    ghostCounter.gridPosString != blueCounter.gridPosString ||
+                if (ghostCounter.gridPosString != _redCounter.gridPosString && 
+                    ghostCounter.gridPosString != _blueCounter.gridPosString ||
                     ghostCounter.actionType != GhostCounter.ActionType.Move) 
                 {
                     Vector3 newScale = new Vector3(1.3f, 1.3f, 0.1f);
@@ -289,7 +289,7 @@ public class Card : MonoBehaviour
                 int gcX = ghostCounterCoordX - 3;
                 int gcY = ghostCounterCoordY - 3;
 
-                if (counter == redCounter)
+                if (counter == _redCounter)
                 {
                     gcX *= -1;
                     gcY *= -1;
@@ -303,7 +303,7 @@ public class Card : MonoBehaviour
                 // Check if out of bounds or if a counter is in the way, if yes then DON'T add action
                 if ((newPosX > 5 || newPosY > 5 || newPosX < 1 || newPosY < 1) ||
                    (card.actionType == Card.ActionType.Move &&
-                   (updatedCounterPosString == redCounter.gridPosString || updatedCounterPosString == blueCounter.gridPosString)))
+                   (updatedCounterPosString == _redCounter.gridPosString || updatedCounterPosString == _blueCounter.gridPosString)))
                 {
                     copyAction = false;
                 }
