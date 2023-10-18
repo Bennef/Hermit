@@ -26,35 +26,40 @@ public class UIManager : NetworkBehaviour
     [Header("Blue Objects")]
     [SerializeField] GameObject _mainCanvasBlue;
     [SerializeField] GameObject _myDeckScreenBlue;
-    [SerializeField] GameObject _logButtonBlue;
-    [SerializeField] GameObject _myDeckButtonBlue;
     [SerializeField] GameObject _gameLogCanvasBlue;
     [SerializeField] GameObject _lowerUIBlue;
-    [SerializeField] GameObject _closeMyDeckButtonBlue;
-    [SerializeField] GameObject _discardButtonBlue;
     [SerializeField] GameObject _messageOverlayBlue;
     [SerializeField] GameObject _myDeckTextBlue;
-    public GameObject _startTurnButtonBlue;
-    public GameObject _resetButtonBlue;
+    [SerializeField] GameObject _myDeckButtonBlue;
+    [SerializeField] GameObject _closeMyDeckButtonBlue;
+    [SerializeField] GameObject _startTurnButtonBlue;
+    [SerializeField] GameObject _discardButtonBlue;
+    [SerializeField] GameObject _resetButtonBlue;
+    [SerializeField] GameObject _logButtonBlue;
 
     [Header("Red Objects")]
     [SerializeField] GameObject _mainCanvasRed;
     [SerializeField] GameObject _myDeckScreenRed;
-    [SerializeField] GameObject _logButtonRed;
-    [SerializeField] GameObject _myDeckButtonRed;
     [SerializeField] GameObject _gameLogCanvasRede;
     [SerializeField] GameObject _lowerUIRed;
-    [SerializeField] GameObject _closeMyDeckButtonRed;
-    [SerializeField] GameObject _discardButtonRed;
     [SerializeField] GameObject _messageOverlayRed;
     [SerializeField] GameObject _myDeckTextRed;
-    public GameObject _startTurnButtonRed;
-    public GameObject _resetButtonRed;
+    [SerializeField] GameObject _startTurnButtonRed;
+    [SerializeField] GameObject _myDeckButtonRed;
+    [SerializeField] GameObject _closeMyDeckButtonRed;
+    [SerializeField] GameObject _discardButtonRed;
+    [SerializeField] GameObject _resetButtonRed;
+    [SerializeField] GameObject _logButtonRed;
 
     public GameObject LogButtonBlue { get { return _logButtonBlue; } }
     public GameObject MyDeckButtonBlue { get { return _logButtonBlue; } }
     public GameObject LogButtonRed { get { return _logButtonBlue; } }
     public GameObject MyDeckButtonRed { get { return _logButtonBlue; } }
+
+    public GameObject StartTurnButtonBlue { get => _startTurnButtonBlue; set => _startTurnButtonBlue = value; }
+    public GameObject ResetButtonBlue { get => _resetButtonBlue; set => _resetButtonBlue = value; }
+    public GameObject StartTurnButtonRed { get => _startTurnButtonRed; set => _startTurnButtonRed = value; }
+    public GameObject ResetButtonRed { get => _resetButtonRed; set => _resetButtonRed = value; }
 
     GameManager _gameManager;
 
@@ -191,17 +196,13 @@ public class UIManager : NetworkBehaviour
         }
 
         foreach (Card card in hero.hand)
-        {
-            if (card.toBeDiscarded)
-            {
+            if (card.ToBeDiscarded)
                 cardsToDiscard.Add(card);
-            }
-        }
 
         foreach (Card card in cardsToDiscard)
         {
             hero.DiscardCardFromHand(card);
-            card.toBeDiscarded = false;
+            card.ToBeDiscarded = false;
         }
         _gameManager.BlueDiscarding = false;
         _gameManager.RedDiscarding = false;
@@ -214,19 +215,13 @@ public class UIManager : NetworkBehaviour
     {
         int cardsToDiscard = 0;
         foreach (Card card in hero.hand) 
-        {
-            if (card.selected) {
+            if (card.Selected) {
                 cardsToDiscard++;
             }
-        }
         if (hero == _blueHero)
-        {
             _discardButtonTextBlue.text = "Discard\n" + cardsToDiscard.ToString();
-        }
         else
-        {
             _discardButtonTextRed.text = "Discard\n" + cardsToDiscard.ToString();
-        }
     }
 
     public void StartTurnButtonPress() 

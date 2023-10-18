@@ -28194,28 +28194,28 @@ MonoBehaviour:
   _messageTextRed: {fileID: 1908131376}
   _mainCanvasBlue: {fileID: 1667315575}
   _myDeckScreenBlue: {fileID: 493271424}
-  _logButtonBlue: {fileID: 502177730}
-  _myDeckButtonBlue: {fileID: 737739178}
   _gameLogCanvasBlue: {fileID: 2003929381}
   _lowerUIBlue: {fileID: 1555838335}
-  _closeMyDeckButtonBlue: {fileID: 1445317461}
-  _discardButtonBlue: {fileID: 1825606703}
   _messageOverlayBlue: {fileID: 910824385}
   _myDeckTextBlue: {fileID: 1967603715}
+  _myDeckButtonBlue: {fileID: 737739178}
+  _closeMyDeckButtonBlue: {fileID: 1445317461}
   _startTurnButtonBlue: {fileID: 75361589}
+  _discardButtonBlue: {fileID: 1825606703}
   _resetButtonBlue: {fileID: 789753130}
+  _logButtonBlue: {fileID: 502177730}
   _mainCanvasRed: {fileID: 354303470}
   _myDeckScreenRed: {fileID: 438667532}
-  _logButtonRed: {fileID: 936627234}
-  _myDeckButtonRed: {fileID: 1829845379}
   _gameLogCanvasRede: {fileID: 93639003}
   _lowerUIRed: {fileID: 1206047911}
-  _closeMyDeckButtonRed: {fileID: 1317931886}
-  _discardButtonRed: {fileID: 1682952232}
   _messageOverlayRed: {fileID: 304201380}
   _myDeckTextRed: {fileID: 1653022268}
   _startTurnButtonRed: {fileID: 360694111}
+  _myDeckButtonRed: {fileID: 1829845379}
+  _closeMyDeckButtonRed: {fileID: 1317931886}
+  _discardButtonRed: {fileID: 1682952232}
   _resetButtonRed: {fileID: 139199043}
+  _logButtonRed: {fileID: 936627234}
 --- !u!4 &1301023213
 Transform:
   m_ObjectHideFlags: 0
@@ -30337,60 +30337,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9700b77eb4187a0428e290df3641251b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnTime: 60
-  countDownTimer: 0
-  currentTurn: 0
-  currentRound: 1
-  blueRoundsWon: 0
-  redRoundsWon: 0
-  hasIdol: {fileID: 0}
-  roundWinner: 
-  blueDeckCardsSelected: 0
-  redDeckCardsSelected: 0
-  aIPlaying: 1
-  blueDiscarding: 0
-  redDiscarding: 0
-  bluePickingHand: 1
-  redPickingHand: 1
-  blueReadyToStart: 0
-  redReadyToStart: 0
-  turnRunning: 0
-  blueSelectedCard: {fileID: 0}
+  _turnTime: 60
+  _countDownTimer: 0
+  _currentTurn: 0
+  _currentRound: 1
+  _blueRoundsWon: 0
+  _redRoundsWon: 0
+  _hasIdol: {fileID: 0}
+  _roundWinner: 
+  _blueDeckCardsSelected: 0
+  _redDeckCardsSelected: 0
+  _aIPlaying: 1
+  _blueDiscarding: 0
+  _redDiscarding: 0
+  _bluePickingHand: 1
+  _redPickingHand: 1
+  _blueReadyToStart: 0
+  _redReadyToStart: 0
+  _turnRunning: 0
+  _blueSelectedCard: {fileID: 0}
   redSelectedCard: {fileID: 0}
-  bluePlayedCardId: 0
-  redPlayedCardId: 0
-  blueTurnDone: 0
-  redTurnDone: 0
-  blueUIObjects: {fileID: 608832777}
-  redUIObjects: {fileID: 416697618}
-  idol: {fileID: 207245090}
-  blueCounterObj: {fileID: 5790425993476128786, guid: a7cb20d9450d71b4d9721e16097a4d04,
+  _bluePlayedCardId: 0
+  _redPlayedCardId: 0
+  _blueTurnDone: 1
+  _redTurnDone: 1
+  _idol: {fileID: 207245090}
+  _blueUIObjects: {fileID: 608832777}
+  _redUIObjects: {fileID: 416697618}
+  _blueCounterObj: {fileID: 5790425993476128786, guid: a7cb20d9450d71b4d9721e16097a4d04,
     type: 3}
-  redCounterObj: {fileID: 7289378998951318665, guid: d7149677f54bc0f4fbec2ce0075c5c14,
+  _redCounterObj: {fileID: 7289378998951318665, guid: d7149677f54bc0f4fbec2ce0075c5c14,
     type: 3}
-  hero1Obj: {fileID: 8084873940461836523, guid: 570fb385a1710c14289c1e0ece3d7da8,
+  _hero1Obj: {fileID: 8084873940461836523, guid: 570fb385a1710c14289c1e0ece3d7da8,
     type: 3}
-  hero2Obj: {fileID: 8084873940461836523, guid: 516633d899c4e3a4cba1548ec009949b,
+  _hero2Obj: {fileID: 8084873940461836523, guid: 516633d899c4e3a4cba1548ec009949b,
     type: 3}
-  blueCounter: {fileID: 0}
-  redCounter: {fileID: 0}
-  firstToGo: {fileID: 0}
-  secondToGo: {fileID: 0}
-  blueHero: {fileID: 0}
-  redHero: {fileID: 0}
-  blueCamera: {fileID: 478362281}
-  redCamera: {fileID: 486726556}
-  blueCup: {fileID: 1800656371}
-  redCup: {fileID: 319878856}
-  idolPosInt: 0
-  blueHasIdolPos: {fileID: 312700788}
-  redHasIdolPos: {fileID: 1832568570}
-  blueCardInHandPos1: {fileID: 2077443641}
-  blueCardInHandPos2: {fileID: 1171084003}
-  blueCardInHandPos3: {fileID: 1418216911}
-  redCardInHandPos1: {fileID: 53547467096918063}
-  redCardInHandPos2: {fileID: 53547466550433549}
-  redCardInHandPos3: {fileID: 53547466381751787}
+  _blueCounter: {fileID: 0}
+  _redCounter: {fileID: 0}
+  _firstToGo: {fileID: 0}
+  _secondToGo: {fileID: 0}
+  _blueCamera: {fileID: 478362281}
+  _redCamera: {fileID: 486726556}
+  _blueCup: {fileID: 1800656371}
+  _redCup: {fileID: 319878856}
+  _idolPosInt: 0
+  _blueHero: {fileID: 0}
+  _redHero: {fileID: 0}
+  _blueHasIdolPos: {fileID: 312700788}
+  _redHasIdolPos: {fileID: 1832568570}
+  _blueCardInHandPos1: {fileID: 2077443641}
+  _blueCardInHandPos2: {fileID: 1171084003}
+  _blueCardInHandPos3: {fileID: 1418216911}
+  _redCardInHandPos1: {fileID: 53547467096918063}
+  _redCardInHandPos2: {fileID: 53547466550433549}
+  _redCardInHandPos3: {fileID: 53547466381751787}
 --- !u!114 &1379885367
 MonoBehaviour:
   m_ObjectHideFlags: 0

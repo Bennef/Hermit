@@ -4,29 +4,31 @@ using UnityEngine;
 
 public class Counter : NetworkBehaviour
 {
-    public Hero hero, otherHero;
-    public Counter otherCounter;
-    public int WeakAttackDamage = 25, StrongAttackDamage = 50;
-    public Transform startPos, currentPos, targetPos;
-    public string gridPosString; // Make sure this is set before play
-    float moveSpeed = 1f;
+    [SerializeField] Hero _hero, _otherHero;
+    [SerializeField] Counter _otherCounter;
+    [SerializeField] int _weakAttackDamage = 25, _strongAttackDamage = 50;
+    [SerializeField] Transform _startPos, _currentPos, _targetPos;
+    [SerializeField] string _gridPosString; // Make sure this is set before play
+    float _moveSpeed = 1f;
     //CameraShake cameraShake;
-    GameManager gameManager;
+    GameManager _gameManager;
     AudioManager _audioManager;
-    Animator anim;
+    Animator _anim;
+
+    public string GridPosString { get => _gridPosString; set => _gridPosString = value; }
 
     void Awake()
     {
         _audioManager = FindAnyObjectByType<AudioManager>();
-        gameManager = FindAnyObjectByType<GameManager>();
-        anim = GetComponentInChildren<Animator>();
+        _gameManager = FindAnyObjectByType<GameManager>();
+        _anim = GetComponentInChildren<Animator>();
     }
 
     public void PlaceToStart()
     {
-        gameObject.transform.position = startPos.position;
-        currentPos = startPos;
-        anim.SetBool("isDead", false);
+        gameObject.transform.position = _startPos.position;
+        _currentPos = _startPos;
+        _anim.SetBool("isDead", false);
         UpdateCounterPosString();
         AssignOtherCounterAndHero();
     }
@@ -35,13 +37,13 @@ public class Counter : NetworkBehaviour
     {
         if (this.name == "Blue Counter(Clone)")
         {
-            otherCounter = gameManager.RedCounter;
-            otherHero = gameManager.RedHero;
+            _otherCounter = _gameManager.RedCounter;
+            _otherHero = _gameManager.RedHero;
         }
         else
         {
-            otherCounter = gameManager.BlueCounter;
-            otherHero = gameManager.BlueHero;
+            _otherCounter = _gameManager.BlueCounter;
+            _otherHero = _gameManager.BlueHero;
         }
     }
     public void ExecuteMove(string[] ghostRefs)
@@ -72,20 +74,17 @@ public class Counter : NetworkBehaviour
         {
             Debug.Log(i + ", " + ghostRefs[i]);
             int targetCoord = int.Parse(ghostRefs[i]);
-            //squares[i] = GameObject.Find("Green Counter " + ghostRefs[i]).transform;
+            squares[i] = GameObject.Find("Red Star " + ghostRefs[i]).transform;
         }
-        targetPos = squares[squares.Length - 1];
+        _targetPos = squares[squares.Length - 1];
 
-        Instantiate(slash, targetPos.position, Quaternion.Euler(90, 0, 180));
-        if (otherCounter.gridPosString == targetPos.gameObject.name.Substring(targetPos.gameObject.name.Length - 2))
-        {
-            TakeDamageClientRpc(StrongAttackDamage);
-        }
+        Instantiate(slash, _targetPos.position, Quaternion.Euler(90, 0, 180));
+        if (_otherCounter._gridPosString == _targetPos.gameObject.name.Substring(_targetPos.gameObject.name.Length - 2))
+            TakeDamageClientRpc(_strongAttackDamage);
         else
-        {
             _audioManager.PlaySound(_audioManager.StrongAttackMiss);
-        }
-        anim.SetBool("isAttacking", true);
+
+        _anim.SetBool("isAttacking", true);
         StartCoroutine(Wait());
     }
 
@@ -99,26 +98,24 @@ public class Counter : NetworkBehaviour
             squares[i] = GameObject.Find("Green Counter " + ghostRefs[i]).transform;
         }
 
-        targetPos = squares[squares.Length -1];
-        Debug.Log("targetPos: " + targetPos);
-        anim.SetBool("isMoving", true);
+        _targetPos = squares[squares.Length -1];
+        Debug.Log("targetPos: " + _targetPos);
+        _anim.SetBool("isMoving", true);
         float time = 0;
         while (time <= 0.9)
         {
-            time += Time.deltaTime / moveSpeed;
-            transform.position = Vector3.Lerp(currentPos.position, targetPos.position, Mathf.SmoothStep(0.0f, 1f, time));
+            time += Time.deltaTime / _moveSpeed;
+            transform.position = Vector3.Lerp(_currentPos.position, _targetPos.position, Mathf.SmoothStep(0.0f, 1f, time));
             yield return null;
         }
-        anim.SetBool("isMoving", false);
-        //string oldPos = gridPosString;
-        currentPos = targetPos;
+        _anim.SetBool("isMoving", false);
+
+        _currentPos = _targetPos;
         UpdateCounterPosString();
 
-        if (gameManager.IdolPosInt == 0) yield break;
-        if (int.Parse(gridPosString) == gameManager.IdolPosInt)
-        {
-            gameManager.PickupIdol(this);
-        }
+        if (_gameManager.IdolPosInt == 0) yield break;
+
+        if (int.Parse(_gridPosString) == _gameManager.IdolPosInt) _gameManager.PickupIdol(this);
         // check if pickup idol - we should also check along route for other player
         /*foreach (Transform ghostCounter in squares)//////////////////////////////////////////////
         {
@@ -163,8 +160,8 @@ public class Counter : NetworkBehaviour
 
     private void TakeDamage(int attackDamage)
     {
-        gameManager.SetHealth(otherHero, otherHero.health - attackDamage);
-        otherCounter.anim.SetBool("isHit", true);
+        _gameManager.SetHealth(_otherHero, _otherHero.Health - attackDamage);
+        _otherCounter._anim.SetBool("isHit", true);
         //cameraShake.CallShake();
         _audioManager.PlaySound(_audioManager.StrongAttackHit);
         TakeDamageClientRpc(attackDamage);
@@ -174,12 +171,12 @@ public class Counter : NetworkBehaviour
     void TakeDamageClientRpc(int attackDamage)
     {
         Debug.Log("SA sent");
-        gameManager.SetHealth(otherHero, otherHero.health - attackDamage);
-        otherCounter.anim.SetBool("isHit", true);
+        _gameManager.SetHealth(_otherHero, _otherHero.Health - attackDamage);
+        _otherCounter._anim.SetBool("isHit", true);
         //cameraShake.CallShake();
         _audioManager.PlaySound(_audioManager.StrongAttackHit);
-        anim.SetBool("isAttacking", false);
-        otherCounter.anim.SetBool("isHit", false);
+        _anim.SetBool("isAttacking", false);
+        _otherCounter._anim.SetBool("isHit", false);
     }
 
     IEnumerator WeakAttack(string[] ghostRefs) 
@@ -190,16 +187,16 @@ public class Counter : NetworkBehaviour
     void UpdateCounterPosString()
     { 
         //Debug.Log(currentPos.gameObject.name);
-        gridPosString = currentPos.gameObject.name.Substring(currentPos.gameObject.name.Length - 2);
+        _gridPosString = _currentPos.gameObject.name.Substring(_currentPos.gameObject.name.Length - 2);
         //Debug.Log(gridPosString);
-        UpdateCounterPosStringClientRpc(gridPosString);
+        UpdateCounterPosStringClientRpc(_gridPosString);
     }
 
     [ClientRpc]
     void UpdateCounterPosStringClientRpc(string sentGridPosString)
     {
         //Debug.Log(currentPos.gameObject.name);
-        gridPosString = sentGridPosString; // this did not update on the client!!!!!!!!
+        _gridPosString = sentGridPosString; // this did not update on the client!!!!!!!!
         //Debug.Log(gridPosString);
     }
 }

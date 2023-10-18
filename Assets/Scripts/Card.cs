@@ -4,31 +4,42 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
-    public int cardId;
-    public bool isDummy;
-    public enum ActionType { Move, WeakAttack, StrongAttack};
-    public ActionType actionType;
-    public string cardString; // from NFT metadata
-    public Card otherCard1, otherCard2;
-    public bool locked = false, selected = false, toBeDiscarded = false, 
-                discarded = false, inDeck = true; // discarded or played cards should be locked
-    public Action[] baseActions;
-    public List<Action> availableActions = new List<Action>();
-    public GameObject availableActionsObj; // We are going to add action components to this obj
-    Vector3 cardOffset;
-    Transform x, hand, tick;
+    [SerializeField] int _cardId;
+    [SerializeField] bool _isDummy;
+    [SerializeField] enum ActionType { Move, WeakAttack, StrongAttack};
+    [SerializeField] ActionType _actionType;
+    [SerializeField] string _cardString; // from NFT metadata
+    [SerializeField] Card _otherCard1, _otherCard2;
+    [SerializeField] bool _locked, _selected, _toBeDiscarded, _discarded, _inDeck = true; // discarded or played cards should be locked
+    [SerializeField] Action[] _baseActions;
+    [SerializeField] List<Action> _availableActions = new List<Action>();
+    [SerializeField] GameObject _availableActionsObj; // We are going to add action components to this obj
+    Vector3 _cardOffset;
+    Transform _x, _hand, _tick;
     Counter _blueCounter, _redCounter;
-    GameManager gameManager;
+    GameManager _gameManager;
     UIManager _uIManager;
     AudioManager _audioManager;
-    Hero hero;
+    Hero _hero;
+
+    public int CardId { get => _cardId; set => _cardId = value; }
+    public Card OtherCard1 { get => _otherCard1; set => _otherCard1 = value; }
+    public Card OtherCard2 { get => _otherCard2; set => _otherCard2 = value; }
+    public bool Locked { get => _locked; set => _locked = value; }
+    public bool Selected { get => _selected; set => _selected = value; }
+    public bool ToBeDiscarded { get => _toBeDiscarded; set => _toBeDiscarded = value; }
+    public List<Action> AvailableActions { get => _availableActions; set => _availableActions = value; }
+    public bool Discarded { get => _discarded; set => _discarded = value; }
+    public bool InDeck { get => _inDeck; set => _inDeck = value; }
+    public Action[] BaseActions { get => _baseActions; set => _baseActions = value; }
+    public GameObject AvailableActionsObj { get => _availableActionsObj; set => _availableActionsObj = value; }
 
     void Awake() 
     {
-        gameManager = FindAnyObjectByType<GameManager>();
+        _gameManager = FindAnyObjectByType<GameManager>();
         _uIManager = FindAnyObjectByType<UIManager>();
         _audioManager = FindAnyObjectByType<AudioManager>();
-        baseActions = GetComponents<Action>();
+        _baseActions = GetComponents<Action>();
         AssignChildren();
     }
 
@@ -36,89 +47,89 @@ public class Card : MonoBehaviour
     {
         _blueCounter = GameObject.Find("Blue Counter(Clone)").GetComponent<Counter>();
         _redCounter = GameObject.Find("Red Counter(Clone)").GetComponent<Counter>();
-        foreach (Action action in baseActions)
+        foreach (Action action in _baseActions)
             action.AssignGhostCounters();
     }
 
     public void AssignChildren() 
     {
-        x = transform.GetChild(0);
-        hand = transform.GetChild(1);
-        tick = transform.GetChild(2);
-        availableActionsObj = transform.GetChild(3).gameObject;
+        _x = transform.GetChild(0);
+        _hand = transform.GetChild(1);
+        _tick = transform.GetChild(2);
+        _availableActionsObj = transform.GetChild(3).gameObject;
     }
     
     void OnMouseDown() 
     {
-        if (locked || isDummy)
+        if (_locked || _isDummy)
             return;
 
         if (NetworkManager.Singleton.IsServer)
-            hero = gameManager.BlueHero;
+            _hero = _gameManager.BlueHero;
         else
-            hero = gameManager.RedHero;
+            _hero = _gameManager.RedHero;
 
-        if (inDeck) 
+        if (_inDeck) 
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                if (!selected)
+                if (!_selected)
                 {
                     PickUpCard(gameObject.transform);
                     ShowHand();
-                    gameManager.SetDeckCardsSelected(hero, gameManager.BlueDeckCardsSelected + 1);
+                    _gameManager.SetDeckCardsSelected(_hero, _gameManager.BlueDeckCardsSelected + 1);
                 }
                 else
                 {
                     PutDownCard(gameObject.transform);
                     HideHand();
-                    gameManager.SetDeckCardsSelected(hero, gameManager.BlueDeckCardsSelected - 1);
+                    _gameManager.SetDeckCardsSelected(_hero, _gameManager.BlueDeckCardsSelected - 1);
                 }
             }
             else
             {
-                if (!selected)
+                if (!_selected)
                 {
                     PickUpCard(gameObject.transform);
                     ShowHand();
-                    gameManager.SetDeckCardsSelected(hero, gameManager.RedDeckCardsSelected + 1);
+                    _gameManager.SetDeckCardsSelected(_hero, _gameManager.RedDeckCardsSelected + 1);
                 }
                 else
                 {
                     PutDownCard(gameObject.transform);
                     HideHand();
-                    gameManager.SetDeckCardsSelected(hero, gameManager.RedDeckCardsSelected - 1);
+                    _gameManager.SetDeckCardsSelected(_hero, _gameManager.RedDeckCardsSelected - 1);
                 }
             }
         }
-        else if (!selected) 
+        else if (!_selected) 
         {
             PickUpCard(gameObject.transform);
             if (NetworkManager.Singleton.IsServer)
-                gameManager.BlueSelectedCard = this;
+                _gameManager.BlueSelectedCard = this;
             else
-                gameManager.RedSelectedCard = this;
+                _gameManager.RedSelectedCard = this;
 
-            HandleOtherCardSelection(otherCard1);
-            HandleOtherCardSelection(otherCard2);
+            HandleOtherCardSelection(_otherCard1);
+            HandleOtherCardSelection(_otherCard2);
             HandlePlayerDiscarding();////
-            toBeDiscarded = true;
+            _toBeDiscarded = true;
         }
         else {
             PutDownCard(gameObject.transform);
-            HideDestinations(availableActions);
+            HideDestinations(_availableActions);
             HideDiscardX();
-            toBeDiscarded = false;
+            _toBeDiscarded = false;
         }
         if (NetworkManager.Singleton.IsServer)
         {
-            if (gameManager.BlueDiscarding)
-                _uIManager.UpdateDiscardButtonText(hero);
+            if (_gameManager.BlueDiscarding)
+                _uIManager.UpdateDiscardButtonText(_hero);
         }
         else
         {
-            if (gameManager.RedDiscarding)
-                _uIManager.UpdateDiscardButtonText(hero);
+            if (_gameManager.RedDiscarding)
+                _uIManager.UpdateDiscardButtonText(_hero);
         }
     }
 
@@ -126,18 +137,18 @@ public class Card : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            if (otherCard.selected && !gameManager.BlueDiscarding)
+            if (otherCard._selected && !_gameManager.BlueDiscarding)
             {
                 PutDownCard(otherCard.GetComponent<Transform>());
-                HideDestinations(otherCard.availableActions);
+                HideDestinations(otherCard._availableActions);
             }
         }
         else
         {
-            if (otherCard.selected && !gameManager.RedDiscarding)
+            if (otherCard._selected && !_gameManager.RedDiscarding)
             {
                 PutDownCard(otherCard.GetComponent<Transform>());
-                HideDestinations(otherCard.availableActions);
+                HideDestinations(otherCard._availableActions);
             }
         }
     }
@@ -146,93 +157,83 @@ public class Card : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            if (gameManager.BlueDiscarding)
+            if (_gameManager.BlueDiscarding)
                 ShowDiscardX();
             else
-                ShowDestinations(availableActions);
+                ShowDestinations(_availableActions);
         }
         else
         {
-            if (gameManager.RedDiscarding)
+            if (_gameManager.RedDiscarding)
                 ShowDiscardX();
             else
-                ShowDestinations(availableActions);
+                ShowDestinations(_availableActions);
         }
     }
 
     void PickUpCard(Transform card)
     {
-        cardOffset = new Vector3(card.position.x, card.position.y, card.position.z - 0.2f);
-        card.position = cardOffset;
-        card.GetComponent<Card>().selected = true;
+        _cardOffset = new Vector3(card.position.x, card.position.y, card.position.z - 0.2f);
+        card.position = _cardOffset;
+        card.GetComponent<Card>()._selected = true;
         _audioManager.PlaySound(_audioManager.CardUp);
     }
 
     public void PutDownCard(Transform card)
     {
-        cardOffset = new Vector3(card.position.x, card.position.y, card.position.z + 0.2f);
-        card.position = cardOffset;
-        card.GetComponent<Card>().selected = false;
-        card.GetComponent<Card>().toBeDiscarded = false;
+        _cardOffset = new Vector3(card.position.x, card.position.y, card.position.z + 0.2f);
+        card.position = _cardOffset;
+        card.GetComponent<Card>()._selected = false;
+        card.GetComponent<Card>()._toBeDiscarded = false;
         _audioManager.PlaySound(_audioManager.CardDown);
     }
 
-    void ShowDestinations(List<Action> availableActions) 
+    void ShowDestinations(List<Action> _availableActions) 
     {
-        foreach (Action action in availableActions)
+        foreach (Action action in _availableActions)
         {
             foreach (GhostCounter ghostCounter in action.ghostCounters) 
             {
-                if (ghostCounter.gridPosString != _redCounter.gridPosString && 
-                    ghostCounter.gridPosString != _blueCounter.gridPosString ||
-                    ghostCounter.actionType != GhostCounter.ActionType.Move) 
+                if (ghostCounter.GridPosString != _redCounter.GridPosString && 
+                    ghostCounter.GridPosString != _blueCounter.GridPosString ||
+                    ghostCounter.GCActionType != GhostCounter.ActionType.Move) 
                 {
                     Vector3 newScale = new Vector3(1.3f, 1.3f, 0.1f);
-                    if (ghostCounter.actionType == GhostCounter.ActionType.Move) 
-                    {
+                    if (ghostCounter.GCActionType == GhostCounter.ActionType.Move) 
                         newScale = new Vector3(1.3f, 1.3f, 0.1f);
-                    } 
-                    else if (ghostCounter.actionType == GhostCounter.ActionType.StrongAttack) 
-                    {
+                    else if (ghostCounter.GCActionType == GhostCounter.ActionType.StrongAttack) 
                         newScale = new Vector3(0.1f, 0.1f, 0.1f);
-                    } 
-                    else if (ghostCounter.actionType == GhostCounter.ActionType.WeakAttack) 
-                    {
+                    else if (ghostCounter.GCActionType == GhostCounter.ActionType.WeakAttack) 
                         newScale = new Vector3(0.7f, 0.7f, 0.1f);
-                    }
                     else
-                    {
                         newScale = new Vector3(100f, 30f, 50f);
-                    }
                     ghostCounter.transform.localScale = newScale;
                 }
             }
         }
     }
 
-    public void HideDestinations(List<Action> availableActions) 
+    public void HideDestinations(List<Action> _availableActions) 
     {
-        foreach (Action action in availableActions) 
-        {
+        foreach (Action action in _availableActions) 
             foreach (GhostCounter counter in action.ghostCounters)
             {
                 counter.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
                 GhostCounter ghostCounter = counter.GetComponent<GhostCounter>();
             }
-        }
     }
 
     public void CalcOffsetForActions(Counter counter, Card card) 
     {
         RemoveChildActions();
-        availableActions.Clear();
+        _availableActions.Clear();
         //Debug.Log("Calculating offsets for " + counter.name + ", GridPosString: " + counter.gridPosString);
         //Debug.Log("Card: " + card.name);
         string counterString = "";
         
         //Debug.Log(counter.name + "GridPosString: " + counter.gridPosString);
         //Debug.Log("Base actions: " + card.baseActions.Length);
-        foreach (Action action in card.baseActions)
+        foreach (Action action in card._baseActions)
         {
             GhostCounter[] newGcs = new GhostCounter[action.ghostCounters.Length];
             bool copyAction = true;
@@ -241,7 +242,7 @@ public class Card : MonoBehaviour
                 if (!copyAction) break;
                 if (action.ghostCounters[i] == null) break;
                 GhostCounter gc = action.ghostCounters[i];
-                switch (gc.actionType)
+                switch (gc.GCActionType)
                 {
                     case GhostCounter.ActionType.Move:
                         counterString = "Green Counter ";
@@ -280,10 +281,10 @@ public class Card : MonoBehaviour
                 //if (card.name == "4") Debug.Log(action.ghostCounters[i]);
                 GhostCounter ghostCounter = action.ghostCounters[i].GetComponent<GhostCounter>();
                 //Debug.Log(counter.gridPosString);
-                int ghostCounterCoordX = int.Parse(ghostCounter.gridPosString.Substring(0, 1));
-                int ghostCounterCoordY = int.Parse(ghostCounter.gridPosString.Substring(1, 1));
-                int playerCounterCoordX = int.Parse(counter.gridPosString.Substring(0, 1));
-                int playerCounterCoordY = int.Parse(counter.gridPosString.Substring(1, 1));
+                int ghostCounterCoordX = int.Parse(ghostCounter.GridPosString.Substring(0, 1));
+                int ghostCounterCoordY = int.Parse(ghostCounter.GridPosString.Substring(1, 1));
+                int playerCounterCoordX = int.Parse(counter.GridPosString.Substring(0, 1));
+                int playerCounterCoordY = int.Parse(counter.GridPosString.Substring(1, 1));
                 //if (card.name == "4") Debug.Log("ghostCounterCoordX: " + ghostCounterCoordX + ", ghostCounterCoordY: " + ghostCounterCoordY);
 
                 int gcX = ghostCounterCoordX - 3;
@@ -302,8 +303,8 @@ public class Card : MonoBehaviour
                 //Debug.Log("updatedCounterPosString: " + updatedCounterPosString);
                 // Check if out of bounds or if a counter is in the way, if yes then DON'T add action
                 if ((newPosX > 5 || newPosY > 5 || newPosX < 1 || newPosY < 1) ||
-                   (card.actionType == Card.ActionType.Move &&
-                   (updatedCounterPosString == _redCounter.gridPosString || updatedCounterPosString == _blueCounter.gridPosString)))
+                   (card._actionType == Card.ActionType.Move &&
+                   (updatedCounterPosString == _redCounter.GridPosString || updatedCounterPosString == _blueCounter.GridPosString)))
                 {
                     copyAction = false;
                 }
@@ -321,9 +322,9 @@ public class Card : MonoBehaviour
     void CopyAction(Action action, GhostCounter[] newGcArray)
     {
         //if (card.name == "Card 4") Debug.Log("Copying Action, action: " + action.actionId.ToString());
-        if (availableActionsObj != null)
+        if (_availableActionsObj != null)
         {
-            Action newAction = availableActionsObj.AddComponent<Action>();
+            Action newAction = _availableActionsObj.AddComponent<Action>();
 
             newAction.actionId = action.actionId;
 
@@ -348,30 +349,30 @@ public class Card : MonoBehaviour
             newAction.actionType = action.actionType;
 
             //Debug.Log("Adding action to list: " + newAction);
-            availableActions.Add(newAction);
+            _availableActions.Add(newAction);
         }
         else
         {
-            Debug.LogError("availableActionsObj is null. Make sure it's properly initialized.");
+            Debug.LogError("__availableActionsObj is null. Make sure it's properly initialized.");
         }
     }
 
     void RemoveChildActions() 
     {
-        Action[] actions = availableActionsObj.GetComponents<Action>();
+        Action[] actions = _availableActionsObj.GetComponents<Action>();
         foreach (Action action in actions) 
             Destroy(action);
     }
 
-    public void ShowDiscardX() => x.gameObject.SetActive(true);
+    public void ShowDiscardX() => _x.gameObject.SetActive(true);
 
-    public void HideDiscardX() => x.gameObject.SetActive(false);
+    public void HideDiscardX() => _x.gameObject.SetActive(false);
 
-    public void ShowHand() => hand.gameObject.SetActive(true);
+    public void ShowHand() => _hand.gameObject.SetActive(true);
 
-    public void HideHand() => hand.gameObject.SetActive(false);
+    public void HideHand() => _hand.gameObject.SetActive(false);
 
-    public void ShowTick() => tick.gameObject.SetActive(true);
+    public void ShowTick() => _tick.gameObject.SetActive(true);
 
-    public void HideTick() => tick.gameObject.SetActive(false);
+    public void HideTick() => _tick.gameObject.SetActive(false);
 }

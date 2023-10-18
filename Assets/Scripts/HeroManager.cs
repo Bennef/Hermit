@@ -29,7 +29,7 @@ public class HeroManager : MonoBehaviour
 
     void AssignValuesToHero(Hero hero)//should some of these be in Hero?
     {
-        hero.name = _heroName;
-        hero.speed = _speed;
+        hero.HeroName = _heroName;
+        hero.Speed = _speed;
     }
 }

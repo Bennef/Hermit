@@ -5,14 +5,19 @@ using UnityEngine;
 public class Hero : MonoBehaviour
 {
     public bool playerChoosingInitialCards;
-    public string heroName;
-    public int health = 100, speed;
+    [SerializeField] string _heroName;
+    [SerializeField] int _health = 100, _speed;
     public List<Card> deck = new List<Card>();
     public List<Card> hand = new List<Card>();
     public List<Card> discardPile = new List<Card>();
-    public Card cardInPlay;
+    [SerializeField] Card _cardInPlay;
     UIManager _uIManager;
 
+    public string HeroName { get => _heroName; set => _heroName = value; }
+    public int Health { get => _health; set => _health = value; }
+    public int Speed { get => _speed; set => _speed = value; }
+    public Card CardInPlay { get => _cardInPlay; set => _cardInPlay = value; }
+    
     void Awake() 
     {// just have all the cards as prefabs in hhe game and find them based on string
         _uIManager = FindAnyObjectByType<UIManager>();
@@ -25,7 +30,7 @@ public class Hero : MonoBehaviour
         //print(deck.Count);
         hand.Clear();
         discardPile.Clear();
-        cardInPlay = null;
+        _cardInPlay = null;
         for (int i = 0; i < this.gameObject.transform.GetChild(0).childCount; i++) 
         {
             Card card = this.gameObject.transform.GetChild(0).GetChild(i).GetComponent<Card>();
@@ -37,13 +42,13 @@ public class Hero : MonoBehaviour
             card?.HideTick();
             if (card != null) 
             {
-                card.locked = false;
-                card.selected = false;
-                card.toBeDiscarded = false;
-                card.discarded = false;
-                card.inDeck = true;
-                card.otherCard1 = null;
-                card.otherCard2 = null;
+                card.Locked = false;
+                card.Selected = false;
+                card.ToBeDiscarded = false;
+                card.Discarded = false;
+                card.InDeck = true;
+                card.OtherCard1 = null;
+                card.OtherCard2 = null;
             }
         }
         playerChoosingInitialCards = true;
@@ -56,9 +61,7 @@ public class Hero : MonoBehaviour
             Card card = transform.GetChild(i).GetComponent<Card>();
             Transform deckPos;
             if (NetworkManager.Singleton.IsServer)
-            {
                 deckPos = GameObject.Find("Blue Deck " + i).transform;
-            }
             else
             {
                 deckPos = GameObject.Find("Red Deck " + i).transform;
@@ -86,25 +89,6 @@ public class Hero : MonoBehaviour
             card.transform.position = dummyPos.position;
         }
     }
-
-    /*
-    public void SetCardPositions(Transform transform, bool isDeck)
-    {
-        string deckOrDummy = isDeck ? "Deck" : "Dummy";
-        string color = NetworkManager.Singleton.IsServer ? "Blue" : "Red";
-
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Card card = transform.GetChild(i).GetComponent<Card>();
-            Transform targetPos = GameObject.Find($"{color} {deckOrDummy} {i}").transform;
-
-            if (isDeck)
-                card.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-
-            card.transform.position = targetPos.position;
-        }
-    }*/
-
 
     public void MoveCardsToHand() {
         if (playerChoosingInitialCards) 
@@ -136,17 +120,15 @@ public class Hero : MonoBehaviour
         List<Card> cardsToRemove = new List<Card>();
         foreach (Card card in discardPile) {
             deck.Add(card);
-            card.discarded = false;
+            card.Discarded = false;
             card.HideDiscardX();
             card.HideTick();
             card.HideHand();
-            card.inDeck = true;
+            card.InDeck = true;
             cardsToRemove.Add(card);
         }
         foreach (Card cardToRemove in cardsToRemove) 
-        {
             discardPile.Remove(cardToRemove);
-        }
     }
 
     void MoveSelectedCardsToHand()
@@ -156,11 +138,11 @@ public class Hero : MonoBehaviour
         {
             //Debug.Log(child.name);
             Card card = child.GetComponent<Card>();
-            if (card.selected) {
+            if (card.Selected) {
                 //Debug.Log("Selected card: " + card);
                 selectedCards.Add(card);
-                card.inDeck = false;
-                card.selected = false;
+                card.InDeck = false;
+                card.Selected = false;
             }
         }
         //Debug.Log("Now adding selected cards to hand");
@@ -183,7 +165,7 @@ public class Hero : MonoBehaviour
             Card randomCard = deck[randomIndex];
             randomCards.Add(randomCard);
             deck.Remove(randomCard);
-            randomCard.inDeck = false;
+            randomCard.InDeck = false;
         }
         //Debug.Log(randomCards.Count);
         hand.AddRange(randomCards);
@@ -192,8 +174,8 @@ public class Hero : MonoBehaviour
     public void DiscardCardFromHand(Card card) 
     { 
         //Debug.Log("Discarding " + card);
-        card.discarded = true; //?
-        card.locked = true; //?
+        card.Discarded = true; //?
+        card.Locked = true; //?
         card.ShowDiscardX();
         discardPile.Add(card);
         hand.Remove(card);
@@ -208,36 +190,32 @@ public class Hero : MonoBehaviour
     public void HideDeck()
     {
         foreach (Card card in deck) 
-        {
             card.gameObject.SetActive(false);
-        }
+
         foreach (Card card in hand)
         {
-            card.locked = false;
+            card.Locked = false;
             card.HideHand();
         }
         foreach (Card card in discardPile) 
-        {
             card.gameObject.SetActive(false);
-        }
     }
 
     public void ShowDeck() 
     {
         foreach (Card card in deck) 
-        {
             card.gameObject.SetActive(true);
-        }
+
         foreach (Card card in hand) 
         {
             card.ShowHand();
             //Debug.Log(this.name + " showing card " + card);
-            card.locked = true;
+            card.Locked = true;
         }
         foreach (Card card in discardPile)
         {
             card.gameObject.SetActive(true);
-            card.selected = false;
+            card.Selected = false;
         }
     }
 }

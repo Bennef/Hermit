@@ -4,41 +4,38 @@ using UnityEngine;
 public class GhostCounter : MonoBehaviour
 {
     public enum ActionType { Move, WeakAttack, StrongAttack, N, NE, E, SE, S, SW, W, NW};
-    public ActionType actionType;
-    public string gridPosString;
-    Renderer counterRenderer;
-    GameManager gameManager;
+    [SerializeField] ActionType _actionType;
+    [SerializeField] string _gridPosString;
+    Renderer _counterRenderer;
+    GameManager _gameManager;
+
+    public string GridPosString { get => _gridPosString; set => _gridPosString = value; }
+    public ActionType GCActionType { get => _actionType; set => _actionType = value; }
 
     void Awake()
     {
-        gameManager = FindAnyObjectByType<GameManager>();
-        counterRenderer = gameObject.GetComponent<Renderer>();
+        _gameManager = FindAnyObjectByType<GameManager>();
+        _counterRenderer = gameObject.GetComponent<Renderer>();
     }
 
     void Update() 
     {
-        if (actionType == ActionType.StrongAttack) 
-            counterRenderer.material.color = new Color (1f, 0f, 0f, Mathf.PingPong(Time.time, 0.5f));
-        else if (actionType == ActionType.WeakAttack) 
-            counterRenderer.material.color = new Color (1f, 0.5f, 0f, Mathf.PingPong(Time.time, 0.5f));
+        if (_actionType == ActionType.StrongAttack) 
+            _counterRenderer.material.color = new Color (1f, 0f, 0f, Mathf.PingPong(Time.time, 0.5f));
+        else if (_actionType == ActionType.WeakAttack) 
+            _counterRenderer.material.color = new Color (1f, 0.5f, 0f, Mathf.PingPong(Time.time, 0.5f));
         else
-            counterRenderer.material.color = new Color(0f, 0.5f, 0f, Mathf.PingPong(Time.time, 0.5f));
+            _counterRenderer.material.color = new Color(0f, 0.5f, 0f, Mathf.PingPong(Time.time, 0.5f));
     }
 
     void OnMouseDown()
     {
-        Hero selectedHero = (NetworkManager.Singleton.IsServer) ? gameManager.BlueHero : gameManager.RedHero;
-        Card selectedCard = (NetworkManager.Singleton.IsServer) ? gameManager.BlueSelectedCard : gameManager.RedSelectedCard;
+        Hero selectedHero = (NetworkManager.Singleton.IsServer) ? _gameManager.BlueHero : _gameManager.RedHero;
+        Card selectedCard = (NetworkManager.Singleton.IsServer) ? _gameManager.BlueSelectedCard : _gameManager.RedSelectedCard;
 
-        foreach (Action availableAction in selectedCard.availableActionsObj.GetComponents<Action>())
-        {
+        foreach (Action availableAction in selectedCard.AvailableActionsObj.GetComponents<Action>())
             foreach (GhostCounter gc in availableAction.ghostCounters)
-            {
                 if (gc == this)
-                {
-                    gameManager.ActionSelected(selectedHero, availableAction.actionType, availableAction.ghostRefs);
-                }
-            }
-        }
+                    _gameManager.ActionSelected(selectedHero, availableAction.actionType, availableAction.ghostRefs);
     }
 }
