@@ -97,17 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a356c7b8853ba741949b240685ebe31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hero: {fileID: 0}
-  otherHero: {fileID: 0}
-  otherCounter: {fileID: 8028970489112050042, guid: d7149677f54bc0f4fbec2ce0075c5c14,
+  _hero: {fileID: 0}
+  _otherHero: {fileID: 0}
+  _otherCounter: {fileID: 0}
+  _weakAttackDamage: 25
+  _strongAttackDamage: 50
+  _startPos: {fileID: 3797119991246662566, guid: ed0086a31e0307045a722f72af84f433,
     type: 3}
-  WeakAttackDamage: 25
-  StrongAttackDamage: 50
-  startPos: {fileID: 3797119991246662566, guid: ed0086a31e0307045a722f72af84f433,
-    type: 3}
-  currentPos: {fileID: 0}
-  targetPos: {fileID: 0}
-  gridPosString: 35
+  _currentPos: {fileID: 0}
+  _targetPos: {fileID: 0}
+  _gridPosString: 
 --- !u!1001 &4841567909170494315
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,16 +12,16 @@ public class UIManager : NetworkBehaviour
     [SerializeField] Hero _redHero;
 
     [Header("Blue UI")]
-    [SerializeField] public Slider _blueHealthSliderBlue;
-    [SerializeField] public Slider _redHealthSliderBlue;
-    public Text _blueHealthTextBlue, _redHealthTextBlue, _roundTextBlue, _turnTextBlue, _roundsTextBlue, _roundTimeLeftTextBlue,
-                _blueReadyTextBlue, _redReadyTextBlue, _discardButtonTextBlue, _messageTextBlue;
+    [SerializeField] Slider _blueHealthSliderBlue;
+    [SerializeField] Slider _redHealthSliderBlue;
+    [SerializeField] Text _blueHealthTextBlue, _redHealthTextBlue, _roundTextBlue, _turnTextBlue, _roundsTextBlue, _roundTimeLeftTextBlue,
+        _blueReadyTextBlue, _redReadyTextBlue, _discardButtonTextBlue, _messageTextBlue;
 
     [Header("Red UI")]
-    [SerializeField] public Slider _blueHealthSliderRed;
-    [SerializeField] public Slider _redHealthSliderRed;
-    public Text _blueHealthTextRed, _redHealthTextRed, _roundTextRed, _turnTextRed, _roundsTextRed, _roundTimeLeftTextRed,
-                _redReadyTextRed, _blueReadyTextRed, _discardButtonTextRed, _messageTextRed;
+    [SerializeField] Slider _blueHealthSliderRed;
+    [SerializeField] Slider _redHealthSliderRed;
+    [SerializeField] Text _blueHealthTextRed, _redHealthTextRed, _roundTextRed, _turnTextRed, _roundsTextRed, _roundTimeLeftTextRed,
+        _redReadyTextRed, _blueReadyTextRed, _discardButtonTextRed, _messageTextRed;
 
     [Header("Blue Objects")]
     [SerializeField] GameObject _mainCanvasBlue;
@@ -60,6 +60,29 @@ public class UIManager : NetworkBehaviour
     public GameObject ResetButtonBlue { get => _resetButtonBlue; set => _resetButtonBlue = value; }
     public GameObject StartTurnButtonRed { get => _startTurnButtonRed; set => _startTurnButtonRed = value; }
     public GameObject ResetButtonRed { get => _resetButtonRed; set => _resetButtonRed = value; }
+    public Slider BlueHealthSliderBlue { get => _blueHealthSliderBlue; set => _blueHealthSliderBlue = value; }
+    public Slider RedHealthSliderBlue { get => _redHealthSliderBlue; set => _redHealthSliderBlue = value; }
+    public Text BlueHealthTextBlue { get => _blueHealthTextBlue; set => _blueHealthTextBlue = value; }
+    public Text RedHealthTextBlue { get => _redHealthTextBlue; set => _redHealthTextBlue = value; }
+    public Text BlueHealthTextRed { get => _blueHealthTextRed; set => _blueHealthTextRed = value; }
+    public Text RedHealthTextRed { get => _redHealthTextRed; set => _redHealthTextRed = value; }
+    public Text MessageTextBlue { get => _messageTextBlue; set => _messageTextBlue = value; }
+    public Text RoundTextBlue { get => _roundTextBlue; set => _roundTextBlue = value; }
+    public Text RoundTextRed { get => _roundTextRed; set => _roundTextRed = value; }
+    public Text RoundsTextBlue { get => _roundsTextBlue; set => _roundsTextBlue = value; }
+    public Text RoundsTextRed { get => _roundsTextRed; set => _roundsTextRed = value; }
+    public Text TurnTextBlue { get => _turnTextBlue; set => _turnTextBlue = value; }
+    public Text TurnTextRed { get => _turnTextRed; set => _turnTextRed = value; }
+    public Text BlueReadyTextBlue { get => _blueReadyTextBlue; set => _blueReadyTextBlue = value; }
+    public Text RedReadyTextBlue { get => _redReadyTextBlue; set => _redReadyTextBlue = value; }
+    public Text DiscardButtonTextBlue { get => _discardButtonTextBlue; set => _discardButtonTextBlue = value; }
+    public Text MessageTextBlue1 { get => _messageTextBlue; set => _messageTextBlue = value; }
+    public Text RedReadyTextRed { get => _redReadyTextRed; set => _redReadyTextRed = value; }
+    public Text BlueReadyTextRed { get => _blueReadyTextRed; set => _blueReadyTextRed = value; }
+    public Text DiscardButtonTextRed { get => _discardButtonTextRed; set => _discardButtonTextRed = value; }
+    public Text MessageTextRed { get => _messageTextRed; set => _messageTextRed = value; }
+    public Slider BlueHealthSliderRed { get => _blueHealthSliderRed; set => _blueHealthSliderRed = value; }
+    public Slider RedHealthSliderRed { get => _redHealthSliderRed; set => _redHealthSliderRed = value; }
 
     GameManager _gameManager;
 

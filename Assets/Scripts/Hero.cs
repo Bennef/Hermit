@@ -115,7 +115,7 @@ public class Hero : MonoBehaviour
     public void FilldeckFromDiscardPile() 
     {
         // Show overlay
-        _uIManager.SetText(_uIManager._messageTextBlue, this.name + " shuffling discard pile\nto fill their hand"); ////
+        _uIManager.SetText(_uIManager.MessageTextBlue, this.name + " shuffling discard pile\nto fill their hand"); ////
         _uIManager.CallShowMessageOverlay();
         List<Card> cardsToRemove = new List<Card>();
         foreach (Card card in discardPile) {

@@ -339,9 +339,9 @@ public class Card : MonoBehaviour
 
                 for (int j = 0; j < action.ghostRefs.Length; j++)
                 {
-                    Debug.Log(action.ghostRefs[j]);
+                    //Debug.Log(action.ghostRefs[j]);
                     if (action.ghostRefs[j] == "00") break;
-                    Debug.Log(action.ghostRefs[j]);
+                    //Debug.Log(action.ghostRefs[j]);
                     newAction.ghostRefs[j] = newAction.ghostCounters[j].name;
                 }
             }

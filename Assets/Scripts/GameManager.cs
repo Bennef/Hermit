@@ -312,19 +312,19 @@ public void StartRound()
         if (NetworkManager.Singleton.IsServer)
         {
             PlaceIdol();
-            _uIManager.HideReadyText(_uIManager._blueReadyTextBlue); 
-            _uIManager.HideReadyText(_uIManager._redReadyTextBlue); 
-            _uIManager.SetHealth(_uIManager._blueHealthSliderBlue, _blueHero.Health, _uIManager._blueHealthTextBlue); 
-            _uIManager.SetHealth(_uIManager._redHealthSliderBlue, _redHero.Health, _uIManager._redHealthTextBlue); 
-            _uIManager.SetText(_uIManager._roundTextBlue, "Round " + _currentRound); 
+            _uIManager.HideReadyText(_uIManager.BlueReadyTextBlue); 
+            _uIManager.HideReadyText(_uIManager.RedReadyTextBlue); 
+            _uIManager.SetHealth(_uIManager.BlueHealthSliderBlue, _blueHero.Health, _uIManager.BlueHealthTextBlue); 
+            _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, _redHero.Health, _uIManager.RedHealthTextBlue); 
+            _uIManager.SetText(_uIManager.RoundTextBlue, "Round " + _currentRound); 
         }
         else 
         {
-            _uIManager.HideReadyText(_uIManager._blueReadyTextRed); 
-            _uIManager.HideReadyText(_uIManager._redReadyTextRed); 
-            _uIManager.SetHealth(_uIManager._blueHealthSliderRed, _blueHero.Health, _uIManager._blueHealthTextRed); 
-            _uIManager.SetHealth(_uIManager._redHealthSliderRed, _redHero.Health, _uIManager._redHealthTextRed); 
-            _uIManager.SetText(_uIManager._roundTextRed, "Round " + _currentRound); 
+            _uIManager.HideReadyText(_uIManager.BlueReadyTextRed); 
+            _uIManager.HideReadyText(_uIManager.RedReadyTextRed); 
+            _uIManager.SetHealth(_uIManager.BlueHealthSliderRed, _blueHero.Health, _uIManager.BlueHealthTextRed); 
+            _uIManager.SetHealth(_uIManager.RedHealthSliderRed, _redHero.Health, _uIManager.RedHealthTextRed); 
+            _uIManager.SetText(_uIManager.RoundTextRed, "Round " + _currentRound); 
         }
 
         _uIManager.ShowMyDeckScreen();
@@ -339,7 +339,7 @@ public void StartRound()
         ResetAllCards();
         _currentRound++;
         _currentTurn = 1;
-        _uIManager.SetText(_uIManager._turnTextBlue, "Turn " + _currentTurn); ////
+        _uIManager.SetText(_uIManager.TurnTextBlue, "Turn " + _currentTurn); ////
         _blueHero.playerChoosingInitialCards = true;
         StartRound();
     }
@@ -349,7 +349,7 @@ public void StartRound()
         _turnRunning = true;
         _blueTurnDone = _redTurnDone = false;
         _bluePickingHand = _redPickingHand = false;
-        _uIManager.SetText(_uIManager._turnTextBlue, "Turn " + _currentTurn); ////
+        _uIManager.SetText(_uIManager.TurnTextBlue, "Turn " + _currentTurn); ////
         Debug.Log("Turn " + _currentTurn + " started");
         //PickCRandomCardsForHand(redHero);
         _actionsToExecute = new string[6][]; // Clear the array
@@ -696,8 +696,8 @@ public void StartRound()
             }
             if (CheckForDefeatWinner())
             {
-                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
-                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);////
+                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
+                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);////
                 _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -717,8 +717,8 @@ public void StartRound()
             }
             if (CheckForDefeatWinner())
             {
-                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
-                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);////
+                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
+                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);////
                 _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -738,8 +738,8 @@ public void StartRound()
             }
             if (CheckForDefeatWinner())
             {
-                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
-                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);////
+                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
+                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);////
                 _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -758,8 +758,8 @@ public void StartRound()
             }
             if (CheckForDefeatWinner())
             {
-                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
-                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);////
+                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
+                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);////
                 _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -774,8 +774,8 @@ public void StartRound()
 
             if (CheckForIdolWinner())
             {
-                _uIManager.SetText(_uIManager._roundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);///
-                _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins round " + _currentRound);///
+                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);///
+                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);///
                 _uIManager.CallShowMessageOverlay();
                 if (CheckForMatchWinner())
                 {
@@ -893,7 +893,7 @@ public void StartRound()
 
     void MatchOver() 
     {
-        _uIManager.SetText(_uIManager._messageTextBlue, _roundWinner + " player wins Match! ");/////////
+        _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins Match! ");/////////
         _uIManager.CallShowMessageOverlay();
         _uIManager.ShowButton(_uIManager.ResetButtonBlue);///////
         Debug.Log("Match Over!");
@@ -949,13 +949,13 @@ public void StartRound()
         hero.Health = health;
         if (hero == _redHero) 
         {
-            _uIManager.SetHealth(_uIManager._redHealthSliderBlue, health, _uIManager._redHealthTextBlue);
-            _uIManager.SetHealth(_uIManager._redHealthSliderBlue, health, _uIManager._redHealthTextRed);
+            _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, health, _uIManager.RedHealthTextBlue);
+            _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, health, _uIManager.RedHealthTextBlue);
         }
         else 
         {
-            _uIManager.SetHealth(_uIManager._blueHealthSliderBlue, health, _uIManager._blueHealthTextBlue);
-            _uIManager.SetHealth(_uIManager._redHealthSliderBlue, health, _uIManager._redHealthTextRed);
+            _uIManager.SetHealth(_uIManager.BlueHealthSliderBlue, health, _uIManager.BlueHealthTextBlue);
+            _uIManager.SetHealth(_uIManager.BlueHealthSliderBlue, health, _uIManager.RedHealthTextRed);
         }
     }
 
@@ -988,13 +988,14 @@ public void StartRound()
                     _idolPosInt = 53;
                     break;
             }
-        }
+        }print(_idolPosInt);
         PlaceIdolClientRpc(_idolPosInt);
     }
 
     [ClientRpc]
     void PlaceIdolClientRpc(int idolPosInt)
     {
+        print(_idolPosInt);
         _idol.transform.position = GameObject.Find("Green Counter " + idolPosInt.ToString()).transform.position;
     }
 
