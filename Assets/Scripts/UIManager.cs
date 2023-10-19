@@ -83,6 +83,10 @@ public class UIManager : NetworkBehaviour
     public Text MessageTextRed { get => _messageTextRed; set => _messageTextRed = value; }
     public Slider BlueHealthSliderRed { get => _blueHealthSliderRed; set => _blueHealthSliderRed = value; }
     public Slider RedHealthSliderRed { get => _redHealthSliderRed; set => _redHealthSliderRed = value; }
+    public GameObject CloseMyDeckButtonBlue { get => _closeMyDeckButtonBlue; set => _closeMyDeckButtonBlue = value; }
+    public GameObject CloseMyDeckButtonRed { get => _closeMyDeckButtonRed; set => _closeMyDeckButtonRed = value; }
+    public GameObject DiscardButtonBlue { get => _discardButtonBlue; set => _discardButtonBlue = value; }
+    public GameObject DiscardButtonRed { get => _discardButtonRed; set => _discardButtonRed = value; }
 
     GameManager _gameManager;
 
@@ -119,7 +123,7 @@ public class UIManager : NetworkBehaviour
         {
             _myDeckScreenBlue.SetActive(true);
             if (!_gameManager.BluePickingHand)
-                ShowCloseMyDeckButton();
+                ShowCloseMyDeckButton(_closeMyDeckButtonBlue);
             _blueHero.ShowDeck();
             _myDeckTextBlue.SetActive(true);
             _blueHero.SetCardPositionsInDeck(_blueHero.gameObject.transform.GetChild(0));
@@ -129,7 +133,7 @@ public class UIManager : NetworkBehaviour
         {
             _myDeckScreenRed.SetActive(true);
             if (!_gameManager.RedPickingHand)
-                ShowCloseMyDeckButton();
+                ShowCloseMyDeckButton(_closeMyDeckButtonRed);
             _redHero.ShowDeck();
             _myDeckTextRed.SetActive(true);
             _redHero.SetCardPositionsInDeck(_redHero.gameObject.transform.GetChild(0));
@@ -168,9 +172,9 @@ public class UIManager : NetworkBehaviour
  
     public void HideStartTurnButton(GameObject startTurnButton) => startTurnButton.SetActive(false);
 
-    public void ShowCloseMyDeckButton() => _closeMyDeckButtonBlue.SetActive(true);
+    public void ShowCloseMyDeckButton(GameObject button) => button.SetActive(true);
 
-    public void HideCloseMyDeckButton() => _closeMyDeckButtonBlue.SetActive(false);
+    public void HideCloseMyDeckButton(GameObject button) => button.SetActive(false);
 
     public void ShowLogAndMyDeckButton(GameObject logButton, GameObject myDeckButton)
     {
@@ -184,17 +188,9 @@ public class UIManager : NetworkBehaviour
         myDeckButton.SetActive(false);
     }
 
-    public void ShowDiscardButton()
-    {
-        _discardButtonBlue.SetActive(true);
-        _discardButtonRed.SetActive(true);
-    }
+    public void ShowDiscardButton(GameObject button) => button.SetActive(true);
 
-    public void HideDiscardButton() 
-    {
-        _discardButtonBlue.SetActive(false);
-        _discardButtonRed.SetActive(false);
-    }
+    public void HideDiscardButton(GameObject button) => button.SetActive(false);
 
     public void ShowReadyText(Text readyText)  => readyText.enabled = true;
 
@@ -211,11 +207,15 @@ public class UIManager : NetworkBehaviour
         {
             hero = _blueHero;
             ShowStartTurnButton(_startTurnButtonBlue);
+            HideCloseMyDeckButton(_closeMyDeckButtonBlue);
+            HideDiscardButton(DiscardButtonBlue);
         }
         else
         {
             hero = _redHero;
             ShowStartTurnButton(_startTurnButtonRed);
+            HideCloseMyDeckButton(_closeMyDeckButtonRed); 
+            HideDiscardButton(DiscardButtonRed);
         }
 
         foreach (Card card in hero.hand)
@@ -229,18 +229,16 @@ public class UIManager : NetworkBehaviour
         }
         _gameManager.BlueDiscarding = false;
         _gameManager.RedDiscarding = false;
-        HideDiscardButton();
         ShowMyDeckScreen();
-        HideCloseMyDeckButton();
     }
 
     public void UpdateDiscardButtonText(Hero hero) 
     {
         int cardsToDiscard = 0;
         foreach (Card card in hero.hand) 
-            if (card.Selected) {
+            if (card.Selected) 
                 cardsToDiscard++;
-            }
+            
         if (hero == _blueHero)
             _discardButtonTextBlue.text = "Discard\n" + cardsToDiscard.ToString();
         else
@@ -252,6 +250,7 @@ public class UIManager : NetworkBehaviour
         if (NetworkManager.Singleton.IsServer)
         {
             UpdateDiscardButtonText(_blueHero);
+            HideStartTurnButton(_startTurnButtonBlue);
             ShowReadyText(_blueReadyTextBlue);
             ShowLogAndMyDeckButton(_logButtonBlue, _myDeckButtonBlue);
             ShowBlueReadyTextClientRpc();
@@ -260,6 +259,7 @@ public class UIManager : NetworkBehaviour
         else
         {
             UpdateDiscardButtonText(_redHero);
+            HideStartTurnButton(_startTurnButtonRed);
             ShowReadyText(_redReadyTextRed);
             ShowLogAndMyDeckButton(_logButtonRed, _myDeckButtonRed);
             ShowRedReadyTextServerRpc();
@@ -292,5 +292,5 @@ public class UIManager : NetworkBehaviour
         HideMessageOverlay();
     }
 
-    public void HideMessageOverlay() => _messageOverlayBlue.SetActive(false);
+    void HideMessageOverlay() => _messageOverlayBlue.SetActive(false);
 }

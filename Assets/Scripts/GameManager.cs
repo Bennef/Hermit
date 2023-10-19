@@ -160,43 +160,6 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-
-    /*
-    void FlipArrowsForRed()
-    {
-        GameObject N = GameObject.Find("N");
-        GameObject E = GameObject.Find("E");
-        GameObject S = GameObject.Find("S");
-        GameObject W = GameObject.Find("W");
-        GameObject NE = GameObject.Find("NE");
-        GameObject SE = GameObject.Find("SE");
-        GameObject SW = GameObject.Find("SW");
-        GameObject NW = GameObject.Find("NW");
-        foreach (Transform arrow in N.transform)
-            arrow.gameObject.name = arrow.gameObject.name.Replace("N", "S");
-
-        foreach (Transform arrow in E.transform)
-            arrow.gameObject.name = arrow.gameObject.name.Replace("E", "W");
-
-        foreach (Transform arrow in S.transform)
-            arrow.gameObject.name = arrow.gameObject.name.Replace("S", "N");
-
-        foreach (Transform arrow in W.transform)
-            arrow.gameObject.name = arrow.gameObject.name.Replace("W", "E");
-
-        foreach (Transform arrow in NE.transform)
-            arrow.gameObject.name = arrow.gameObject.name.Replace("NE", "SW");
-
-        foreach (Transform arrow in SE.transform)
-            arrow.gameObject.name = arrow.gameObject.name.Replace("SE", "NW");
-
-        foreach (Transform arrow in SW.transform)
-            arrow.gameObject.name = arrow.gameObject.name.Replace("SW", "NE");
-
-        foreach (Transform arrow in NW.transform)
-            arrow.gameObject.name = arrow.gameObject.name.Replace("NW", "SE");
-    }*/
-
     void AssignActionIdsAndCardIds()
     {
         Card[] blueCards = _blueHero.GetComponentsInChildren<Card>();
@@ -333,8 +296,10 @@ public void StartRound()
     public void EndRound() 
     {
         Debug.Log("End of round " + _currentRound);
-        _uIManager.HideCloseMyDeckButton();
+        _uIManager.HideCloseMyDeckButton(_uIManager.CloseMyDeckButtonBlue);
+        _uIManager.HideCloseMyDeckButton(_uIManager.CloseMyDeckButtonRed);
         _uIManager.HideStartTurnButton(_uIManager.StartTurnButtonBlue);
+        _uIManager.HideStartTurnButton(_uIManager.StartTurnButtonRed);
         //_audioManager.PlaySound(_audioManager.RoundWin);
         ResetAllCards();
         _currentRound++;
@@ -387,14 +352,12 @@ public void StartRound()
             _blueReadyToStart = true;
             UpdateReadyToStartBoolClientRpc(true);
             _blueDeckCardsSelected = 0;
-            _uIManager.HideStartTurnButton(_uIManager.StartTurnButtonBlue);
         }
         else
         {
             _redReadyToStart = true;
             UpdateReadyToStartBoolServerRpc(true);
             _redDeckCardsSelected = 0;
-            _uIManager.HideStartTurnButton(_uIManager.StartTurnButtonRed);
         }
     }
 
@@ -826,16 +789,17 @@ public void StartRound()
     {
         if (!NetworkManager.Singleton.IsServer)
         {
+            _uIManager.ShowDiscardButton(_uIManager.DiscardButtonBlue);
             if (redSelectedCard != null)
-            {
                 redSelectedCard.Selected = false;
-            }
+
             UnLockCards(_redHero.hand);
             //redSelectedCard.PutDownCard(redSelectedCard.transform);
             redSelectedCard.Locked = true;
             RedDiscarding = true;
         }
-        _uIManager.ShowDiscardButton();
+        else
+            _uIManager.ShowDiscardButton(_uIManager.DiscardButtonRed);
     }
 
     public void ActionSelected(Hero hero, Action.ActionType actionType, string[] ghostRefs)
@@ -995,7 +959,7 @@ public void StartRound()
     [ClientRpc]
     void PlaceIdolClientRpc(int idolPosInt)
     {
-        print(_idolPosInt);
+        //print(_idolPosInt);
         _idol.transform.position = GameObject.Find("Green Counter " + idolPosInt.ToString()).transform.position;
     }
 

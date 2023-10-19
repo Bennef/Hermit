@@ -413,18 +413,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8328d67ce5bb924699b8a3a3c9138a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 2
-  cardString: 
-  otherCard1: {fileID: 0}
-  otherCard2: {fileID: 0}
-  locked: 0
-  selected: 0
-  toBeDiscarded: 0
-  discarded: 0
-  inDeck: 1
-  baseActions: []
-  availableActions: []
-  availableActionsObj: {fileID: 0}
+  _cardId: 0
+  _isDummy: 0
+  _actionType: 2
+  _cardString: 
+  _otherCard1: {fileID: 0}
+  _otherCard2: {fileID: 0}
+  _locked: 0
+  _selected: 0
+  _toBeDiscarded: 0
+  _discarded: 0
+  _inDeck: 1
+  _baseActions: []
+  _availableActions: []
+  _availableActionsObj: {fileID: 0}
 --- !u!114 &6590287104455217065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -443,7 +445,6 @@ MonoBehaviour:
   - Red Star 22
   ghostCounters:
   - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
 --- !u!114 &6590287104455217062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,7 +463,6 @@ MonoBehaviour:
   - Red Star 32
   ghostCounters:
   - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
 --- !u!114 &6590287104455217063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,7 +481,6 @@ MonoBehaviour:
   - Red Star 42
   ghostCounters:
   - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
 --- !u!114 &6590287104455217060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,7 +499,6 @@ MonoBehaviour:
   - Red Star 43
   ghostCounters:
   - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
 --- !u!114 &6590287104455217061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,7 +517,6 @@ MonoBehaviour:
   - Red Star 44
   ghostCounters:
   - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
 --- !u!114 &6590287104455217058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,7 +535,6 @@ MonoBehaviour:
   - Red Star 34
   ghostCounters:
   - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
 --- !u!114 &6590287104455217059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,7 +553,6 @@ MonoBehaviour:
   - Red Star 24
   ghostCounters:
   - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
 --- !u!114 &6590287104455217056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576,4 +571,3 @@ MonoBehaviour:
   - Red Star 23
   ghostCounters:
   - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
