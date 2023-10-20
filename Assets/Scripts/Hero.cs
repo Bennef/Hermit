@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Hero : MonoBehaviour
 {
-    public bool playerChoosingInitialCards;
+    [SerializeField] bool _playerChoosingInitialCards;
     [SerializeField] string _heroName;
     [SerializeField] int _health = 100, _speed;
-    public List<Card> deck = new List<Card>();
-    public List<Card> hand = new List<Card>();
-    public List<Card> discardPile = new List<Card>();
+    [SerializeField] List<Card> _deck = new List<Card>();
+    [SerializeField] List<Card> _hand = new List<Card>();
+    [SerializeField] List<Card> _discardPile = new List<Card>();
     [SerializeField] Card _cardInPlay;
     UIManager _uIManager;
 
@@ -17,7 +17,11 @@ public class Hero : MonoBehaviour
     public int Health { get => _health; set => _health = value; }
     public int Speed { get => _speed; set => _speed = value; }
     public Card CardInPlay { get => _cardInPlay; set => _cardInPlay = value; }
-    
+    public bool PlayerChoosingInitialCards { get => _playerChoosingInitialCards; set => _playerChoosingInitialCards = value; }
+    public List<Card> Deck { get => _deck; set => _deck = value; }
+    public List<Card> Hand { get => _hand; set => _hand = value; }
+    public List<Card> DiscardPile { get => _discardPile; set => _discardPile = value; }
+
     void Awake() 
     {// just have all the cards as prefabs in hhe game and find them based on string
         _uIManager = FindAnyObjectByType<UIManager>();
@@ -26,16 +30,16 @@ public class Hero : MonoBehaviour
 
     public void PutAllCardsInDeck() 
     {
-        deck.Clear();
+        _deck.Clear();
         //print(deck.Count);
-        hand.Clear();
-        discardPile.Clear();
+        _hand.Clear();
+        _discardPile.Clear();
         _cardInPlay = null;
         for (int i = 0; i < this.gameObject.transform.GetChild(0).childCount; i++) 
         {
             Card card = this.gameObject.transform.GetChild(0).GetChild(i).GetComponent<Card>();
             //print(i + "  " + card);
-            deck.Add(card);
+            _deck.Add(card);
             card?.AssignChildren();
             card?.HideHand();
             card?.HideDiscardX();
@@ -51,7 +55,7 @@ public class Hero : MonoBehaviour
                 card.OtherCard2 = null;
             }
         }
-        playerChoosingInitialCards = true;
+        _playerChoosingInitialCards = true;
     }
 
     public void SetCardPositionsInDeck(Transform transform)
@@ -91,20 +95,20 @@ public class Hero : MonoBehaviour
     }
 
     public void MoveCardsToHand() {
-        if (playerChoosingInitialCards) 
+        if (_playerChoosingInitialCards) 
         {  
-            playerChoosingInitialCards = false;////
+            _playerChoosingInitialCards = false;////
             //Debug.Log(this + " moving selected cards to hand");
             MoveSelectedCardsToHand();
         }
         else {
-            int cardsRequired = 3 - hand.Count;
-            if (cardsRequired == 2 && deck.Count == 1)
+            int cardsRequired = 3 - _hand.Count;
+            if (cardsRequired == 2 && _deck.Count == 1)
             {
-                hand.Add(deck[0]);
-                deck.Remove(deck[0]);
+                _hand.Add(_deck[0]);
+                _deck.Remove(_deck[0]);
             }
-            if (deck.Count == 0) {
+            if (_deck.Count == 0) {
                 // Put all discard pile in deck
                 FilldeckFromDiscardPile();
             }
@@ -118,8 +122,8 @@ public class Hero : MonoBehaviour
         _uIManager.SetText(_uIManager.MessageTextBlue, this.name + " shuffling discard pile\nto fill their hand"); ////
         _uIManager.CallShowMessageOverlay();
         List<Card> cardsToRemove = new List<Card>();
-        foreach (Card card in discardPile) {
-            deck.Add(card);
+        foreach (Card card in _discardPile) {
+            _deck.Add(card);
             card.Discarded = false;
             card.HideDiscardX();
             card.HideTick();
@@ -128,7 +132,7 @@ public class Hero : MonoBehaviour
             cardsToRemove.Add(card);
         }
         foreach (Card cardToRemove in cardsToRemove) 
-            discardPile.Remove(cardToRemove);
+            _discardPile.Remove(cardToRemove);
     }
 
     void MoveSelectedCardsToHand()
@@ -145,11 +149,11 @@ public class Hero : MonoBehaviour
                 card.Selected = false;
             }
         }
-        //Debug.Log("Now adding selected cards to hand");
+        //Debug.Log("Now adding selected cards to _hand");
         foreach (Card card in selectedCards) 
         {
-            hand.Add(card);
-            deck.Remove(card);
+            _hand.Add(card);
+            _deck.Remove(card);
         }
     }
 
@@ -159,16 +163,16 @@ public class Hero : MonoBehaviour
         Debug.Log(this + " adding " + cardsRequired + " RANDOM cards to hand");
         List<Card> randomCards = new List<Card>();
 
-        while (randomCards.Count < cardsRequired && deck.Count > 0) 
+        while (randomCards.Count < cardsRequired && _deck.Count > 0) 
         {
-            int randomIndex = Random.Range(0, deck.Count);
-            Card randomCard = deck[randomIndex];
+            int randomIndex = Random.Range(0, _deck.Count);
+            Card randomCard = _deck[randomIndex];
             randomCards.Add(randomCard);
-            deck.Remove(randomCard);
+            _deck.Remove(randomCard);
             randomCard.InDeck = false;
         }
         //Debug.Log(randomCards.Count);
-        hand.AddRange(randomCards);
+        _hand.AddRange(randomCards);
     }
 
     public void DiscardCardFromHand(Card card) 
@@ -177,42 +181,42 @@ public class Hero : MonoBehaviour
         card.Discarded = true; //?
         card.Locked = true; //?
         card.ShowDiscardX();
-        discardPile.Add(card);
-        hand.Remove(card);
+        _discardPile.Add(card);
+        _hand.Remove(card);
     }
 
     public void DiscardRandomCardInHand() 
     {
         int randomNumber = Random.Range(0, 2);
-        DiscardCardFromHand(hand[randomNumber]);
+        DiscardCardFromHand(_hand[randomNumber]);
     }
 
     public void HideDeck()
     {
-        foreach (Card card in deck) 
+        foreach (Card card in _deck) 
             card.gameObject.SetActive(false);
 
-        foreach (Card card in hand)
+        foreach (Card card in _hand)
         {
             card.Locked = false;
             card.HideHand();
         }
-        foreach (Card card in discardPile) 
+        foreach (Card card in _discardPile) 
             card.gameObject.SetActive(false);
     }
 
     public void ShowDeck() 
     {
-        foreach (Card card in deck) 
+        foreach (Card card in _deck) 
             card.gameObject.SetActive(true);
 
-        foreach (Card card in hand) 
+        foreach (Card card in _hand) 
         {
             card.ShowHand();
             //Debug.Log(this.name + " showing card " + card);
             card.Locked = true;
         }
-        foreach (Card card in discardPile)
+        foreach (Card card in _discardPile)
         {
             card.gameObject.SetActive(true);
             card.Selected = false;

@@ -188,7 +188,17 @@ public class UIManager : NetworkBehaviour
         myDeckButton.SetActive(false);
     }
 
-    public void ShowDiscardButton(GameObject button) => button.SetActive(true);
+    public void ShowDiscardButton()
+    {
+        _discardButtonBlue.SetActive(true);
+        _discardButtonRed.SetActive(true);
+    }
+    
+    public void HideDiscardButton()
+    {
+        _discardButtonBlue.SetActive(false);
+        _discardButtonRed.SetActive(false);
+    }
 
     public void HideDiscardButton(GameObject button) => button.SetActive(false);
 
@@ -218,7 +228,7 @@ public class UIManager : NetworkBehaviour
             HideDiscardButton(DiscardButtonRed);
         }
 
-        foreach (Card card in hero.hand)
+        foreach (Card card in hero.Hand)
             if (card.ToBeDiscarded)
                 cardsToDiscard.Add(card);
 
@@ -235,7 +245,7 @@ public class UIManager : NetworkBehaviour
     public void UpdateDiscardButtonText(Hero hero) 
     {
         int cardsToDiscard = 0;
-        foreach (Card card in hero.hand) 
+        foreach (Card card in hero.Hand) 
             if (card.Selected) 
                 cardsToDiscard++;
             

@@ -64,13 +64,12 @@ public class GameManager : NetworkBehaviour
 
     void Awake()
     {
-        AssignCamera();
-
         if (Singleton == null)
             Singleton = this;
         else
             Destroy(gameObject);
 
+        AssignCamera();
         SpawnObjects();
 
         if (!NetworkManager.Singleton.IsServer)
@@ -305,7 +304,7 @@ public void StartRound()
         _currentRound++;
         _currentTurn = 1;
         _uIManager.SetText(_uIManager.TurnTextBlue, "Turn " + _currentTurn); ////
-        _blueHero.playerChoosingInitialCards = true;
+        _blueHero.PlayerChoosingInitialCards = true;
         StartRound();
     }
 
@@ -362,18 +361,11 @@ public void StartRound()
     }
 
     [ClientRpc]
-    void UpdateReadyToStartBoolClientRpc(bool trueOrFalse)
-    {
-        //Debug.Log("Setting blueIsReady to " + trueOrFalse + " on client");
-        _blueReadyToStart = trueOrFalse;
-    }
+    void UpdateReadyToStartBoolClientRpc(bool trueOrFalse) => _blueReadyToStart = trueOrFalse;
 
     [ServerRpc(RequireOwnership = false)]
-    void UpdateReadyToStartBoolServerRpc(bool trueOrFalse)
-    {
-        //Debug.Log("Setting redIsReady to " + trueOrFalse + " on server");
-        _redReadyToStart = trueOrFalse;
-    }  
+    void UpdateReadyToStartBoolServerRpc(bool trueOrFalse) => _redReadyToStart = trueOrFalse;
+
     /*
     void PickRandomCardsForHand(Hero hero) 
     {
@@ -507,20 +499,20 @@ public void StartRound()
         //Debug.Log(hero.hand.Count + " in hand");
         if (hero == _blueHero)
         {
-            ProcessCardInHand(hero.hand[0], _blueCardInHandPos1, hero.hand[1], hero.hand[2]);
-            ProcessCardInHand(hero.hand[1], _blueCardInHandPos2, hero.hand[0], hero.hand[2]);
-            ProcessCardInHand(hero.hand[2], _blueCardInHandPos3, hero.hand[0], hero.hand[1]);
+            ProcessCardInHand(hero.Hand[0], _blueCardInHandPos1, hero.Hand[1], hero.Hand[2]);
+            ProcessCardInHand(hero.Hand[1], _blueCardInHandPos2, hero.Hand[0], hero.Hand[2]);
+            ProcessCardInHand(hero.Hand[2], _blueCardInHandPos3, hero.Hand[0], hero.Hand[1]);
         }
         else
         {
             //Debug.Log(hero.hand.Count);
-            ProcessCardInHand(hero.hand[0], _redCardInHandPos1, hero.hand[1], hero.hand[2]);
-            ProcessCardInHand(hero.hand[1], _redCardInHandPos2, hero.hand[0], hero.hand[2]);
-            ProcessCardInHand(hero.hand[2], _redCardInHandPos3, hero.hand[0], hero.hand[1]);
+            ProcessCardInHand(hero.Hand[0], _redCardInHandPos1, hero.Hand[1], hero.Hand[2]);
+            ProcessCardInHand(hero.Hand[1], _redCardInHandPos2, hero.Hand[0], hero.Hand[2]);
+            ProcessCardInHand(hero.Hand[2], _redCardInHandPos3, hero.Hand[0], hero.Hand[1]);
         }
         
         CalcGhostPositions(hero, counter);
-        LockCards(hero.deck);
+        LockCards(hero.Deck);
         _uIManager.HideMyDeckScreen();
     }
 
@@ -659,9 +651,7 @@ public void StartRound()
             }
             if (CheckForDefeatWinner())
             {
-                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
-                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);////
-                _uIManager.CallShowMessageOverlay();
+                RoundWon();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -680,9 +670,7 @@ public void StartRound()
             }
             if (CheckForDefeatWinner())
             {
-                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
-                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);////
-                _uIManager.CallShowMessageOverlay();
+                RoundWon();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -701,9 +689,7 @@ public void StartRound()
             }
             if (CheckForDefeatWinner())
             {
-                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
-                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);////
-                _uIManager.CallShowMessageOverlay();
+                RoundWon();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -721,9 +707,7 @@ public void StartRound()
             }
             if (CheckForDefeatWinner())
             {
-                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);////
-                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);////
-                _uIManager.CallShowMessageOverlay();
+                RoundWon();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -737,9 +721,7 @@ public void StartRound()
 
             if (CheckForIdolWinner())
             {
-                _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);///
-                _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);///
-                _uIManager.CallShowMessageOverlay();
+                RoundWon();
                 if (CheckForMatchWinner())
                 {
                     MatchOver();
@@ -754,7 +736,7 @@ public void StartRound()
             {
                 _blueHero.DiscardCardFromHand(_blueHero.CardInPlay);////
                 _blueHero.DiscardRandomCardInHand();////
-                UnLockCards(_blueHero.deck);////
+                UnLockCards(_blueHero.Deck);////
                 _currentRound++;
                 StartRound();
             }
@@ -762,12 +744,19 @@ public void StartRound()
             {
                 ShowPlayedCardTicksClientRpc();
                 //_blueSelectedCard.PutDownCard(_blueSelectedCard.transform);// same for red
-                UnLockCards(_blueHero.hand);
+                UnLockCards(_blueHero.Hand);
                 _blueSelectedCard.Locked = true;
                 _blueDiscarding = true;
                 CleanUpTurnStuffClientRpc();
             }
         }
+    }
+
+    private void RoundWon() // Maybe add the type of win?
+    {
+        _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);
+        _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);
+        _uIManager.CallShowMessageOverlay();
     }
 
     [ClientRpc]
@@ -789,17 +778,15 @@ public void StartRound()
     {
         if (!NetworkManager.Singleton.IsServer)
         {
-            _uIManager.ShowDiscardButton(_uIManager.DiscardButtonBlue);
             if (redSelectedCard != null)
                 redSelectedCard.Selected = false;
 
-            UnLockCards(_redHero.hand);
+            UnLockCards(_redHero.Hand);
             //redSelectedCard.PutDownCard(redSelectedCard.transform);
             redSelectedCard.Locked = true;
             RedDiscarding = true;
         }
-        else
-            _uIManager.ShowDiscardButton(_uIManager.DiscardButtonRed);
+        _uIManager.ShowDiscardButton();
     }
 
     public void ActionSelected(Hero hero, Action.ActionType actionType, string[] ghostRefs)
@@ -807,7 +794,7 @@ public void StartRound()
         Debug.Log(ghostRefs[0]);
         _audioManager.PlaySound(_audioManager.SelectSquare);
         _aIPlaying = false;
-        LockCards(hero.hand);
+        LockCards(hero.Hand);
         if (hero == _blueHero)
         {
             _blueHero.CardInPlay = _blueSelectedCard;
@@ -863,42 +850,66 @@ public void StartRound()
         Debug.Log("Match Over!");
     }
 
-    bool CheckForIdolWinner() 
+    bool CheckForIdolWinner()
     {
-        if (_hasIdol == _redHero && _currentTurn == 8) 
-        { 
-            _audioManager.PlaySound(_audioManager.IdolWin);
+        if (_currentTurn == 8)
+        {
+            string winner = GetIdolWinner();
+            if (!string.IsNullOrEmpty(winner))
+            {
+                HandleIdolWin(winner);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    string GetIdolWinner()
+    {
+        if (_hasIdol == _redHero)
+            return "Red";
+        if (_hasIdol == _blueHero)
+            return "Blue";
+        return null;
+    }
+
+    void HandleIdolWin(string winner)
+    {
+        _audioManager.PlaySound(_audioManager.IdolWin);
+
+        if (winner == "Red")
             _redRoundsWon++;
-            _roundWinner = "Red";
+        else if (winner == "Blue")
+            _blueRoundsWon++;
+
+        _roundWinner = winner;
+    }
+
+    bool CheckForDefeatWinner()
+    {
+        if (_blueHero.Health == 0)
+        {
+            HandleDefeat("Red");
             return true;
         }
-        if (_hasIdol == _blueHero && _currentTurn == 8) 
-        { 
-            _audioManager.PlaySound(_audioManager.IdolWin);
-            _blueRoundsWon++;
-            _roundWinner = "Blue";
+        if (_redHero.Health == 0)
+        {
+            HandleDefeat("Blue");
             return true;
         }
         return false;
     }
 
-    bool CheckForDefeatWinner() 
+    void HandleDefeat(string winner)
     {
-        if (_blueHero.Health == 0 ) 
-        {
-            _audioManager.PlaySound(_audioManager.PlayerDead);
+        _audioManager.PlaySound(_audioManager.PlayerDead);
+
+        if (winner == "Red")
             _redRoundsWon++;
-            _roundWinner = "Red";
-            return true;
-        }
-        if (_redHero.Health == 0 ) 
-        {
-            _audioManager.PlaySound(_audioManager.PlayerDead);
+        else if (winner == "Blue")
             _blueRoundsWon++;
-            _roundWinner = "Blue";
-            return true;
-        }
-        return false;
+
+        _roundWinner = winner;
     }
 
     bool CheckForMatchWinner() 
@@ -911,15 +922,15 @@ public void StartRound()
     public void SetHealth(Hero hero, int health) 
     {
         hero.Health = health;
-        if (hero == _redHero) 
-        {
-            _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, health, _uIManager.RedHealthTextBlue);
-            _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, health, _uIManager.RedHealthTextBlue);
-        }
-        else 
+        if (hero == _blueHero) 
         {
             _uIManager.SetHealth(_uIManager.BlueHealthSliderBlue, health, _uIManager.BlueHealthTextBlue);
             _uIManager.SetHealth(_uIManager.BlueHealthSliderBlue, health, _uIManager.RedHealthTextRed);
+        }
+        else 
+        {
+            _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, health, _uIManager.RedHealthTextBlue);
+            _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, health, _uIManager.RedHealthTextBlue);
         }
     }
 
@@ -1011,7 +1022,7 @@ public void StartRound()
 
     public void CalcGhostPositions(Hero hero, Counter counter) 
     {
-        foreach (Card cardInHand in hero.hand) 
+        foreach (Card cardInHand in hero.Hand) 
             cardInHand.CalcOffsetForActions(counter, cardInHand);
     }
 
