@@ -310,7 +310,7 @@ public class Card : MonoBehaviour
                 }
                 else
                 {
-                    string newPosString = counterString + updatedCounterPosString;
+                    string newPosString = counterString + updatedCounterPosString; print(newPosString);
                     newGcs[i] = GameObject.Find(newPosString).GetComponent<GhostCounter>();
                 }
             }

@@ -378,20 +378,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8328d67ce5bb924699b8a3a3c9138a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardId: 0
-  isDummy: 0
-  actionType: 0
-  cardString: 
-  otherCard1: {fileID: 0}
-  otherCard2: {fileID: 0}
-  locked: 0
-  selected: 0
-  toBeDiscarded: 0
-  discarded: 0
-  inDeck: 1
-  baseActions: []
-  availableActions: []
-  availableActionsObj: {fileID: 0}
+  _cardId: 0
+  _isDummy: 0
+  _actionType: 0
+  _cardString: 
+  _otherCard1: {fileID: 0}
+  _otherCard2: {fileID: 0}
+  _locked: 0
+  _selected: 0
+  _toBeDiscarded: 0
+  _discarded: 0
+  _inDeck: 1
+  _baseActions: []
+  _availableActions: []
+  _availableActionsObj: {fileID: 0}
 --- !u!114 &5698698984604313680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,11 +406,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 0
-  ghostRefs:
-  - NW 22
+  _ghostRefs:
   - Green Counter 11
-  ghostCounters:
-  - {fileID: 0}
+  - NW 22
+  _ghostCounters: []
 --- !u!114 &5698698984604313681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,11 +424,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 0
-  ghostRefs:
-  - NE 42
+  _ghostRefs:
   - Green Counter 51
-  ghostCounters:
-  - {fileID: 0}
+  - NE 42
+  _ghostCounters: []
 --- !u!114 &5698698984604313682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,11 +442,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 0
-  ghostRefs:
-  - SE 44
+  _ghostRefs:
   - Green Counter 55
-  ghostCounters:
-  - {fileID: 0}
+  - SE 44
+  _ghostCounters: []
 --- !u!114 &5698698984604313683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,11 +460,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 0
-  ghostRefs:
-  - SW 24
+  _ghostRefs:
   - Green Counter 15
-  ghostCounters:
-  - {fileID: 0}
+  - SW 24
+  _ghostCounters: []
 --- !u!1 &6484388842824839529
 GameObject:
   m_ObjectHideFlags: 0

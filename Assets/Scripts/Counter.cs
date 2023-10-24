@@ -89,6 +89,7 @@ void Awake()
             _audioManager.PlaySound(_audioManager.StrongAttackMiss);
 
         _anim.SetBool("isAttacking", true);
+        SetAnimBoolClientRpc("isAttacking", true);
         StartCoroutine(Wait());
     }
 
@@ -98,13 +99,14 @@ void Awake()
         Transform[] squares = new Transform[_ghostRefs.Length];
         for (int i = 0; i < _ghostRefs.Length; i++)
         {
-            Debug.Log(i + ", " + _ghostRefs[i]);
+            //Debug.Log(i + ", " + _ghostRefs[i]);
             squares[i] = GameObject.Find("Green Counter " + _ghostRefs[i]).transform;
         }
 
         _targetPos = squares[squares.Length -1];
-        Debug.Log("targetPos: " + _targetPos);
+        //Debug.Log("targetPos: " + _targetPos);
         _anim.SetBool("isMoving", true);
+        SetAnimBoolClientRpc("isMoving", true);
         float time = 0;
         while (time <= 0.9)
         {
@@ -113,7 +115,7 @@ void Awake()
             yield return null;
         }
         _anim.SetBool("isMoving", false);
-
+        SetAnimBoolClientRpc("isMoving", false);
         _currentPos = _targetPos;
         UpdateCounterPosString();
 
@@ -130,8 +132,11 @@ void Awake()
                 gameManager.PickupIdol(this);
             }
         }*/
-    }   
-    
+    }
+
+    [ClientRpc]
+    void SetAnimBoolClientRpc(string parameter,bool trueOrFalse) => _anim.SetBool(parameter, trueOrFalse);
+
     IEnumerator Wait() 
     {  
         /*var slash = Resources.Load<GameObject>("Strong Slash");
