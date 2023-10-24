@@ -86,14 +86,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a37109ca150f2548b522a53f997cea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerChoosingInitialCards: 1
-  heroName: 
-  health: 100
-  speed: 50
-  deck: []
-  hand: []
-  discardPile: []
-  cardInPlay: {fileID: 0}
+  _playerChoosingInitialCards: 0
+  _heroName: 
+  _health: 100
+  _speed: 50
+  _deck: []
+  _hand: []
+  _discardPile: []
+  _cardInPlay: {fileID: 0}
 --- !u!114 &1489729902380632760
 MonoBehaviour:
   m_ObjectHideFlags: 0

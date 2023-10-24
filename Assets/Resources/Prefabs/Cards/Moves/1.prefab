@@ -211,18 +211,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8328d67ce5bb924699b8a3a3c9138a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 0
-  cardString: 
-  otherCard1: {fileID: 0}
-  otherCard2: {fileID: 0}
-  locked: 0
-  selected: 0
-  toBeDiscarded: 0
-  discarded: 0
-  inDeck: 1
-  baseActions: []
-  availableActions: []
-  availableActionsObj: {fileID: 0}
+  _cardId: 0
+  _isDummy: 0
+  _actionType: 0
+  _cardString: 
+  _otherCard1: {fileID: 0}
+  _otherCard2: {fileID: 0}
+  _locked: 0
+  _selected: 0
+  _toBeDiscarded: 0
+  _discarded: 0
+  _inDeck: 1
+  _baseActions: []
+  _availableActions: []
+  _availableActionsObj: {fileID: 0}
 --- !u!114 &53547466632738334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,11 +239,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 0
-  ghostRefs:
+  _ghostRefs:
   - Green Counter 32
-  ghostCounters:
-  - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &53547466632738333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,11 +256,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 0
-  ghostRefs:
+  _ghostRefs:
   - Green Counter 43
-  ghostCounters:
-  - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &53547466632738331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,11 +273,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 0
-  ghostRefs:
+  _ghostRefs:
   - Green Counter 34
-  ghostCounters:
-  - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &53547466632738332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,11 +290,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 0
-  ghostRefs:
+  _ghostRefs:
   - Green Counter 23
-  ghostCounters:
-  - {fileID: 0}
-  selectedGridSquare: {fileID: 0}
+  _ghostCounters: []
 --- !u!1 &935783911368126182
 GameObject:
   m_ObjectHideFlags: 0

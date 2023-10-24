@@ -40,8 +40,8 @@ public class GhostCounter : MonoBehaviour
         Card selectedCard = (NetworkManager.Singleton.IsServer) ? _gameManager.BlueSelectedCard : _gameManager.RedSelectedCard;
 
         foreach (Action availableAction in selectedCard.AvailableActionsObj.GetComponents<Action>())
-            foreach (GhostCounter gc in availableAction.ghostCounters)
+            foreach (GhostCounter gc in availableAction.GhostCounters)
                 if (gc == this)
-                    _gameManager.ActionSelected(selectedHero, availableAction.actionType, availableAction.ghostRefs);
+                    _gameManager.ActionSelected(selectedHero, availableAction.actionType, availableAction.GhostRefs);
     }
 }

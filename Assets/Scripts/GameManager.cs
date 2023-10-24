@@ -61,6 +61,7 @@ public class GameManager : NetworkBehaviour
     public bool RedTurnDone { get => _redTurnDone; set => _redTurnDone = value; }
     public Hero BlueHero { get => _blueHero; set => _blueHero = value; }
     public Hero RedHero { get => _redHero; set => _redHero = value; }
+    public bool TurnRunning { get => _turnRunning; set => _turnRunning = value; }
 
     void Awake()
     {
@@ -93,7 +94,7 @@ public class GameManager : NetworkBehaviour
         else
             _blueUIObjects.SetActive(false);
 
-        AssignHCTValues();
+        //AssignHCTValues();
         _blueHero.PutAllCardsInDeck();
         _redHero.PutAllCardsInDeck();
         AssignActionIdsAndCardIds();
@@ -174,7 +175,7 @@ public class GameManager : NetworkBehaviour
             card.CardId = uniqueCardId; // Assign unique card ID
             foreach (Action action in card.BaseActions) // Iterate over the baseActions list
             {
-                action.actionId = uniqueActionId; // Assign unique action ID
+                action.ActionId = uniqueActionId; // Assign unique action ID
                 uniqueActionId++;
             }
             uniqueCardId++;
@@ -256,9 +257,9 @@ public class GameManager : NetworkBehaviour
         {
             _uIManager.SetText(_uIManager.roundTimeLeftTextBlue, "Time\n" + "0"); ////
         }*/
-}
+    }
 
-public void StartRound() 
+    public void StartRound() 
     {
         Debug.Log("Start of round " + _currentRound);
         _blueHero.Health = 100;
@@ -535,7 +536,7 @@ public void StartRound()
             card.Locked = false;
     }
         
-    public void RegisterAction(Counter counter, Action.ActionType actionType, string[] ghostRefs) 
+    public void RegisterAction(Counter counter, Action.ActionType actionType, string[] _ghostRefs) 
     {
         int flowPos = 0;
         if (actionType == Action.ActionType.Move) 
@@ -560,30 +561,30 @@ public void StartRound()
                 flowPos = 5;
         }
 
-        _actionsToExecute[flowPos] = ghostRefs;
+        _actionsToExecute[flowPos] = _ghostRefs;
 
         if (counter == _blueCounter) 
         {
             _blueSelectedCard?.HideDestinations(_blueSelectedCard.AvailableActions);
-            RegisterActionClientRpc(flowPos, ConvertToIntArray(ghostRefs));
+            RegisterActionClientRpc(flowPos, ConvertToIntArray(_ghostRefs));
             //_uIManager.ShowReadyText(_uIManager.blueReadyTextBlue); ////
         }
         if (counter == _redCounter) 
         {
             redSelectedCard?.HideDestinations(redSelectedCard.AvailableActions);
-            RegisterActionServerRpc(flowPos, ConvertToIntArray(ghostRefs));
+            RegisterActionServerRpc(flowPos, ConvertToIntArray(_ghostRefs));
             //_uIManager.ShowReadyText(_uIManager.redReadyTextBlue); ////
         }
     }
 
-    int[] ConvertToIntArray(string[] ghostRefs) 
+    int[] ConvertToIntArray(string[] _ghostRefs) 
     {
-        //Debug.Log(ghostRefs.Length);
-        int[] lastTwoDigitsArray = new int[ghostRefs.Length];
+        //Debug.Log(_ghostRefs.Length);
+        int[] lastTwoDigitsArray = new int[_ghostRefs.Length];
 
-        for (int i = 0; i < ghostRefs.Length; i++)
+        for (int i = 0; i < _ghostRefs.Length; i++)
         {
-            string ghostRef = ghostRefs[i];
+            string ghostRef = _ghostRefs[i];
 
             if (ghostRef.Length >= 2)
             {
@@ -600,23 +601,23 @@ public void StartRound()
     }
     
     [ClientRpc]
-    public void RegisterActionClientRpc(int flowPos, int[] intGhostRefs)//convert back to string array
+    public void RegisterActionClientRpc(int flowPos, int[] int_ghostRefs)//convert back to string array
     {
-        string[] ghostRefsConverted = new string[intGhostRefs.Length];
-        for (int i = 0; i < intGhostRefs.Length; i++)
-            ghostRefsConverted[i] = intGhostRefs[i].ToString();
-        _actionsToExecute[flowPos] = ghostRefsConverted;
-        //Debug.Log(ghostRefsConverted[0]);
+        string[] _ghostRefsConverted = new string[int_ghostRefs.Length];
+        for (int i = 0; i < int_ghostRefs.Length; i++)
+            _ghostRefsConverted[i] = int_ghostRefs[i].ToString();
+        _actionsToExecute[flowPos] = _ghostRefsConverted;
+        //Debug.Log(_ghostRefsConverted[0]);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void RegisterActionServerRpc(int flowPos, int[] intGhostRefs)
+    public void RegisterActionServerRpc(int flowPos, int[] int_ghostRefs)
     {
-        string[] ghostRefsConverted = new string[intGhostRefs.Length];
-        for (int i = 0; i < intGhostRefs.Length; i++)
-            ghostRefsConverted[i] = intGhostRefs[i].ToString();
-        _actionsToExecute[flowPos] = ghostRefsConverted;
-        //Debug.Log(ghostRefsConverted[0]);
+        string[] _ghostRefsConverted = new string[int_ghostRefs.Length];
+        for (int i = 0; i < int_ghostRefs.Length; i++)
+            _ghostRefsConverted[i] = int_ghostRefs[i].ToString();
+        _actionsToExecute[flowPos] = _ghostRefsConverted;
+        //Debug.Log(_ghostRefsConverted[0]);
     }
 
     IEnumerator ExecuteFlowOfEvents() 
@@ -789,16 +790,16 @@ public void StartRound()
         _uIManager.ShowDiscardButton();
     }
 
-    public void ActionSelected(Hero hero, Action.ActionType actionType, string[] ghostRefs)
+    public void ActionSelected(Hero hero, Action.ActionType actionType, string[] _ghostRefs)
     {
-        Debug.Log(ghostRefs[0]);
+        Debug.Log(hero + " selected " + _ghostRefs[0]);
         _audioManager.PlaySound(_audioManager.SelectSquare);
         _aIPlaying = false;
         LockCards(hero.Hand);
         if (hero == _blueHero)
         {
             _blueHero.CardInPlay = _blueSelectedCard;
-            RegisterAction(_blueCounter, actionType, ghostRefs);
+            RegisterAction(_blueCounter, actionType, _ghostRefs);
             _bluePlayedCardId = _blueSelectedCard.CardId;
             SetBluePlayedCardClientRpc(_bluePlayedCardId);
             _blueTurnDone = true;
@@ -807,7 +808,7 @@ public void StartRound()
         else if (hero == _redHero)
         {
             _redHero.CardInPlay = redSelectedCard;
-            RegisterAction(_redCounter, actionType, ghostRefs);
+            RegisterAction(_redCounter, actionType, _ghostRefs);
             _redPlayedCardId = redSelectedCard.CardId;
             SetRedPlayedCardServerRpc(_redPlayedCardId);
             _redTurnDone = true;

@@ -3,56 +3,60 @@ using UnityEngine;
 
 public class Action : MonoBehaviour
 {
-    public int actionId;
+    [SerializeField] int actionId;
     public enum ActionType { Move, WeakAttack, StrongAttack, Arrow};
     public ActionType actionType;
-    public string[] ghostRefs;
-    public GhostCounter[] ghostCounters; 
+    [SerializeField] string[] _ghostRefs;
+    [SerializeField] GhostCounter[] _ghostCounters;
 
+    public int ActionId { get => actionId; set => actionId = value; }
+    public string[] GhostRefs { get => _ghostRefs; set => _ghostRefs = value; }
+    public GhostCounter[] GhostCounters { get => _ghostCounters; set => _ghostCounters = value; }
+    
     public void AssignGhostCounters()
     {
-        ghostCounters = new GhostCounter[ghostRefs.Length]; 
+        _ghostCounters = new GhostCounter[_ghostRefs.Length]; 
 
-        for (int i = 0; i < ghostRefs.Length; i++)
+        for (int i = 0; i < _ghostRefs.Length; i++)
         {
-            //Debug.Log(ghostRefs[i]);
+            //Debug.Log(_ghostRefs[i]);
             if (!NetworkManager.Singleton.IsServer)
             {
-                if (ghostRefs.Length > 1 && i < ghostRefs.Length)
+                if (_ghostRefs.Length > 1 && i < _ghostRefs.Length)
                 {
-                    Debug.Log(ghostRefs[i]);
-                    switch (ghostRefs[i].Substring(0, 2))
+                    //Debug.Log(_ghostRefs[i]);
+                    switch (_ghostRefs[i].Substring(0, 2))
                     {
                         case "N ":
-                            ghostRefs[i] = ghostRefs[i].Replace("N", "S");
+                            _ghostRefs[i] = _ghostRefs[i].Replace("N", "S");
                             break;
                         case "E ":
-                            ghostRefs[i] = ghostRefs[i].Replace("E", "W");
+                            _ghostRefs[i] = _ghostRefs[i].Replace("E", "W");
                             break;
                         case "S ":
-                            ghostRefs[i] = ghostRefs[i].Replace("S", "N");
+                            _ghostRefs[i] = _ghostRefs[i].Replace("S", "N");
                             break;
                         case "W ":
-                            ghostRefs[i] = ghostRefs[i].Replace("W", "E");
+                            _ghostRefs[i] = _ghostRefs[i].Replace("W", "E");
                             break;
                         case "NE":
-                            ghostRefs[i] = ghostRefs[i].Replace("NE", "SW");
+                            _ghostRefs[i] = _ghostRefs[i].Replace("NE", "SW");
                             break;
                         case "SE":
-                            ghostRefs[i] = ghostRefs[i].Replace("SE", "NW");
+                            _ghostRefs[i] = _ghostRefs[i].Replace("SE", "NW");
                             break;
                         case "SW":
-                            ghostRefs[i] = ghostRefs[i].Replace("SW", "NE");
+                            _ghostRefs[i] = _ghostRefs[i].Replace("SW", "NE");
                             break;
                         case "NW":
-                            ghostRefs[i] = ghostRefs[i].Replace("NW", "SE");
+                            _ghostRefs[i] = _ghostRefs[i].Replace("NW", "SE");
                             break;
                     }
-                    Debug.Log(ghostRefs[i]);
+                    //Debug.Log(_ghostRefs[i]);
                 }
             }
-            if (ghostRefs[i] != "00")
-                ghostCounters[i] = GameObject.Find(ghostRefs[i]).GetComponent<GhostCounter>();
+            if (_ghostRefs[i] != "00")
+                _ghostCounters[i] = GameObject.Find(_ghostRefs[i]).GetComponent<GhostCounter>();
         }
     }
 }

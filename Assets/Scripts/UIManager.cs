@@ -122,7 +122,7 @@ public class UIManager : NetworkBehaviour
         if (NetworkManager.Singleton.IsServer)
         {
             _myDeckScreenBlue.SetActive(true);
-            if (!_gameManager.BluePickingHand)
+            if (!_gameManager.BluePickingHand)/////////here don't show close button
                 ShowCloseMyDeckButton(_closeMyDeckButtonBlue);
             _blueHero.ShowDeck();
             _myDeckTextBlue.SetActive(true);
@@ -216,6 +216,7 @@ public class UIManager : NetworkBehaviour
         if (NetworkManager.Singleton.IsServer)
         {
             hero = _blueHero;
+            _gameManager.BluePickingHand = true;
             ShowStartTurnButton(_startTurnButtonBlue);
             HideCloseMyDeckButton(_closeMyDeckButtonBlue);
             HideDiscardButton(DiscardButtonBlue);
@@ -223,6 +224,7 @@ public class UIManager : NetworkBehaviour
         else
         {
             hero = _redHero;
+            _gameManager.RedPickingHand = true;
             ShowStartTurnButton(_startTurnButtonRed);
             HideCloseMyDeckButton(_closeMyDeckButtonRed); 
             HideDiscardButton(DiscardButtonRed);

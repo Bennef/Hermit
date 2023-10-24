@@ -192,7 +192,7 @@ public class Card : MonoBehaviour
     {
         foreach (Action action in _availableActions)
         {
-            foreach (GhostCounter ghostCounter in action.ghostCounters) 
+            foreach (GhostCounter ghostCounter in action.GhostCounters) 
             {
                 if (ghostCounter.GridPosString != _redCounter.GridPosString && 
                     ghostCounter.GridPosString != _blueCounter.GridPosString ||
@@ -216,7 +216,7 @@ public class Card : MonoBehaviour
     public void HideDestinations(List<Action> _availableActions) 
     {
         foreach (Action action in _availableActions) 
-            foreach (GhostCounter counter in action.ghostCounters)
+            foreach (GhostCounter counter in action.GhostCounters)
             {
                 counter.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
                 GhostCounter ghostCounter = counter.GetComponent<GhostCounter>();
@@ -235,13 +235,13 @@ public class Card : MonoBehaviour
         //Debug.Log("Base actions: " + card.baseActions.Length);
         foreach (Action action in card._baseActions)
         {
-            GhostCounter[] newGcs = new GhostCounter[action.ghostCounters.Length];
+            GhostCounter[] newGcs = new GhostCounter[action.GhostCounters.Length];
             bool copyAction = true;
-            for (int i = action.ghostCounters.Length - 1; i >= 0; i--)
+            for (int i = action.GhostCounters.Length - 1; i >= 0; i--)
             {
                 if (!copyAction) break;
-                if (action.ghostCounters[i] == null) break;
-                GhostCounter gc = action.ghostCounters[i];
+                if (action.GhostCounters[i] == null) break;
+                GhostCounter gc = action.GhostCounters[i];
                 switch (gc.GCActionType)
                 {
                     case GhostCounter.ActionType.Move:
@@ -279,7 +279,7 @@ public class Card : MonoBehaviour
                         break;
                 }
                 //if (card.name == "4") Debug.Log(action.ghostCounters[i]);
-                GhostCounter ghostCounter = action.ghostCounters[i].GetComponent<GhostCounter>();
+                GhostCounter ghostCounter = action.GhostCounters[i].GetComponent<GhostCounter>();
                 //Debug.Log(counter.gridPosString);
                 int ghostCounterCoordX = int.Parse(ghostCounter.GridPosString.Substring(0, 1));
                 int ghostCounterCoordY = int.Parse(ghostCounter.GridPosString.Substring(1, 1));
@@ -326,23 +326,23 @@ public class Card : MonoBehaviour
         {
             Action newAction = _availableActionsObj.AddComponent<Action>();
 
-            newAction.actionId = action.actionId;
+            newAction.ActionId = action.ActionId;
 
             // Copy the original ghostCounters array to the new Action component
             //newAction.ghostCounters = (GhostCounter[])action.ghostCounters.Clone();
-            newAction.ghostCounters = newGcArray;
+            newAction.GhostCounters = newGcArray;
             //Debug.Log(counterString + updatedCounterPosString);
-            for (int i = 0; i < action.ghostCounters.Length; i++)
+            for (int i = 0; i < action.GhostCounters.Length; i++)
             {
                 // Update the specific GhostCounter reference in the new Action component
-                newAction.ghostRefs = new string[newAction.ghostCounters.Length];
+                newAction.GhostRefs = new string[newAction.GhostCounters.Length];
 
-                for (int j = 0; j < action.ghostRefs.Length; j++)
+                for (int j = 0; j < action.GhostRefs.Length; j++)
                 {
-                    //Debug.Log(action.ghostRefs[j]);
-                    if (action.ghostRefs[j] == "00") break;
-                    //Debug.Log(action.ghostRefs[j]);
-                    newAction.ghostRefs[j] = newAction.ghostCounters[j].name;
+                    //Debug.Log(action._ghostRefs[j]);
+                    if (action.GhostRefs[j] == "00") break;
+                    //Debug.Log(action._ghostRefs[j]);
+                    newAction.GhostRefs[j] = newAction.GhostCounters[j].name;
                 }
             }
             // Copy the ActionType from the original action to the new action

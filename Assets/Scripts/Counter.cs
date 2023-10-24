@@ -17,11 +17,14 @@ public class Counter : NetworkBehaviour
 
     public string GridPosString { get => _gridPosString; set => _gridPosString = value; }
 
-    void Awake()
+    
+
+void Awake()
     {
         _audioManager = FindAnyObjectByType<AudioManager>();
         _gameManager = FindAnyObjectByType<GameManager>();
         _anim = GetComponentInChildren<Animator>();
+        
     }
 
     public void PlaceToStart()
@@ -46,35 +49,36 @@ public class Counter : NetworkBehaviour
             _otherHero = _gameManager.BlueHero;
         }
     }
-    public void ExecuteMove(string[] ghostRefs)
+
+    public void ExecuteMove(string[] _ghostRefs)
     {
-        foreach (string gRef in ghostRefs)
-            Debug.Log(gRef);
-        Debug.Log(this.name + " moving to " + ghostRefs[ghostRefs.Length - 1]);
-        StartCoroutine(MoveCounter(ghostRefs));
+        foreach (string gRef in _ghostRefs)
+            //Debug.Log(gRef);
+        //Debug.Log(this.name + " moving to " + _ghostRefs[_ghostRefs.Length - 1]);
+        StartCoroutine(MoveCounter(_ghostRefs));
     }
 
-    public void ExecuteWeakAttack(string[] ghostRefs)
+    public void ExecuteWeakAttack(string[] _ghostRefs)
     {
-        foreach (string gRef in ghostRefs)
+        foreach (string gRef in _ghostRefs)
         {
             //Debug.Log(gRef);
         }
-        Debug.Log(this.name + " weak attacking " + ghostRefs[ghostRefs.Length - 1]);
-        StartCoroutine(WeakAttack(ghostRefs));
+        Debug.Log(this.name + " weak attacking " + _ghostRefs[_ghostRefs.Length - 1]);
+        StartCoroutine(WeakAttack(_ghostRefs));
     }
 
-    public void ExecuteStrongAttack(string[] ghostRefs)
+    public void ExecuteStrongAttack(string[] _ghostRefs)
     {
-        Debug.Log(this.name + " strong attacking " + ghostRefs[ghostRefs.Length - 1]);
+        Debug.Log(this.name + " strong attacking " + _ghostRefs[_ghostRefs.Length - 1]);
 
         var slash = Resources.Load<GameObject>("Strong Slash");
-        Transform[] squares = new Transform[ghostRefs.Length];
-        for (int i = 0; i < ghostRefs.Length; i++)
+        Transform[] squares = new Transform[_ghostRefs.Length];
+        for (int i = 0; i < _ghostRefs.Length; i++)
         {
-            Debug.Log(i + ", " + ghostRefs[i]);
-            int targetCoord = int.Parse(ghostRefs[i]);
-            squares[i] = GameObject.Find("Red Star " + ghostRefs[i]).transform;
+            Debug.Log(i + ", " + _ghostRefs[i]);
+            int targetCoord = int.Parse(_ghostRefs[i]);
+            squares[i] = GameObject.Find("Red Star " + _ghostRefs[i]).transform;
         }
         _targetPos = squares[squares.Length - 1];
 
@@ -88,14 +92,14 @@ public class Counter : NetworkBehaviour
         StartCoroutine(Wait());
     }
 
-    IEnumerator MoveCounter(string[] ghostRefs)
+    IEnumerator MoveCounter(string[] _ghostRefs)
     {
         _audioManager.PlaySound(_audioManager.SlideCounter);
-        Transform[] squares = new Transform[ghostRefs.Length];
-        for (int i = 0; i < ghostRefs.Length; i++)
+        Transform[] squares = new Transform[_ghostRefs.Length];
+        for (int i = 0; i < _ghostRefs.Length; i++)
         {
-            Debug.Log(i + ", " + ghostRefs[i]);
-            squares[i] = GameObject.Find("Green Counter " + ghostRefs[i]).transform;
+            Debug.Log(i + ", " + _ghostRefs[i]);
+            squares[i] = GameObject.Find("Green Counter " + _ghostRefs[i]).transform;
         }
 
         _targetPos = squares[squares.Length -1];
@@ -131,11 +135,11 @@ public class Counter : NetworkBehaviour
     IEnumerator Wait() 
     {  
         /*var slash = Resources.Load<GameObject>("Strong Slash");
-        Transform[] squares = new Transform[ghostRefs.Length];
-        for (int i = 0; i < ghostRefs.Length; i++)
+        Transform[] squares = new Transform[_ghostRefs.Length];
+        for (int i = 0; i < _ghostRefs.Length; i++)
         {
-            Debug.Log(i + ", " + ghostRefs[i]);
-            squares[i] = GameObject.Find("Green Counter " + ghostRefs[i]).transform;
+            Debug.Log(i + ", " + _ghostRefs[i]);
+            squares[i] = GameObject.Find("Green Counter " + _ghostRefs[i]).transform;
         }
         targetPos = squares[squares.Length - 1];
         Instantiate(slash, targetPos.position, Quaternion.Euler(90, 0, 180));
@@ -179,7 +183,7 @@ public class Counter : NetworkBehaviour
         _otherCounter._anim.SetBool("isHit", false);
     }
 
-    IEnumerator WeakAttack(string[] ghostRefs) 
+    IEnumerator WeakAttack(string[] _ghostRefs) 
     {
         yield return null;
     }
