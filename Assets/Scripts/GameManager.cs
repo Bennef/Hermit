@@ -756,7 +756,7 @@ public class GameManager : NetworkBehaviour
     private void RoundWon() // Maybe add the type of win?
     {
         _uIManager.SetText(_uIManager.RoundsTextBlue, "B : R " + _blueRoundsWon + " : " + _redRoundsWon);
-        _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " player wins round " + _currentRound);
+        _uIManager.SetText(_uIManager.MessageTextBlue, _roundWinner + " wins round " + _currentRound);
         _uIManager.CallShowMessageOverlay();
     }
 
@@ -926,11 +926,11 @@ public class GameManager : NetworkBehaviour
         if (hero == _blueHero) 
         {
             _uIManager.SetHealth(_uIManager.BlueHealthSliderBlue, health, _uIManager.BlueHealthTextBlue);
-            _uIManager.SetHealth(_uIManager.BlueHealthSliderBlue, health, _uIManager.RedHealthTextRed);
+            _uIManager.SetHealth(_uIManager.BlueHealthSliderRed, health, _uIManager.BlueHealthTextRed);
         }
         else 
         {
-            _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, health, _uIManager.RedHealthTextBlue);
+            _uIManager.SetHealth(_uIManager.RedHealthSliderRed, health, _uIManager.RedHealthTextRed);
             _uIManager.SetHealth(_uIManager.RedHealthSliderBlue, health, _uIManager.RedHealthTextBlue);
         }
     }

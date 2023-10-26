@@ -324,10 +324,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 11
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &1051762309429919428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,10 +341,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 21
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &1051762309429919426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,10 +358,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 31
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &1051762309429919429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,10 +375,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 41
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &1019679508232821249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,10 +392,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 51
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!1 &3593175333573060896
 GameObject:
   m_ObjectHideFlags: 0

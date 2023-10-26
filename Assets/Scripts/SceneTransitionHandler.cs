@@ -41,7 +41,7 @@ public class SceneTransitionHandler : NetworkBehaviour
     /// </summary>
     private void Awake()
     {
-        if(sceneTransitionHandler != this && sceneTransitionHandler != null)
+        if (sceneTransitionHandler != this && sceneTransitionHandler != null)
         {
             GameObject.Destroy(sceneTransitionHandler.gameObject);
         }
@@ -58,7 +58,7 @@ public class SceneTransitionHandler : NetworkBehaviour
     public void SetSceneState(SceneStates sceneState)
     {
         m_SceneState = sceneState;
-        if(OnSceneStateChanged != null)
+        if (OnSceneStateChanged != null)
         {
             OnSceneStateChanged.Invoke(m_SceneState);
         }
@@ -80,10 +80,8 @@ public class SceneTransitionHandler : NetworkBehaviour
     /// </summary>
     private void Start()
     {
-        if(m_SceneState == SceneStates.Init)
-        {
+        if (m_SceneState == SceneStates.Init)
             SceneManager.LoadScene(DefaultMainMenu);
-        }
     }
 
     /// <summary>
@@ -92,7 +90,6 @@ public class SceneTransitionHandler : NetworkBehaviour
     public void RegisterCallbacks()
     {
         NetworkManager.Singleton.SceneManager.OnLoadComplete += OnLoadComplete;
-        
     }
 
     /// <summary>
@@ -101,7 +98,7 @@ public class SceneTransitionHandler : NetworkBehaviour
     /// <param name="scenename"></param>
     public void SwitchScene(string scenename)
     {
-        if(NetworkManager.Singleton.IsListening)
+        if (NetworkManager.Singleton.IsListening)
         {
             m_numberOfClientLoaded = 0;
             NetworkManager.Singleton.SceneManager.LoadScene(scenename, LoadSceneMode.Single);
@@ -130,9 +127,7 @@ public class SceneTransitionHandler : NetworkBehaviour
     public void ExitAndLoadStartMenu()
     {
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.SceneManager != null)
-        {
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnLoadComplete;
-        }
         
         OnClientLoadedScene = null;
         SetSceneState(SceneStates.Start);

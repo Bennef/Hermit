@@ -3614,6 +3614,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _actionType: 5
   _gridPosString: 
+--- !u!1 &170545009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 170545010}
+  m_Layer: 0
+  m_Name: Camera Shake
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &170545010
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170545009}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.809895, y: -1.1105149, z: 2.8966112}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &179261533
 GameObject:
   m_ObjectHideFlags: 0
@@ -11193,7 +11224,7 @@ GameObject:
   - component: {fileID: 452065611}
   - component: {fileID: 452065610}
   m_Layer: 6
-  m_Name: Blue Health Bar
+  m_Name: Red Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27081,7 +27112,7 @@ GameObject:
   - component: {fileID: 1225645985}
   - component: {fileID: 1225645984}
   m_Layer: 6
-  m_Name: Red Health Bar
+  m_Name: Blue Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28618,8 +28649,8 @@ MonoBehaviour:
   _redReadyTextBlue: {fileID: 209158547}
   _discardButtonTextBlue: {fileID: 1452343340}
   _messageTextBlue: {fileID: 1989798750}
-  _blueHealthSliderRed: {fileID: 452065610}
-  _redHealthSliderRed: {fileID: 1225645984}
+  _blueHealthSliderRed: {fileID: 1225645984}
+  _redHealthSliderRed: {fileID: 452065610}
   _blueHealthTextRed: {fileID: 757394849}
   _redHealthTextRed: {fileID: 935695468}
   _roundTextRed: {fileID: 1445728769}
@@ -40793,7 +40824,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 22
+    m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -40804,7 +40835,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Red player wins this round!
+  m_Text: Message
 --- !u!222 &1908131377
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -42106,7 +42137,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 22
+    m_FontSize: 44
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -42117,7 +42148,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Red player wins this round!
+  m_Text: Message
 --- !u!222 &1989798751
 CanvasRenderer:
   m_ObjectHideFlags: 0

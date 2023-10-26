@@ -407,8 +407,8 @@ MonoBehaviour:
   actionId: 0
   actionType: 0
   _ghostRefs:
-  - Green Counter 11
   - NW 22
+  - Green Counter 11
   _ghostCounters: []
 --- !u!114 &5698698984604313681
 MonoBehaviour:
@@ -425,8 +425,8 @@ MonoBehaviour:
   actionId: 0
   actionType: 0
   _ghostRefs:
-  - Green Counter 51
   - NE 42
+  - Green Counter 51
   _ghostCounters: []
 --- !u!114 &5698698984604313682
 MonoBehaviour:
@@ -443,8 +443,8 @@ MonoBehaviour:
   actionId: 0
   actionType: 0
   _ghostRefs:
-  - Green Counter 55
   - SE 44
+  - Green Counter 55
   _ghostCounters: []
 --- !u!114 &5698698984604313683
 MonoBehaviour:
@@ -461,8 +461,8 @@ MonoBehaviour:
   actionId: 0
   actionType: 0
   _ghostRefs:
-  - Green Counter 15
   - SW 24
+  - Green Counter 15
   _ghostCounters: []
 --- !u!1 &6484388842824839529
 GameObject:

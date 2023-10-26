@@ -239,7 +239,8 @@ public class Card : MonoBehaviour
             bool copyAction = true;
             for (int i = action.GhostCounters.Length - 1; i >= 0; i--)
             {
-                if (!copyAction) break;
+                print("Card: " + this.name + " " + action.GhostCounters[i] + ", " + copyAction);
+                if (!copyAction) break; 
                 if (action.GhostCounters[i] == null) break;
                 GhostCounter gc = action.GhostCounters[i];
                 switch (gc.GCActionType)
@@ -306,7 +307,7 @@ public class Card : MonoBehaviour
                    (card._actionType == Card.ActionType.Move &&
                    (updatedCounterPosString == _redCounter.GridPosString || updatedCounterPosString == _blueCounter.GridPosString)))
                 {
-                    copyAction = false;
+                    copyAction = false;//print("not allowed");
                 }
                 else
                 {

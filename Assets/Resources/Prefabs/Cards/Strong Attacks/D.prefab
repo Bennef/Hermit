@@ -438,10 +438,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 15
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &3197442838231388797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,10 +455,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 25
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &3197442838231388795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,10 +472,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 35
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &3197442838231388796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,10 +489,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 45
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
 --- !u!114 &3234046814744146630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,7 +506,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionId: 0
   actionType: 2
-  ghostRefs:
+  _ghostRefs:
   - Red Star 55
-  ghostCounters:
-  - {fileID: 0}
+  _ghostCounters: []
