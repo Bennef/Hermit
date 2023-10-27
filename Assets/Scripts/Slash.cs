@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Slash : MonoBehaviour
 {
-    [SerializeField] float fadeSpeed = 1f; 
+    //[SerializeField] float fadeSpeed = 1f; 
 
     void OnEnable () => StartCoroutine(Attack());
  

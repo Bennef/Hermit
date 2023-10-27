@@ -628,7 +628,7 @@ public class GameManager : NetworkBehaviour
             // First to go Move
             if (_actionsToExecute[0] != null)
             {
-                Debug.Log("Flow 1: " + _actionsToExecute[0][0]);
+                //Debug.Log("Flow 1: " + _actionsToExecute[0][0]);
                 _firstToGo.ExecuteMove(_actionsToExecute[0]);
                 //AddToLog(_firstToGo + " : " + _actionsToExecute2[0].actionType + " to " + _actionsToExecute[0].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
@@ -637,7 +637,7 @@ public class GameManager : NetworkBehaviour
             // Second to go Move
             if (_actionsToExecute[1] != null)
             {
-                Debug.Log("Flow 2: " + _actionsToExecute[1][0]);
+                //Debug.Log("Flow 2: " + _actionsToExecute[1][0]);
                 _secondToGo.ExecuteMove(_actionsToExecute[1]);
                 //AddToLog(_secondToGo + " : " + _actionsToExecute[1].actionType + " to " + _actionsToExecute[1].selectedGridSquare);
                 yield return new WaitForSeconds(1.5f);
@@ -792,7 +792,7 @@ public class GameManager : NetworkBehaviour
 
     public void ActionSelected(Hero hero, Action.ActionType actionType, string[] _ghostRefs)
     {
-        Debug.Log(hero + " selected " + _ghostRefs[0]);
+        //Debug.Log(hero + " selected " + _ghostRefs[0]);
         _audioManager.PlaySound(_audioManager.SelectSquare);
         _aIPlaying = false;
         LockCards(hero.Hand);
@@ -964,7 +964,7 @@ public class GameManager : NetworkBehaviour
                     _idolPosInt = 53;
                     break;
             }
-        }print(_idolPosInt);
+        }//print(_idolPosInt);
         PlaceIdolClientRpc(_idolPosInt);
     }
 

@@ -18,11 +18,8 @@ public class GhostCounter : MonoBehaviour
         _counterRenderer = gameObject.GetComponent<Renderer>();
         SetGridPosString();
     }
-
-    private void SetGridPosString()
-    {
-        _gridPosString = name.Substring(name.Length - 2);
-    }
+    
+    private void SetGridPosString() => _gridPosString = name.Substring(name.Length - 2);
 
     void Update() 
     {

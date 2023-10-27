@@ -85,7 +85,7 @@ public class Counter : NetworkBehaviour
 
         _anim.SetBool("isAttacking", true);
         SetAnimBoolClientRpc("isAttacking", true);
-        StartCoroutine(Wait());
+        StartCoroutine(WaitForAttack());
     }
 
     [ClientRpc]
@@ -107,6 +107,7 @@ public class Counter : NetworkBehaviour
 
         _targetPos = squares[squares.Length -1];
         //Debug.Log("targetPos: " + _targetPos);
+        // check if targetpos is the same as the firstToGo pos
         _anim.SetBool("isMoving", true);
         SetAnimBoolClientRpc("isMoving", true);
         float time = 0;
@@ -139,7 +140,7 @@ public class Counter : NetworkBehaviour
     [ClientRpc]
     void SetAnimBoolClientRpc(string parameter,bool trueOrFalse) => _anim.SetBool(parameter, trueOrFalse);
 
-    IEnumerator Wait() 
+    IEnumerator WaitForAttack() 
     {  
         float time = 0;
         while (time <= 0.9) 
@@ -147,17 +148,19 @@ public class Counter : NetworkBehaviour
             time += Time.deltaTime;
             yield return null;
         }
+        _otherCounter._anim.SetBool("isHit", false);
+        _anim.SetBool("isAttacking", false);
+        SetAnimBoolClientRpc("isAttacking", false);
     }
 
     [ClientRpc]
     void TakeDamageClientRpc(int attackDamage)
     {
         _gameManager.SetHealth(_otherHero, _otherHero.Health - attackDamage);
-        _otherCounter._anim.SetBool("isHit", true);print(_otherCounter._anim.GetBool("IsHit"));
+        _otherCounter._anim.SetBool("isHit", true);
         //_cameraShake.CallShake();
         _audioManager.PlaySound(_audioManager.StrongAttackHit);
-        _anim.SetBool("isAttacking", false);
-        _otherCounter._anim.SetBool("isHit", false);
+        StartCoroutine(WaitForAttack());
     }
 
     IEnumerator WeakAttack(string[] _ghostRefs) 

@@ -17,14 +17,14 @@ public class HeroManager : MonoBehaviour
         _heroName = "Bob";
         // image?
         _speed = 100;
-        _card1 = "1";
+        /*_card1 = "1";
         _card2 = "2";
         _card3 = "4";
         _card4 = "5";
         _card5 = "A";
         _card6 = "B";
         _card7 = "C";
-        _card8 = "D";
+        _card8 = "D";*/
     }
 
     void AssignValuesToHero(Hero hero)//should some of these be in Hero?

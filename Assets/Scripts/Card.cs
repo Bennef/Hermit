@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -239,7 +240,7 @@ public class Card : MonoBehaviour
             bool copyAction = true;
             for (int i = action.GhostCounters.Length - 1; i >= 0; i--)
             {
-                print("Card: " + this.name + " " + action.GhostCounters[i] + ", " + copyAction);
+                //print("Card: " + this.name + " " + action.GhostCounters[i] + ", " + copyAction);
                 if (!copyAction) break; 
                 if (action.GhostCounters[i] == null) break;
                 GhostCounter gc = action.GhostCounters[i];
@@ -311,7 +312,7 @@ public class Card : MonoBehaviour
                 }
                 else
                 {
-                    string newPosString = counterString + updatedCounterPosString; print(newPosString);
+                    string newPosString = counterString + updatedCounterPosString; 
                     newGcs[i] = GameObject.Find(newPosString).GetComponent<GhostCounter>();
                 }
             }
@@ -332,7 +333,7 @@ public class Card : MonoBehaviour
             // Copy the original ghostCounters array to the new Action component
             //newAction.ghostCounters = (GhostCounter[])action.ghostCounters.Clone();
             newAction.GhostCounters = newGcArray;
-            //Debug.Log(counterString + updatedCounterPosString);
+            //Debug.Log(_counterString + updatedCounterPosString);
             for (int i = 0; i < action.GhostCounters.Length; i++)
             {
                 // Update the specific GhostCounter reference in the new Action component
@@ -342,7 +343,7 @@ public class Card : MonoBehaviour
                 {
                     //Debug.Log(action._ghostRefs[j]);
                     if (action.GhostRefs[j] == "00") break;
-                    //Debug.Log(action._ghostRefs[j]);
+                    //Debug.Log(action.GhostRefs[j]);
                     newAction.GhostRefs[j] = newAction.GhostCounters[j].name;
                 }
             }

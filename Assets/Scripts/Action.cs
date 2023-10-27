@@ -1,4 +1,5 @@
-﻿using Unity.Netcode;
+﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Action : MonoBehaviour
@@ -55,8 +56,15 @@ public class Action : MonoBehaviour
                     //Debug.Log(_ghostRefs[i]);
                 }
             }
-            if (_ghostRefs[i] != "00")
-                _ghostCounters[i] = GameObject.Find(_ghostRefs[i]).GetComponent<GhostCounter>();
+            if (_ghostRefs[i] != "00") 
+            {
+                //print(_ghostRefs[i]);
+                GameObject gc = GameObject.Find(_ghostRefs[i]);
+                if (gc != null)
+                {
+                    _ghostCounters[i] = gc.GetComponent<GhostCounter>();
+                }
+            }
         }
     }
 }
